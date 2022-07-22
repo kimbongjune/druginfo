@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -15,22 +16,51 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"/>
+            android:layout_gravity="center"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이약모야"
+                android:layout_gravity="center"
+                android:textSize="30dp"
+                android:textColor="#1890FF"
+                android:textStyle="bold"
+                android:fontFamily="@font/kid_butterfly"
+                />
+        </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:tabSelectedTextColor="#1890FF"
+            app:tabMode="fixed"
+            app:tabInlineLabel="true"
+            app:tabTextAppearance="@style/tab_text"
+            app:tabIconTint="@color/tabbar_selected_color"
+            app:tabIndicatorColor="@color/tabbar_selected_color"
+            app:tabBackground="@drawable/t"
+            app:tabPaddingStart="-0.5dp"
+            app:tabPaddingEnd="-0.5dp"
+            >
+        </com.google.android.material.tabs.TabLayout>
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
+            android:background="#F5F5F5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
 
     <TextView
-        android:layout_width="300dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#FF0000"
+        android:background="#F5F5F5"
         android:fitsSystemWindows="true"
         android:gravity="center_horizontal"
-        android:text="I am Drawer"
-        android:textColor="#FFFFFF"
+        android:text="드래그 메뉴"
+        android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"/>
 

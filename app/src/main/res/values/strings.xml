@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">drug information</string>
+    <string name="app_name">이약모야</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="drawer_opened">Opened Drawer</string>
     <string name="drawer_closed">Closed Drawer</string>
