@@ -52,8 +52,9 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="200dp"
+        android:id="@+id/hamburgerMenu"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#F5F5F5"
@@ -62,6 +63,7 @@
         android:text="드래그 메뉴"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:orientation="horizontal" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

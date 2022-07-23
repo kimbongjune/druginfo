@@ -5,20 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nocdu.druginformation.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    final val TAG:String = "MainActivity"
+    var backButtonPressdTime:Long = 0
+
     lateinit var toggle : ActionBarDrawerToggle
     private lateinit var tabLayout: TabLayout
+    lateinit var toast: Toast
 
     class MyFragmentPagerAdapter(activity: FragmentActivity): FragmentStateAdapter(activity){
         val fragments : List<Fragment>
@@ -60,6 +66,46 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
         setUpTabIcons()
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.e(TAG, "${TAG} is onStoped")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e(TAG, "${TAG} is onPaused")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.e(TAG, "${TAG} is onStarted")
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e(TAG, "${TAG} is onDestroyed")
+    }
+
+    override fun finish() {
+        super.finish()
+        Log.e(TAG, "${TAG} is finished")
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        Log.e(TAG, "press BackButton")
+        if(System.currentTimeMillis() - backButtonPressdTime >= 2000){
+            backButtonPressdTime = System.currentTimeMillis()
+            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT)
+            toast.show()
+            Log.e(TAG, "first backPressed")
+        }else{
+            Log.e(TAG, "second backPressed")
+            toast.cancel()
+            finish()
+        }
     }
 
     fun setUpTabIcons(){

@@ -1,14 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Search" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/testButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/roundbutton"
+        android:drawableRight="@drawable/ic_baseline_search_24"
+        android:gravity="left|center"
+        android:hint="찾고계신 약이 있으신가요?"
+        android:paddingLeft="20dp"
+        android:textColor="#B3000000"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8">
 
-</LinearLayout>
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/testButton2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="left|center"
+        android:background="@drawable/roundbutton"
+        android:layout_marginTop="50dp"
+        android:drawableLeft="@drawable/ic_outline_pill_24"
+        android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+        android:drawablePadding="20dp"
+        android:paddingLeft="20dp"
+        android:text="모양으로 검색하기"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/testButton"
+        app:layout_constraintWidth_percent="0.8">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/testButton3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="left|center"
+        android:background="@drawable/roundbutton"
+        android:layout_marginTop="50dp"
+        android:drawableLeft="@drawable/ic_baseline_image_search_24"
+        android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+        android:drawablePadding="20dp"
+        android:paddingLeft="20dp"
+        android:text="이미지로 검색하기"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/testButton2"
+        app:layout_constraintWidth_percent="0.8">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <TextView
+        android:id="@+id/search_list_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="최근 검색어"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/testButton3"
+        app:layout_constraintHorizontal_bias="0.124"
+        app:layout_constraintWidth_percent="0.2"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="아스피린"
+        android:background="@drawable/search_round_button"
+        android:paddingVertical="3dp"
+        android:minHeight="1dp"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.124"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_list_text"
+        app:layout_constraintWidth_percent="0.2">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
