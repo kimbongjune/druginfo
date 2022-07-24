@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/searchFragment"
     tools:context=".SearchFragment">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/testButton"
+        android:id="@+id/textSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -27,7 +28,7 @@
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/testButton2"
+        android:id="@+id/imageSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="left|center"
@@ -41,7 +42,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testButton"
+        app:layout_constraintTop_toBottomOf="@+id/textSearch"
         app:layout_constraintWidth_percent="0.8">
     </androidx.appcompat.widget.AppCompatButton>
 
@@ -60,7 +61,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testButton2"
+        app:layout_constraintTop_toBottomOf="@+id/imageSearch"
         app:layout_constraintWidth_percent="0.8">
     </androidx.appcompat.widget.AppCompatButton>
 

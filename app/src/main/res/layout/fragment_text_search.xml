@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/textSearchFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TextSearchFragment"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@color/white">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/search_fragment_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center|center_vertical"
+        android:gravity="center_vertical"
+        android:background="@drawable/t"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <EditText
+            android:id="@+id/search_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
+            android:textSize="12sp"
+            android:hint="의약품, 제조사, 성분, 효능 등으로 검색">
+        </EditText>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/search_text_detail_button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:layout_gravity="right"
+            android:text="상세검색"
+            android:textSize="10sp"
+            android:textColor="@color/white"
+            android:layout_marginRight="10dp">
+        </androidx.appcompat.widget.AppCompatButton>
+
+
+        <ImageButton
+            android:id="@+id/search_text_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_baseline_search_24"
+            android:layout_marginRight="10dp">
+        </ImageButton>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detail_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="@color/black"
+        android:animateLayoutChanges="true"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_fragment_toolbar"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_search_layout"
+        android:nestedScrollingEnabled="false"
+        android:orientation="vertical"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

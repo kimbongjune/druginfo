@@ -20,8 +20,8 @@ class SearchFragment : Fragment(), View.OnClickListener {
     ): View? {
         Log.e(TAG, "${TAG} is oncteated")
         binding = FragmentSearchBinding.inflate(inflater, container, false)
-        binding?.testButton?.setOnClickListener(this)
-        binding?.testButton2?.setOnClickListener(this)
+        binding?.textSearch?.setOnClickListener(this)
+        binding?.imageSearch?.setOnClickListener(this)
         return binding?.root
     }
 
@@ -49,11 +49,17 @@ class SearchFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         binding?.apply {
             when(v){
-                testButton -> {
+                textSearch -> {
                     Log.e(TAG, "button Clicked")
                     Toast.makeText(activity, "testButton button Clicked", Toast.LENGTH_SHORT).show()
+                    val textSearchFragment:Fragment = TextSearchFragment()
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.setCustomAnimations(R.anim.slide_in_bottom,R.anim.slide_out_bottom,R.anim.slide_in_bottom,R.anim.slide_out_bottom)
+                    transaction?.replace(R.id.drawer, textSearchFragment)
+                    transaction?.addToBackStack(TAG)
+                    transaction?.commit();
                 }
-                testButton2 -> {
+                imageSearch -> {
                     Log.e(TAG, "button2 Clicked")
                     Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
                 }

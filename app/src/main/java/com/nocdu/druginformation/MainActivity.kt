@@ -1,15 +1,21 @@
 package com.nocdu.druginformation
 
+import android.content.Context
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
@@ -47,9 +53,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toggle.syncState()
+//        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        toggle.syncState()
 
         val adapter = MyFragmentPagerAdapter(this)
         binding.viewPager.adapter = adapter
@@ -94,18 +100,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        //super.onBackPressed()
+        super.onBackPressed()
         Log.e(TAG, "press BackButton")
-        if(System.currentTimeMillis() - backButtonPressdTime >= 2000){
-            backButtonPressdTime = System.currentTimeMillis()
-            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT)
-            toast.show()
-            Log.e(TAG, "first backPressed")
-        }else{
-            Log.e(TAG, "second backPressed")
-            toast.cancel()
-            finish()
+        for(fragment: Fragment in supportFragmentManager.fragments) {
+            if (fragment.isVisible) {
+                Log.e(TAG, fragment.toString())
+            }
         }
+//        val fragmentManager:FragmentManager = supportFragmentManager
+//        if(fragmentManager.backStackEntryCount != 0){
+//            for(i in 0..fragmentManager.backStackEntryCount){
+//                Log.e(TAG,"FragmentList = ${fragmentManager.getBackStackEntryAt(i).id}")
+//            }
+//        }
+
+//        if(System.currentTimeMillis() - backButtonPressdTime >= 2000){
+//            backButtonPressdTime = System.currentTimeMillis()
+//            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT)
+//            toast.show()
+//            Log.e(TAG, "first backPressed")
+//        }else{
+//            Log.e(TAG, "second backPressed")
+//            toast.cancel()
+//            finish()
+//        }
     }
 
     fun setUpTabIcons(){
@@ -115,31 +133,36 @@ class MainActivity : AppCompatActivity() {
         tabLayout.getTabAt(3)?.setIcon(R.drawable.ic_outline_info_24)
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        val infrater = menuInflater
-//        infrater.inflate(R.menu.menu_main, menu)
-//
-//        val menuItem = menu?.findItem(R.id.menu_search)
-//        val searchView = menuItem?.actionView as SearchView
-//
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                Log.e("TAG", "typingText = ${query}")
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return true
-//            }
-//
-//        })
-//        return true
-//    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(toggle.onOptionsItemSelected(item)){
-            return true
+        when (item.itemId) {
+            android.R.id.home -> {
+                val view = this.currentFocus
+                if (view != null) {
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+                Log.e("TAG", "!!!!!!!!")
+                this.onBackPressed()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        if (event?.action === MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm: InputMethodManager =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 }
