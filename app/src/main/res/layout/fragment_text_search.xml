@@ -5,78 +5,215 @@
     android:id="@+id/textSearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TextSearchFragment"
+    tools:context=".ui.view.TextSearchFragment"
     android:orientation="vertical"
     android:clickable="true"
     android:background="@color/white">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/search_fragment_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center|center_vertical"
-        android:gravity="center_vertical"
-        android:background="@drawable/t"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_search_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-        <EditText
-            android:id="@+id/search_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:textSize="12sp"
-            android:hint="의약품, 제조사, 성분, 효능 등으로 검색">
-        </EditText>
+        app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tl_search"
+            style="@style/EditTextGreyStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:startIconDrawable="@drawable/ic_baseline_keyboard_arrow_left_24"
+            android:hint="Search...."
+            android:padding="4dp"
+            app:endIconMode="clear_text"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_detail_search"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textAutoComplete"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/search_text_detail_button"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:layout_gravity="right"
+            android:id="@+id/btn_detail_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
             android:text="상세검색"
-            android:textSize="10sp"
-            android:textColor="@color/white"
-            android:layout_marginRight="10dp">
-        </androidx.appcompat.widget.AppCompatButton>
-
-
-        <ImageButton
-            android:id="@+id/search_text_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:layout_gravity="right"
-            android:src="@drawable/ic_baseline_search_24"
-            android:layout_marginRight="10dp">
-        </ImageButton>
-
-    </androidx.appcompat.widget.Toolbar>
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tl_search"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/detail_search_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:id="@+id/cl_detail_search"
+        android:background="@drawable/t"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
         android:visibility="gone"
-        android:background="@color/black"
-        android:animateLayoutChanges="true"
-        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_search_layout">
+
+        <TextView
+            android:id="@+id/tv_drug_name_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="의약품 명"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.3"/>
+
+        <EditText
+            android:id="@+id/ed_drug_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="의약품 명을 입력해주세요 ex)아스피린"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/border_bottom"
+            app:layout_constraintStart_toEndOf="@id/tv_drug_name_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.7"/>
+
+        <TextView
+            android:id="@+id/tv_maker_name_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="제약사 명"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_drug_name_title"
+            app:layout_constraintWidth_percent="0.3"/>
+
+        <EditText
+            android:id="@+id/ed_maker_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="제약사 명을 입력해주세요 ex)경동제약"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/border_bottom"
+            app:layout_constraintStart_toEndOf="@id/tv_maker_name_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ed_drug_name"
+            app:layout_constraintWidth_percent="0.7"/>
+
+        <TextView
+            android:id="@+id/tv_effect_name_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="효능"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_maker_name_title"
+            app:layout_constraintWidth_percent="0.3"/>
+
+        <EditText
+            android:id="@+id/ed_effect_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="약의 효능을 입력해주세요 ex)감기"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/border_bottom"
+            app:layout_constraintStart_toEndOf="@id/tv_effect_name_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ed_maker_name"
+            app:layout_constraintWidth_percent="0.7"/>
+
+        <TextView
+            android:id="@+id/tv_edi_code_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="보험코드"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_effect_name_title"
+            app:layout_constraintWidth_percent="0.3"/>
+
+        <EditText
+            android:id="@+id/ed_edi_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="보험코드를 입력해주세요 ex)644902212"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/border_bottom"
+            app:layout_constraintStart_toEndOf="@id/tv_edi_code_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ed_effect_name"
+            app:layout_constraintWidth_percent="0.7"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_term_clear"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:text="조건 초기화"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@drawable/search_round_button"
+            android:backgroundTint="@color/black"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.35"
+            app:layout_constraintTop_toBottomOf="@+id/tv_edi_code_title"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:text="검색하기"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:backgroundTint="#1E3FB7"
+            android:background="@drawable/search_round_button"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.55"
+            app:layout_constraintTop_toBottomOf="@+id/tv_edi_code_title"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_search_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="검색결과"
+        android:paddingBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_fragment_toolbar"
-        />
+        app:layout_constraintTop_toBottomOf="@id/cl_detail_search"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
-        android:layout_width="match_parent"
+        android:id="@+id/rv_search_result"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.9"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_search_layout"
-        android:nestedScrollingEnabled="false"
-        android:orientation="vertical"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_search_count"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

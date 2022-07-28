@@ -1,4 +1,4 @@
-package com.nocdu.druginformation
+package com.nocdu.druginformation.ui.view
 
 import android.os.Bundle
 import android.util.Log
@@ -12,12 +12,14 @@ import com.nocdu.druginformation.databinding.FragmentSearchBinding
 
 class InfoFragment : Fragment() {
     final val TAG:String = "InfoFragment"
+    private var _binding:FragmentInfoBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         Log.e(TAG, "${TAG} is oncteated")
-        val binding = FragmentInfoBinding.inflate(inflater, container, false)
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,9 +38,13 @@ class InfoFragment : Fragment() {
         Log.e(TAG, "${TAG} is onStarted")
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         Log.e(TAG, "${TAG} is onDestroyed")
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

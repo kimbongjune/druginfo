@@ -4,4 +4,8 @@
     <string name="drawer_opened">Opened Drawer</string>
     <string name="drawer_closed">Closed Drawer</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home Fragment</string>
+    <string name="search">Search Fragment</string>
+    <string name="alarm">Alarm Fragment</string>
+    <string name="info">Info Fragment</string>
 </resources>

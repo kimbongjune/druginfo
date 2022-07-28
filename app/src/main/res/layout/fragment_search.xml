@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/searchFragment"
-    tools:context=".SearchFragment">
+    tools:context=".ui.view.SearchFragment">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/textSearch"
+        android:id="@+id/btn_text_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -28,7 +28,7 @@
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/imageSearch"
+        android:id="@+id/btn_view_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="left|center"
@@ -42,12 +42,12 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textSearch"
+        app:layout_constraintTop_toBottomOf="@+id/btn_text_search"
         app:layout_constraintWidth_percent="0.8">
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/testButton3"
+        android:id="@+id/btn_image_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="left|center"
@@ -61,12 +61,12 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageSearch"
+        app:layout_constraintTop_toBottomOf="@+id/btn_view_search"
         app:layout_constraintWidth_percent="0.8">
     </androidx.appcompat.widget.AppCompatButton>
 
     <TextView
-        android:id="@+id/search_list_text"
+        android:id="@+id/tv_search_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -74,7 +74,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testButton3"
+        app:layout_constraintTop_toBottomOf="@+id/btn_image_search"
         app:layout_constraintHorizontal_bias="0.124"
         app:layout_constraintWidth_percent="0.2"
         />
@@ -91,7 +91,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.124"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_list_text"
+        app:layout_constraintTop_toBottomOf="@+id/tv_search_list"
         app:layout_constraintWidth_percent="0.2">
 
     </androidx.appcompat.widget.AppCompatButton>
