@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/actionbarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_gravity="fill_horizontal"
+    android:background="@drawable/border_bottom"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/imgrefresh"
+        android:layout_width="40dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:onClick="toggleMenu"
+        android:background="@drawable/ic_baseline_keyboard_arrow_left_24"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="의약품 정보"
+        android:textSize="14sp"/>
+
+</RelativeLayout>

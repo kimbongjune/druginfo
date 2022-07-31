@@ -5,9 +5,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Header(
-    @field:Json(name = "resultCode")
-    val resultCode: String?,
-    @field:Json(name = "resultMsg")
-    val resultMsg: String?
+data class Meta(
+    @Json(name = "is_end")
+    val isEnd: Boolean?,
+    @Json(name = "total_count")
+    val totalCount: Int?
 )

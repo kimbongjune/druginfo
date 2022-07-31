@@ -18,11 +18,11 @@ class DrugSearchViewModel(private val bookSearchRepository: DrugSearchRepository
     val searchResult:LiveData<SearchResponse> get() = _searchResult
 
     fun searchDrugs(item_name:String, textView: TextView) = viewModelScope.launch(Dispatchers.IO){
-        val response = bookSearchRepository.searchDrugs(item_name, API_KEY, 1, 15, "json")
+        val response = bookSearchRepository.searchDrugs(item_name, 1)
         if(response.isSuccessful){
             response.body()?.let {
-                Log.e("TAG","데이터 갯수 = ${it.body?.totalCount}")
-                textView.text = "검색결과 : ${it.body?.totalCount.toString()} 건"
+                Log.e("TAG","데이터 갯수 = ${it.meta?.totalCount}")
+                textView.text = "검색결과 : ${it.meta?.totalCount.toString()} 건"
                 _searchResult.postValue(it)
             }
         }

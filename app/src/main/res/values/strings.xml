@@ -8,4 +8,5 @@
     <string name="search">Search Fragment</string>
     <string name="alarm">Alarm Fragment</string>
     <string name="info">Info Fragment</string>
+    <string name="search_result">search_result</string>
 </resources>

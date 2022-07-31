@@ -65,7 +65,7 @@ class SearchFragment : Fragment(), View.OnClickListener {
                         R.anim.slide_out_bottom,
                         R.anim.slide_in_bottom,
                         R.anim.slide_out_bottom)
-                    transaction?.replace(R.id.drawer, textSearchFragment)
+                    transaction?.replace(R.id.mainActivity, textSearchFragment)
                     transaction?.addToBackStack("TextSearchFragment")
                     transaction?.commit();
                 }

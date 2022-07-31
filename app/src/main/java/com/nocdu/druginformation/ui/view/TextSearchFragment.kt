@@ -2,6 +2,7 @@ package com.nocdu.druginformation.ui.view
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -56,7 +58,7 @@ class TextSearchFragment : Fragment(){
         detailSearch()
         cleanTerm()
         drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
-            val drugs = response.body?.items
+            val drugs = response.documents
             drugSearchAdapter.submitList(drugs)
         }
     }
@@ -93,6 +95,10 @@ class TextSearchFragment : Fragment(){
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL))
             adapter = drugSearchAdapter
+        }
+        drugSearchAdapter.setOnItemClickListener {
+            Log.e(TAG,"data${it}")
+            viewDetailInfo()
         }
     }
 
@@ -163,5 +169,21 @@ class TextSearchFragment : Fragment(){
             button.text = "상세검색"
             View.GONE
         }
+    }
+
+    fun viewDetailInfo(){
+        val searchResultFragment:Fragment = SearchResultFragment()
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
+        binding.etSearch.clearFocus()
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction?.setCustomAnimations(
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_bottom,
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_bottom)
+        transaction?.replace(R.id.textSearchFragment, searchResultFragment)
+        transaction?.addToBackStack("TextSearchFragment")
+        transaction?.commit();
     }
 }

@@ -6,8 +6,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class SearchResponse(
-    @field:Json(name = "body")
-    val body: Body?,
-    @field:Json(name = "header")
-    val header: Header?
+    @Json(name = "documents")
+    val documents: List<Document?>?,
+    @Json(name = "meta")
+    val meta: Meta?
 )

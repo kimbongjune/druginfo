@@ -6,13 +6,10 @@ import retrofit2.Response
 
 class DrugSearchRepositoryImpl:DrugSearchRepository {
     override suspend fun searchDrugs(
-        item_name: String,
-        serviceKey: String,
-        pageNo: Int,
-        numOfRows: Int,
-        type: String
+        query: String,
+        page: Int,
     ): Response<SearchResponse> {
-        return api.searchDrugs(item_name, serviceKey, pageNo, numOfRows, type)
+        return api.searchDrugs(query, page)
     }
 
 }

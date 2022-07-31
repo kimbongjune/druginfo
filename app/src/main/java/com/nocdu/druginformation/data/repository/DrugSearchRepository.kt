@@ -6,10 +6,7 @@ import retrofit2.Response
 interface DrugSearchRepository {
 
     suspend fun searchDrugs(
-        item_name:String,
-        serviceKey:String,
-        pageNo:Int,
-        numOfRows:Int,
-        type:String
+        query:String,
+        page:Int
     ):Response<SearchResponse>
 }
