@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nocdu.druginformation.data.model.SearchResponse
 import com.nocdu.druginformation.data.repository.DrugSearchRepository
-import com.nocdu.druginformation.utill.Constants.API_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

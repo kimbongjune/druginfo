@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nocdu.druginformation.R
+import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentTextSearchBinding
 import com.nocdu.druginformation.databinding.ItemRecyclerviewBinding
 import com.nocdu.druginformation.ui.adapter.DrugSearchAdapter
@@ -98,7 +99,7 @@ class TextSearchFragment : Fragment(){
         }
         drugSearchAdapter.setOnItemClickListener {
             Log.e(TAG,"data${it}")
-            viewDetailInfo()
+            viewDetailInfo(it)
         }
     }
 
@@ -171,7 +172,7 @@ class TextSearchFragment : Fragment(){
         }
     }
 
-    fun viewDetailInfo(){
+    fun viewDetailInfo(document: Document){
         val searchResultFragment:Fragment = SearchResultFragment()
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
@@ -182,8 +183,11 @@ class TextSearchFragment : Fragment(){
             R.anim.slide_out_bottom,
             R.anim.slide_in_bottom,
             R.anim.slide_out_bottom)
-        transaction?.replace(R.id.textSearchFragment, searchResultFragment)
-        transaction?.addToBackStack("TextSearchFragment")
-        transaction?.commit();
+        transaction?.replace(R.id.textSearchFragment, SearchResultFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("data",document)
+            }
+            transaction?.addToBackStack("TextSearchFragment")
+        })?.commit()
     }
 }
