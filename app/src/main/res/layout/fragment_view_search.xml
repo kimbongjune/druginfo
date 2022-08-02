@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.view.ViewSearchFragment"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_search_result_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/border_bottom"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="모양선택"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tb_search_result_fragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tv_drug_front_text_title"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:text="전면 식별표시"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/et_drug_front_text"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.3"/>
+
+        <EditText
+            android:id="@+id/et_drug_front_text"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:textSize="12sp"
+            android:hint="약품 전면에 표시된 문자를 입력해주세요. ex) KS"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="2dp"
+            android:background="@drawable/border_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_drug_front_text_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.7" />
+
+        <TextView
+            android:id="@+id/tv_drug_back_text_title"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:text="후면 식별표시"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/et_drug_back_text"
+            app:layout_constraintTop_toBottomOf="@+id/tv_drug_front_text_title"
+            app:layout_constraintWidth_percent="0.3"/>
+
+        <EditText
+            android:id="@+id/et_drug_back_text"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:textSize="12sp"
+            android:paddingLeft="2dp"
+            android:hint="약품 후면에 표시된 문자를 입력해주세요. ex) FC"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_drug_back_text_title"
+            app:layout_constraintTop_toBottomOf="@+id/et_drug_front_text"
+            app:layout_constraintWidth_percent="0.7" />
+
+        <TextView
+            android:id="@+id/tv_choose_drawable"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="30dp"
+            android:text="모양 선택"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintTop_toBottomOf="@+id/tv_drug_back_text_title"/>
+
+        <HorizontalScrollView
+            android:id="@+id/hs_drug_drawable"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_choose_drawable">
+
+            <RadioGroup
+                android:id="@+id/rg_drug_drawable"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_all"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:button="@null"
+                    android:text="전체\n선택"
+                    android:checked="true"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/selector_radio_button_text" />
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_circle"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_circle"
+                    android:paddingTop="5dp"
+                    android:text="원형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_oval"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_oval"
+                    android:paddingTop="5dp"
+                    android:text="타원형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_semicircle"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_semicircle"
+                    android:paddingTop="5dp"
+                    android:text="반원형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_triangle"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_triangle"
+                    android:paddingTop="5dp"
+                    android:text="삼각형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_diamond"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_diamond"
+                    android:paddingTop="5dp"
+                    android:text="마름모형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_oblong"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_oblong"
+                    android:paddingTop="7dp"
+                    android:text="장방형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_pentagon"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_pentagon"
+                    android:paddingTop="5dp"
+                    android:text="오각형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_hexagon"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_hexagon"
+                    android:paddingTop="5dp"
+                    android:text="육각형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_octagon"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_octagon"
+                    android:paddingTop="5dp"
+                    android:text="팔각형"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_drawable_select_extra"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_extra"
+                    android:paddingTop="5dp"
+                    android:text="기타"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+            </RadioGroup>
+
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tv_choose_dosage_form"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:text="제형 선택"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintTop_toBottomOf="@+id/hs_drug_drawable"/>
+
+        <HorizontalScrollView
+            android:id="@+id/hs_drug_dosage_form"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_choose_dosage_form">
+
+            <RadioGroup
+                android:id="@+id/rg_drug_dosage_form"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <RadioButton
+                    android:id="@+id/rb_dosage_form_select_all"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:button="@null"
+                    android:text="전체\n선택"
+                    android:checked="true"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/selector_radio_button_text" />
+
+                <RadioButton
+                    android:id="@+id/rb_dosage_form_select_tablet"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_tablet"
+                    android:paddingTop="18dp"
+                    android:text="정제"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_dosage_form_select_hard_capsule"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_hard_capsule"
+                    android:paddingTop="18dp"
+                    android:text="경질캡슐"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+                <RadioButton
+                    android:id="@+id/rb_dosage_form_select_soft_capsule"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_button_text"
+                    android:layout_marginStart="10dp"
+                    android:drawableTop="@drawable/ic_radio_button_soft_capsule"
+                    android:paddingTop="18dp"
+                    android:text="연질캡슐"
+                    android:button="@null"
+                    android:gravity="bottom|center"/>
+
+
+            </RadioGroup>
+
+        </HorizontalScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

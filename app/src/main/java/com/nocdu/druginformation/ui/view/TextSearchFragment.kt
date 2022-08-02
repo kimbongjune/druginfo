@@ -58,6 +58,7 @@ class TextSearchFragment : Fragment(){
         goBack()
         detailSearch()
         cleanTerm()
+        detailSearchParamSend()
         drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
             val drugs = response.documents
             drugSearchAdapter.submitList(drugs)
@@ -144,6 +145,16 @@ class TextSearchFragment : Fragment(){
         binding.btnDetailSearch.setOnClickListener{
             Log.e(TAG,"btnDetailSearch Clicked")
             binding.clDetailSearch.visibleChange(it)
+        }
+    }
+
+    private fun detailSearchParamSend(){
+        binding.btnDetailSearchParamSend.setOnClickListener{
+            Log.e(TAG,"btnDetailSearchParamSend Clicked")
+            Log.e(TAG,"Drug name = ${binding.edDrugName.text}")
+            Log.e(TAG,"maker name = ${binding.edMakerName.text}")
+            Log.e(TAG,"effect name = ${binding.edEffectName.text}")
+            Log.e(TAG,"edi code = ${binding.edEdiCode.text}")
         }
     }
 

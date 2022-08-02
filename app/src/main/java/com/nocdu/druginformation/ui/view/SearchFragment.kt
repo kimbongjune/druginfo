@@ -24,6 +24,7 @@ class SearchFragment : Fragment(), View.OnClickListener {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding?.btnTextSearch?.setOnClickListener(this)
         binding?.btnImageSearch?.setOnClickListener(this)
+        binding?.btnViewSearch?.setOnClickListener(this)
         return binding?.root
     }
 
@@ -70,8 +71,22 @@ class SearchFragment : Fragment(), View.OnClickListener {
                     transaction?.commit();
                 }
                 btnImageSearch -> {
-                    Log.e(TAG, "button2 Clicked")
+                    Log.e(TAG, "btnImageSearch Clicked")
                     Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
+                }
+                btnViewSearch -> {
+                    Log.e(TAG, "btnViewSearch Clicked")
+                    Toast.makeText(activity, "btnViewSearch button Clicked", Toast.LENGTH_SHORT).show()
+                    val viewSearchFragment:Fragment = ViewSearchFragment()
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.setCustomAnimations(
+                        R.anim.slide_in_bottom,
+                        R.anim.slide_out_bottom,
+                        R.anim.slide_in_bottom,
+                        R.anim.slide_out_bottom)
+                    transaction?.replace(R.id.mainActivity, viewSearchFragment)
+                    transaction?.addToBackStack("ViewSearchFragment")
+                    transaction?.commit()
                 }
             }
         }
