@@ -6,46 +6,36 @@
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1955" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1955" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1955" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_black.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_blue.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_bluegreen.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_brown.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_green.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_grey.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_navy.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_orange.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_pink.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_purple.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_red.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_transparent.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_violet.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_white.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_yellow.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/ic_radio_button_circle_yellowgreen.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/selector_radio_button.xml" value="0.22" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/selector_radio_button_text.xml" value="0.22" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/t.xml" value="0.1945" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/drawable/tablayout_text_size.xml" value="0.1945" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/layout/fragment_alarm.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/layout/fragment_search.xml" value="0.1875" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/layout/fragment_search_result.xml" value="0.23541666666666666" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/layout/fragment_view_search.xml" value="0.22" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/kbj_kotlin/app/src/main/res/menu/menu_main.xml" value="0.33" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/border_bottom.xml" value="0.174" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.18" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_baseline_image_search_24.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_24.xml" value="0.18" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.18" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_launcher_background.xml" value="0.175" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_outline_info_24.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_outline_pill_24.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_pill_svgrepo_com.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_radio_button_circle.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_radio_button_hard_capsule.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_radio_button_line_extra.xml" value="0.174" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_radio_button_line_plus.xml" value="0.175" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_radio_button_oblong.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_radio_button_oval.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_radio_button_tablet.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/medication-24px.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/medication-48px.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/radio_button_circle.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/roundbutton.xml" value="0.1515" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/search_round_button.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/selector_radio_button.xml" value="0.174" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/selector_radio_button_text.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/t.xml" value="0.1525" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/actionbar_layout.xml" value="0.1875" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/activity_main.xml" value="0.18" />
@@ -55,8 +45,9 @@
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_main.xml" value="0.16614583333333333" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_search_menu.xml" value="0.17135416666666667" />
-        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_search_result.xml" value="0.19345057610673136" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_search_result.xml" value="0.1882005899705015" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_text_search.xml" value="0.25" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_view_search.xml" value="0.2" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/item_recyclerview.xml" value="0.33" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/menu/fragment_search_menu.xml" value="0.33" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/menu/menu_main.xml" value="0.21" />
