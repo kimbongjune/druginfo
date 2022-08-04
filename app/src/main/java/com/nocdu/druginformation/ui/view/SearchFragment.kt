@@ -73,6 +73,16 @@ class SearchFragment : Fragment(), View.OnClickListener {
                 btnImageSearch -> {
                     Log.e(TAG, "btnImageSearch Clicked")
                     Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
+                    val imageSearchFragment:Fragment = ImageSearchFragment()
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.setCustomAnimations(
+                        R.anim.slide_in_bottom,
+                        R.anim.slide_out_bottom,
+                        R.anim.slide_in_bottom,
+                        R.anim.slide_out_bottom)
+                    transaction?.replace(R.id.mainActivity, imageSearchFragment)
+                    transaction?.addToBackStack("ImageSearchFragment")
+                    transaction?.commit()
                 }
                 btnViewSearch -> {
                     Log.e(TAG, "btnViewSearch Clicked")
