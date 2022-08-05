@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         Log.e(TAG, "${TAG} is finished")
     }
 
+
     private fun setUpTabLayoutWithViewpager(){
         TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, postion ->
             tab.text = tabTitleArray[postion]

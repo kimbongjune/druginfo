@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -56,7 +57,6 @@ class TextSearchFragment : Fragment(){
         setupRecyclerView()
         searchDrugs()
         goBack()
-        detailSearch()
         cleanTerm()
         detailSearchParamSend()
         drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
@@ -137,14 +137,8 @@ class TextSearchFragment : Fragment(){
 
     private fun goBack(){
         binding.tlSearch.setStartIconOnClickListener{
-            Log.e(TAG,"backPressButton Clicked")
-        }
-    }
-
-    private fun detailSearch(){
-        binding.btnDetailSearch.setOnClickListener{
-            Log.e(TAG,"btnDetailSearch Clicked")
-            binding.clDetailSearch.visibleChange(it)
+            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 

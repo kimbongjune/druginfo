@@ -21,15 +21,14 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tl_search"
             style="@style/EditTextGreyStyle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:startIconDrawable="@drawable/ic_baseline_keyboard_arrow_left_24"
             android:hint="Search...."
             android:padding="4dp"
             app:endIconMode="clear_text"
-            app:layout_constraintWidth_percent="0.8"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_detail_search"
+            app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -39,17 +38,6 @@
                 android:inputType="textAutoComplete"/>
 
         </com.google.android.material.textfield.TextInputLayout>
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_detail_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
-            android:text="상세검색"
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tl_search"
-            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -27,6 +27,7 @@ class ImageSearchFragment : Fragment() {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
         imageSearch()
+        goBack()
     }
 
     override fun onStop() {
@@ -58,6 +59,13 @@ class ImageSearchFragment : Fragment() {
         binding.btnUploadImage.setOnClickListener{
             Log.e(TAG,"btnDetailSearch Clicked")
             Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun goBack(){
+        binding.tbSearchResultFragment.setNavigationOnClickListener{
+            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 }

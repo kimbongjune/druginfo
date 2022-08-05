@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.databinding.FragmentViewSearchBinding
 
@@ -25,6 +26,7 @@ class ViewSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
+        goBack()
     }
 
     override fun onStop() {
@@ -50,5 +52,12 @@ class ViewSearchFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    private fun goBack(){
+        binding.tbSearchResultFragment.setNavigationOnClickListener{
+            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 }

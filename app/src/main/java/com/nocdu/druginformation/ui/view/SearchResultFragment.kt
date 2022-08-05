@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import coil.load
 import com.nocdu.druginformation.R
@@ -31,8 +32,8 @@ class SearchResultFragment : Fragment() {
         var data: Document = (arguments?.getSerializable("data") as Document).apply {
             addObject(this)
         }
-
         super.onViewCreated(view, savedInstanceState)
+        goBack()
     }
 
     override fun onStop() {
@@ -295,6 +296,13 @@ class SearchResultFragment : Fragment() {
         }else{
             binding.tvGeneralCaution.visibility = View.GONE
             binding.tvGeneralCautionTitle.visibility = View.GONE
+        }
+    }
+
+    private fun goBack(){
+        binding.tbSearchResultFragment.setNavigationOnClickListener{
+            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 }

@@ -1,15 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/alarmFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.view.AlarmFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/alarm" />
+    <ImageView
+        android:id="@+id/iv_alarm_calendar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/druginfo_calendar"
+        android:layout_marginTop="60dp"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_alarm_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="아직 등록된 알람이 없어요"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_alarm_calendar"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_create_alarm"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/alarm_blue_round_button"
+        android:text="첫 알람 등록하기"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:drawableLeft="@drawable/ic_alarm_clock"
+        android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_white_24"
+        android:drawablePadding="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_info"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

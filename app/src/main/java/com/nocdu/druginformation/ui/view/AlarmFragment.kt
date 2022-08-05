@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.nocdu.druginformation.databinding.FragmentAlarmBinding
 import com.nocdu.druginformation.databinding.FragmentHomeBinding
 
@@ -21,6 +22,11 @@ class AlarmFragment : Fragment() {
         Log.e(TAG, "${TAG} is oncteated")
         _binding = FragmentAlarmBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        createAlarm()
     }
 
     override fun onStop() {
@@ -46,5 +52,12 @@ class AlarmFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    private fun createAlarm(){
+        binding.btnCreateAlarm.setOnClickListener{
+            Log.e(TAG,"btnDetailSearchParamSend Clicked")
+            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+        }
     }
 }
