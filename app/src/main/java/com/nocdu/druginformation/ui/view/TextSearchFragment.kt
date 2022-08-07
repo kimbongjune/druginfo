@@ -73,6 +73,7 @@ class TextSearchFragment : Fragment(){
     override fun onPause() {
         super.onPause()
         Log.e(TAG, "${TAG} is onPaused")
+
     }
 
     override fun onStart() {

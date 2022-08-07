@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.nocdu.druginformation.R
 import com.nocdu.druginformation.databinding.FragmentAlarmBinding
 import com.nocdu.druginformation.databinding.FragmentHomeBinding
 
@@ -57,7 +58,16 @@ class AlarmFragment : Fragment() {
     private fun createAlarm(){
         binding.btnCreateAlarm.setOnClickListener{
             Log.e(TAG,"btnDetailSearchParamSend Clicked")
-            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+            val alarmCreateFragment:Fragment = AlarmCreateFragment()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.setCustomAnimations(
+                R.anim.slide_in_bottom,
+                R.anim.slide_out_bottom,
+                R.anim.slide_in_bottom,
+                R.anim.slide_out_bottom)
+            transaction?.replace(R.id.mainActivity, alarmCreateFragment)
+            transaction?.addToBackStack("AlarmCreateFragment")
+            transaction?.commit()
         }
     }
 }

@@ -3,6 +3,8 @@ package com.nocdu.druginformation.ui.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nocdu.druginformation.R
@@ -15,6 +17,10 @@ import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
 class MainActivity : AppCompatActivity() {
 
     final val TAG:String = "MainActivity"
+
+    var backButtonPressdTime:Long = 0
+
+    lateinit var toast: Toast
 
     private val binding:ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -75,6 +81,23 @@ class MainActivity : AppCompatActivity() {
     override fun finish() {
         super.finish()
         Log.e(TAG, "${TAG} is finished")
+    }
+
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount == 0){
+            if(System.currentTimeMillis() - backButtonPressdTime >= 2000){
+                backButtonPressdTime = System.currentTimeMillis()
+                toast = Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT)
+                toast.show()
+                Log.e(TAG, "first backPressed")
+            }else{
+                Log.e(TAG, "second backPressed")
+                toast.cancel()
+                finish()
+            }
+        }else{
+            super.onBackPressed()
+        }
     }
 
 

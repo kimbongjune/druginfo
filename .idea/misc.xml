@@ -15,6 +15,7 @@
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable-v24/alarm_blue_round_button.xml" value="0.175" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable-v24/ic_baseline_keyboard_arrow_right_white_24.xml" value="0.175" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable-v24/selector_radio_round_button.xml" value="0.174" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/blue_round_button.xml" value="0.175" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/border_bottom.xml" value="0.174" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/ic_alarm_clock.xml" value="0.175" />
@@ -42,10 +43,15 @@
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/search_round_button.xml" value="0.1835" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/selector_radio_button.xml" value="0.174" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/selector_radio_button_text.xml" value="0.1835" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/switch_thumb.xml" value="0.174" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/switch_track_off.xml" value="0.175" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/switch_track_on.xml" value="0.174" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/switch_track_selector.xml" value="0.173" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/drawable/t.xml" value="0.1525" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/actionbar_layout.xml" value="0.1875" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_alarm.xml" value="0.18" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_alarm_create.xml" value="0.25" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_home.xml" value="0.17135416666666667" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_image_search.xml" value="0.2" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_info.xml" value="0.17135416666666667" />
@@ -56,6 +62,8 @@
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_text_search.xml" value="0.25" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/fragment_view_search.xml" value="0.22" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/item_recyclerview.xml" value="0.33" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/number_picker_dialog.xml" value="0.33" />
+        <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/layout/onetime_eat_picker_dialog.xml" value="0.16614583333333333" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/menu/fragment_search_menu.xml" value="0.33" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/menu/menu_main.xml" value="0.21" />
         <entry key="..\:/Users/nocdu/AndroidStudioProjects/druginformation/app/src/main/res/menu/top_navigation_menu.xml" value="0.25" />

@@ -13,6 +13,7 @@
         <item name="android:colorAccent">@color/black</item>  // cursor 색.
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:timePickerStyle">@style/MyTimePickerTheme</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="EditTextGreyStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox"> // important : parent 를 이것으로.
@@ -21,6 +22,9 @@
         <item name="android:textCursorDrawable">@color/black</item>  // cursor 색.
         <item name="android:textColorHint">@color/black</item>  // hint 색
         <item name="hintTextColor">@color/icon_selected</item>   // floating hint 색
+    </style>
 
+    <style name="MyTimePickerTheme" parent="android:Widget.Material.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
     </style>
 </resources>

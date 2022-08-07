@@ -64,7 +64,6 @@ class ImageSearchFragment : Fragment() {
 
     private fun goBack(){
         binding.tbSearchResultFragment.setNavigationOnClickListener{
-            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
