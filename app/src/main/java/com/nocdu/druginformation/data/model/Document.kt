@@ -2,6 +2,9 @@ package com.nocdu.druginformation.data.model
 
 
 import android.os.Parcelable
+import androidx.annotation.NonNull
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -9,6 +12,7 @@ import java.io.Serializable
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+@Entity(tableName = "drugs")
 data class Document(
     @Json(name = "after_consult_doctor")
     val afterConsultDoctor: String?,
@@ -41,7 +45,9 @@ data class Document(
     @Json(name = "item_name")
     val itemName: String?,
     @Json(name = "item_seq")
-    val itemSeq: String?,
+    @PrimaryKey(autoGenerate = false)
+    @NonNull
+    val itemSeq: String,
     @Json(name = "laction_women_inject_warning")
     val lactionWomenInjectWarning: String?,
     @Json(name = "multie_inject_warning")

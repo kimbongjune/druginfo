@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.data.model.SearchResponse
 import com.nocdu.druginformation.data.repository.DrugSearchRepository
 import kotlinx.coroutines.Dispatchers
@@ -26,4 +27,14 @@ class DrugSearchViewModel(private val bookSearchRepository: DrugSearchRepository
             }
         }
     }
+
+    fun saveDrugs(document: Document) = viewModelScope.launch(Dispatchers.IO) {
+        bookSearchRepository.insertDrugs(document)
+    }
+
+    fun deleteDrugs(document: Document) = viewModelScope.launch(Dispatchers.IO){
+        bookSearchRepository.deleteDrugs(document)
+    }
+
+    val favoriteDrugs:LiveData<List<Document>> = bookSearchRepository.getFavoriteDrugs()
 }

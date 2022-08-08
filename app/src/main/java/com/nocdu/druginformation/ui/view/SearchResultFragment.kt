@@ -8,14 +8,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import coil.load
+import com.google.android.material.snackbar.Snackbar
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentSearchResultBinding
+import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 
 class SearchResultFragment : Fragment() {
     final val TAG:String = "SearchResultFragment"
     private var _binding: FragmentSearchResultBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var drugSearchViewModel: DrugSearchViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +37,13 @@ class SearchResultFragment : Fragment() {
             addObject(this)
         }
         super.onViewCreated(view, savedInstanceState)
+        drugSearchViewModel = (activity as MainActivity).drugSearchViewModel
         goBack()
+
+        binding.fabFavorite.setOnClickListener {
+            drugSearchViewModel.saveDrugs(data)
+            Snackbar.make(view, "drug has saved", Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     override fun onStop() {

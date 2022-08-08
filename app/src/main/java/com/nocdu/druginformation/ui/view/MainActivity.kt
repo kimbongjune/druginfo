@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.adapter.ViewPagerAdapter
+import com.nocdu.druginformation.data.database.DrugSearchDatabase
 import com.nocdu.druginformation.data.repository.DrugSearchRepositoryImpl
 import com.nocdu.druginformation.databinding.ActivityMainBinding
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
@@ -51,7 +52,8 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
 
-        val drugSearchRepository = DrugSearchRepositoryImpl()
+        val database = DrugSearchDatabase.getInstance(this)
+        val drugSearchRepository = DrugSearchRepositoryImpl(database)
         val factory = DrugSearchViewModelProviderFactory(drugSearchRepository)
         drugSearchViewModel = ViewModelProvider(this, factory)[DrugSearchViewModel::class.java]
 
