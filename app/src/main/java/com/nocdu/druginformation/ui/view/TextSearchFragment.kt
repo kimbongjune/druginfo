@@ -29,8 +29,10 @@ import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentTextSearchBinding
 import com.nocdu.druginformation.databinding.ItemRecyclerviewBinding
 import com.nocdu.druginformation.ui.adapter.DrugSearchAdapter
+import com.nocdu.druginformation.ui.adapter.DrugSearchPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.utill.Constants.SEARCH_DRUGS_TIME_DELAY
+import com.nocdu.druginformation.utill.collectLatestStateFlow
 
 class TextSearchFragment : Fragment(){
 
@@ -39,7 +41,8 @@ class TextSearchFragment : Fragment(){
     private val binding get() = _binding!!
 
     private lateinit var drugSearchViewModel: DrugSearchViewModel
-    private lateinit var  drugSearchAdapter: DrugSearchAdapter
+    //private lateinit var  drugSearchAdapter: DrugSearchAdapter
+    private lateinit var drugSearchAdapter:DrugSearchPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,9 +62,13 @@ class TextSearchFragment : Fragment(){
         goBack()
         cleanTerm()
         detailSearchParamSend()
-        drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
-            val drugs = response.documents
-            drugSearchAdapter.submitList(drugs)
+//        drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
+//            val drugs = response.documents
+//            drugSearchAdapter.submitList(drugs)
+//        }
+
+        collectLatestStateFlow(drugSearchViewModel.searchPagingResult){
+            drugSearchAdapter.submitData(it)
         }
     }
 
@@ -92,7 +99,8 @@ class TextSearchFragment : Fragment(){
     }
 
     private fun setupRecyclerView(){
-        drugSearchAdapter = DrugSearchAdapter()
+        //drugSearchAdapter = DrugSearchAdapter()
+        drugSearchAdapter = DrugSearchPagingAdapter()
         binding.rvSearchResult.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -127,8 +135,9 @@ class TextSearchFragment : Fragment(){
                 Log.e(TAG,"enter pressed")
                 val query = binding.etSearch.text.toString().trim()
                 Log.e(TAG,"type text = ${query}")
-                drugSearchViewModel.searchDrugs(query, binding.tvSearchCount)
-                binding.tvSearchCount.visibility = View.VISIBLE
+                //drugSearchViewModel.searchDrugs(query, binding.tvSearchCount)
+                drugSearchViewModel.searchDrugsPaging(query)
+                //binding.tvSearchCount.visibility = View.VISIBLE
             }else{
                 true
             }

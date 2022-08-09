@@ -1,10 +1,15 @@
 package com.nocdu.druginformation.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.nocdu.druginformation.data.api.RetrofitInstance.api
 import com.nocdu.druginformation.data.database.DrugSearchDatabase
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.data.model.SearchResponse
+import com.nocdu.druginformation.utill.Constants.PAGING_SIZE
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepository {
@@ -23,8 +28,33 @@ class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepo
         db.drugSearchDAO().deleteDrugs(document)
     }
 
-    override fun getFavoriteDrugs(): LiveData<List<Document>> {
+    override fun getFavoriteDrugs(): Flow<List<Document>> {
         return db.drugSearchDAO().getFavoriteDrugs()
+    }
+
+    override fun getFavoritePagingDrugs(): Flow<PagingData<Document>> {
+        val pagingSourceFactory = {db.drugSearchDAO().getFavoritePagingDrugs()}
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGING_SIZE,
+                enablePlaceholders = false,
+                maxSize = PAGING_SIZE * 3
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
+
+    override fun searchDrugsPaging(query: String): Flow<PagingData<Document>> {
+        val pagingSourceFactory = {DrugSearchPagingSource(query)}
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGING_SIZE,
+                enablePlaceholders = false,
+                maxSize = PAGING_SIZE * 3
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
     }
 
 }

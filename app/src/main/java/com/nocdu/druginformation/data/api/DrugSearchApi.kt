@@ -10,6 +10,6 @@ interface DrugSearchApi {
     @GET(value = "drugsearch/textsearch")
     suspend fun searchDrugs(
         @Query(value = "query") query:String,
-        @Query(value = "page") page:Int
+        @Query(value = "page") page: Int
     ):Response<SearchResponse>
 }

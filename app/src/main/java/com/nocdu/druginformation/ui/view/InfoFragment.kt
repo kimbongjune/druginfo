@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +21,11 @@ import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentInfoBinding
 import com.nocdu.druginformation.databinding.FragmentSearchBinding
 import com.nocdu.druginformation.ui.adapter.DrugSearchAdapter
+import com.nocdu.druginformation.ui.adapter.DrugSearchPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
+import com.nocdu.druginformation.utill.collectLatestStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class InfoFragment : Fragment() {
@@ -27,7 +34,8 @@ class InfoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var drugSearchViewModel: DrugSearchViewModel
-    private lateinit var drugSearchAdapter:DrugSearchAdapter
+    //private lateinit var drugSearchAdapter:DrugSearchAdapter
+    private lateinit var drugSearchAdapter : DrugSearchPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +52,29 @@ class InfoFragment : Fragment() {
         setupRecyclerView()
         setUpTouchHelper(view)
 
-        drugSearchViewModel.favoriteDrugs.observe(viewLifecycleOwner){
-            drugSearchAdapter.submitList(it)
+//        drugSearchViewModel.favoriteDrugs.observe(viewLifecycleOwner){
+//            drugSearchAdapter.submitList(it)
+//        }
+
+//        lifecycleScope.launch {
+//            drugSearchViewModel.favoriteDrugs.collectLatest {
+//                drugSearchAdapter.submitList(it)
+//            }
+//        }
+
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+//                drugSearchViewModel.favoriteDrugs.collectLatest {
+//                    drugSearchAdapter.submitList(it)
+//                }
+//            }
+//        }
+
+//        collectLatestStateFlow(drugSearchViewModel.favoriteDrugs){
+//            drugSearchAdapter.submitList(it)
+//        }
+        collectLatestStateFlow(drugSearchViewModel.favoritePaingDrugs){
+            drugSearchAdapter.submitData(it)
         }
     }
 
@@ -75,7 +104,8 @@ class InfoFragment : Fragment() {
     }
 
     private fun setupRecyclerView(){
-        drugSearchAdapter = DrugSearchAdapter()
+        //drugSearchAdapter = DrugSearchAdapter()
+        drugSearchAdapter = DrugSearchPagingAdapter()
         binding.rvFavoriteDrugs.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -121,13 +151,22 @@ class InfoFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
-                val document:Document = drugSearchAdapter.currentList[position]
-                drugSearchViewModel.deleteDrugs(document)
-                Snackbar.make(view, "drug has Deleted", Snackbar.LENGTH_LONG).apply {
-                    setAction("취소"){
-                        drugSearchViewModel.saveDrugs(document)
-                    }
-                }.show()
+//                val document:Document = drugSearchAdapter.currentList[position]
+//                drugSearchViewModel.deleteDrugs(document)
+//                Snackbar.make(view, "drug has Deleted", Snackbar.LENGTH_LONG).apply {
+//                    setAction("취소"){
+//                        drugSearchViewModel.saveDrugs(document)
+//                    }
+//                }.show()
+                val pageDrug = drugSearchAdapter.peek(position)
+                pageDrug?.let { drug ->
+                    drugSearchViewModel.deleteDrugs(drug)
+                    Snackbar.make(view, "drug has Deleted", Snackbar.LENGTH_LONG).apply {
+                        setAction("취소"){
+                            drugSearchViewModel.saveDrugs(drug)
+                        }
+                    }.show()
+                }
             }
         }
         ItemTouchHelper(itemTouchHelperCallback).apply {
