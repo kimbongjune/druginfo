@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,7 @@ import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentTextSearchBinding
 import com.nocdu.druginformation.databinding.ItemRecyclerviewBinding
 import com.nocdu.druginformation.ui.adapter.DrugSearchAdapter
+import com.nocdu.druginformation.ui.adapter.DrugSearchLoadStateAdapter
 import com.nocdu.druginformation.ui.adapter.DrugSearchPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.utill.Constants.SEARCH_DRUGS_TIME_DELAY
@@ -60,8 +62,7 @@ class TextSearchFragment : Fragment(){
         setupRecyclerView()
         searchDrugs()
         goBack()
-        cleanTerm()
-        detailSearchParamSend()
+        setupLoadState()
 //        drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
 //            val drugs = response.documents
 //            drugSearchAdapter.submitList(drugs)
@@ -105,7 +106,9 @@ class TextSearchFragment : Fragment(){
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL))
-            adapter = drugSearchAdapter
+            adapter = drugSearchAdapter.withLoadStateFooter(
+                footer = DrugSearchLoadStateAdapter(drugSearchAdapter::retry)
+            )
         }
         drugSearchAdapter.setOnItemClickListener {
             Log.e(TAG,"data${it}")
@@ -152,26 +155,6 @@ class TextSearchFragment : Fragment(){
         }
     }
 
-    private fun detailSearchParamSend(){
-        binding.btnDetailSearchParamSend.setOnClickListener{
-            Log.e(TAG,"btnDetailSearchParamSend Clicked")
-            Log.e(TAG,"Drug name = ${binding.edDrugName.text}")
-            Log.e(TAG,"maker name = ${binding.edMakerName.text}")
-            Log.e(TAG,"effect name = ${binding.edEffectName.text}")
-            Log.e(TAG,"edi code = ${binding.edEdiCode.text}")
-        }
-    }
-
-    private fun cleanTerm(){
-        binding.btnTermClear.setOnClickListener{
-            Log.e(TAG,"Clean term")
-            binding.edDrugName.text.clear()
-            binding.edMakerName.text.clear()
-            binding.edEffectName.text.clear()
-            binding.edEdiCode.text.clear()
-        }
-    }
-
     open fun View.visibleChange(view:View){
         var button = view as Button
         this.visibility = if(!this.isVisible){
@@ -204,5 +187,34 @@ class TextSearchFragment : Fragment(){
             }
             transaction?.addToBackStack("TextSearchFragment")
         })?.commit()
+    }
+
+    private fun setupLoadState(){
+        drugSearchAdapter.addLoadStateListener { combinedLoadStates ->
+            val loadState = combinedLoadStates.source
+            val isListEmpty = drugSearchAdapter.itemCount < 1
+                    && loadState.refresh is LoadState.NotLoading
+                    && loadState.append.endOfPaginationReached
+
+            binding.tvEmptyList.isVisible = isListEmpty
+            binding.rvSearchResult.isVisible = !isListEmpty
+
+            binding.progressBar.isVisible = loadState.refresh is LoadState.Loading
+
+//            binding.btnRetry.isVisible = loadState.refresh is LoadState.Error
+//                    || loadState.append is LoadState.Error
+//                    || loadState.prepend is LoadState.Error
+//
+//            val errorState:LoadState.Error? = loadState.append as? LoadState.Error
+//                ?: loadState.prepend as? LoadState.Error
+//                ?: loadState.refresh as? LoadState.Error
+//
+//            errorState?.let {
+//                Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_SHORT).show()
+//            }
+        }
+//        binding.btnRetry.setOnClickListener{
+//            drugSearchAdapter.retry()
+//        }
     }
 }
