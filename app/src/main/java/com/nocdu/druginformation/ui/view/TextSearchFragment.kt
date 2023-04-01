@@ -3,6 +3,7 @@ package com.nocdu.druginformation.ui.view
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,6 +26,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentTextSearchBinding
@@ -46,6 +48,10 @@ class TextSearchFragment : Fragment(){
     //private lateinit var  drugSearchAdapter: DrugSearchAdapter
     private lateinit var drugSearchAdapter:DrugSearchPagingAdapter
 
+    private val keyboard: InputMethodManager by lazy {
+        activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,6 +69,7 @@ class TextSearchFragment : Fragment(){
         searchDrugs()
         goBack()
         setupLoadState()
+        showKeyBoard(binding.etSearch)
 //        drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
 //            val drugs = response.documents
 //            drugSearchAdapter.submitList(drugs)
@@ -91,6 +98,7 @@ class TextSearchFragment : Fragment(){
 
     override fun onDestroy() {
         super.onDestroy()
+        hideKeyBoard()
         Log.e(TAG, "${TAG} is onDestroyed")
     }
 
@@ -151,6 +159,7 @@ class TextSearchFragment : Fragment(){
     private fun goBack(){
         binding.tlSearch.setStartIconOnClickListener{
             Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+            drugSearchViewModel.removeDrugsPaging()
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
@@ -216,5 +225,17 @@ class TextSearchFragment : Fragment(){
 //        binding.btnRetry.setOnClickListener{
 //            drugSearchAdapter.retry()
 //        }
+    }
+
+    fun showKeyBoard(textInputEditText : TextInputEditText){
+        textInputEditText.requestFocus()
+        keyboard.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    fun hideKeyBoard(){
+        keyboard.hideSoftInputFromWindow(
+            activity?.currentFocus?.windowToken,
+            InputMethodManager.HIDE_IMPLICIT_ONLY
+        )
     }
 }

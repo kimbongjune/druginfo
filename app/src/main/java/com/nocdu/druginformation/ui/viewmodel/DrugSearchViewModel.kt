@@ -60,4 +60,10 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
                 }
         }
     }
+
+    fun removeDrugsPaging(){
+        viewModelScope.launch {
+            _searchPagingResult.value = PagingData.empty();
+        }
+    }
 }
