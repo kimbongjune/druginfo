@@ -20,16 +20,16 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
     private val _searchResult = MutableLiveData<SearchResponse>()
     val searchResult:LiveData<SearchResponse> get() = _searchResult
 
-    fun searchDrugs(item_name:String, textView: TextView) = viewModelScope.launch(Dispatchers.IO){
-        val response = drugSearchRepository.searchDrugs(item_name, 1)
-        if(response.isSuccessful){
-            response.body()?.let {
-                Log.e("TAG","데이터 갯수 = ${it.meta?.totalCount}")
-                textView.text = "검색결과 : ${it.meta?.totalCount.toString()} 건"
-                _searchResult.postValue(it)
-            }
-        }
-    }
+//    fun searchDrugs(item_name:String, textView: TextView) = viewModelScope.launch(Dispatchers.IO){
+//        val response = drugSearchRepository.searchDrugs(item_name, 1)
+//        if(response.isSuccessful){
+//            response.body()?.let {
+//                Log.e("TAG","데이터 갯수 = ${it.meta?.totalCount}")
+//                textView.text = "검색결과 : ${it.meta?.totalCount.toString()} 건"
+//                _searchResult.postValue(it)
+//            }
+//        }
+//    }
 
     fun saveDrugs(document: Document) = viewModelScope.launch(Dispatchers.IO) {
         drugSearchRepository.insertDrugs(document)
@@ -54,6 +54,16 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
     fun searchDrugsPaging(query:String){
         viewModelScope.launch {
             drugSearchRepository.searchDrugsPaging(query)
+                .cachedIn(viewModelScope)
+                .collect{
+                    _searchPagingResult.value = it
+                }
+        }
+    }
+
+    fun searchViewDrugPaging(shape: String, dosageForm:String, printFront: String, printBack: String, colorClass: String, line:String){
+        viewModelScope.launch {
+            drugSearchRepository.viewSearchDrugsPaging(shape, dosageForm, printFront, printBack, colorClass, line)
                 .cachedIn(viewModelScope)
                 .collect{
                     _searchPagingResult.value = it

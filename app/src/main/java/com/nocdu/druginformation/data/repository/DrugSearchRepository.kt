@@ -23,4 +23,6 @@ interface DrugSearchRepository {
     fun getFavoritePagingDrugs():Flow<PagingData<Document>>
 
     fun searchDrugsPaging(query: String):Flow<PagingData<Document>>
+
+    fun viewSearchDrugsPaging(shape: String, dosageForm:String, printFront:String, printBack:String, colorClass:String, line:String):Flow<PagingData<Document>>
 }

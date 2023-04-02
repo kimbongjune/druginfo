@@ -57,4 +57,22 @@ class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepo
         ).flow
     }
 
+    override fun viewSearchDrugsPaging(
+        shape: String,
+        dosageForm:String,
+        printFront: String,
+        printBack: String,
+        colorClass: String,
+        line:String
+    ): Flow<PagingData<Document>> {
+        val pagingSourceFactory = {DrugViewSearchPagingSource(shape, dosageForm, printFront, printBack, colorClass, line)}
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGING_SIZE,
+                enablePlaceholders = false,
+                maxSize = PAGING_SIZE * 3
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
 }

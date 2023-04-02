@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.size
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -24,6 +25,7 @@ import com.nocdu.druginformation.ui.adapter.DrugSearchAdapter
 import com.nocdu.druginformation.ui.adapter.DrugSearchPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.utill.collectLatestStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -51,6 +53,9 @@ class InfoFragment : Fragment() {
         drugSearchViewModel = (activity as MainActivity).drugSearchViewModel
         setupRecyclerView()
         setUpTouchHelper(view)
+        Log.e(TAG,"머임????");
+        Log.e(TAG,"즐겨찾기 개수" + drugSearchAdapter.itemCount)
+        //Log.e(TAG,"즐겨찾기 개수" + drugSearchViewModel.favoritePaingDrugs.value.size)
 
 //        drugSearchViewModel.favoriteDrugs.observe(viewLifecycleOwner){
 //            drugSearchAdapter.submitList(it)
@@ -119,10 +124,10 @@ class InfoFragment : Fragment() {
             Log.e(TAG,"data${it}")
             viewDetailInfo(it)
         }
+        Log.e(TAG,"즐겨찾기 개수" + drugSearchAdapter.itemCount)
     }
 
     fun viewDetailInfo(document: Document){
-        val searchResultFragment:Fragment = SearchResultFragment()
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
         val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -161,7 +166,8 @@ class InfoFragment : Fragment() {
                 val pageDrug = drugSearchAdapter.peek(position)
                 pageDrug?.let { drug ->
                     drugSearchViewModel.deleteDrugs(drug)
-                    Snackbar.make(view, "drug has Deleted", Snackbar.LENGTH_LONG).apply {
+                    Log.e(TAG,"즐겨찾기 개수" + drugSearchAdapter.itemCount)
+                    Snackbar.make(view, "즐겨찾기에서 제거되었습니다.", Snackbar.LENGTH_LONG).apply {
                         setAction("취소"){
                             drugSearchViewModel.saveDrugs(drug)
                         }

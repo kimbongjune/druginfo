@@ -34,6 +34,7 @@ class SearchResultFragment : Fragment() {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         Log.e(TAG,"Arg = ${arguments?.getSerializable("data")}")
         var data: Document = (arguments?.getSerializable("data") as Document).apply {
+            binding.tvToolbarText.text = this.itemName
             addObject(this)
         }
         super.onViewCreated(view, savedInstanceState)
@@ -311,7 +312,7 @@ class SearchResultFragment : Fragment() {
 
     private fun goBack(){
         binding.tbSearchResultFragment.setNavigationOnClickListener{
-            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
         }
     }

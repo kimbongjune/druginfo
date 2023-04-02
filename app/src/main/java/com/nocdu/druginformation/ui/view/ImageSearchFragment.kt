@@ -58,7 +58,7 @@ class ImageSearchFragment : Fragment() {
     private fun imageSearch(){
         binding.btnUploadImage.setOnClickListener{
             Log.e(TAG,"btnDetailSearch Clicked")
-            Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
         }
     }
 

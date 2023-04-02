@@ -58,7 +58,7 @@ class SearchFragment : Fragment(), View.OnClickListener {
             when(v){
                 btnTextSearch -> {
                     Log.e(TAG, "button Clicked")
-                    Toast.makeText(activity, "testButton button Clicked", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "testButton button Clicked", Toast.LENGTH_SHORT).show()
                     val textSearchFragment:Fragment = TextSearchFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.setCustomAnimations(
@@ -72,7 +72,7 @@ class SearchFragment : Fragment(), View.OnClickListener {
                 }
                 btnImageSearch -> {
                     Log.e(TAG, "btnImageSearch Clicked")
-                    Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
                     val imageSearchFragment:Fragment = ImageSearchFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.setCustomAnimations(
@@ -86,7 +86,7 @@ class SearchFragment : Fragment(), View.OnClickListener {
                 }
                 btnViewSearch -> {
                     Log.e(TAG, "btnViewSearch Clicked")
-                    Toast.makeText(activity, "btnViewSearch button Clicked", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "btnViewSearch button Clicked", Toast.LENGTH_SHORT).show()
                     val viewSearchFragment:Fragment = ViewSearchFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.setCustomAnimations(

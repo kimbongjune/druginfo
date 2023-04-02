@@ -33,14 +33,16 @@ class MainActivity : AppCompatActivity() {
         "홈",
         "검색",
         "알람",
-        "내 정보"
+        //"내 정보"
+        "즐겨찾기"
     )
 
     private val tabIconArray = arrayOf(
         R.drawable.ic_outline_home_24,
         R.drawable.ic_baseline_search_24,
         R.drawable.ic_baseline_access_time_24,
-        R.drawable.ic_outline_info_24
+        R.drawable.ic_baseline_star_border_24,
+        //R.drawable.ic_outline_info_24
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

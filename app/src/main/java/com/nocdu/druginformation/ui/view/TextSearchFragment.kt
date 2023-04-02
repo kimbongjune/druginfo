@@ -99,6 +99,7 @@ class TextSearchFragment : Fragment(){
     override fun onDestroy() {
         super.onDestroy()
         hideKeyBoard()
+        drugSearchViewModel.removeDrugsPaging()
         Log.e(TAG, "${TAG} is onDestroyed")
     }
 
@@ -158,8 +159,7 @@ class TextSearchFragment : Fragment(){
 
     private fun goBack(){
         binding.tlSearch.setStartIconOnClickListener{
-            Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
-            drugSearchViewModel.removeDrugsPaging()
+            //Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
