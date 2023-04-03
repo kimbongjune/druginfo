@@ -302,20 +302,29 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!--<androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_eat_drug_time_layout"
+            <RelativeLayout
+                android:id="@+id/rl_eat_drug_time_layout"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constrainedHeight="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_eat_drug_count_layout"/>-->
+                app:layout_constraintTop_toBottomOf="@id/cl_eat_drug_count_layout">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_eat_drug_time_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constrainedHeight="true"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"/>
+
+            </RelativeLayout>
+
+            <!--<androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_eat_drug_time_layout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -357,7 +366,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_eat_drug_onetime_layout"
@@ -369,7 +378,7 @@
                 android:paddingBottom="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_eat_drug_time_layout">
+                app:layout_constraintTop_toBottomOf="@id/rl_eat_drug_time_layout">
 
                 <TextView
                     android:id="@+id/tv_eat_drug_onetime_cycle"

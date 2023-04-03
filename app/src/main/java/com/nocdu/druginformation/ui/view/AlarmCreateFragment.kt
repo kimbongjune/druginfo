@@ -11,16 +11,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.databinding.FragmentAlarmCreateBinding
 import com.nocdu.druginformation.databinding.NumberPickerDialogBinding
 import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
+import com.nocdu.druginformation.ui.adapter.AlarmAdapter
+import com.nocdu.druginformation.ui.adapter.AlarmList
+import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import java.util.*
 
 class AlarmCreateFragment : Fragment() {
     val TAG:String = "AlarmCreateFragment"
     private var _binding: FragmentAlarmCreateBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var alarmAdapter: AlarmAdapter
+
+    var alarmList = arrayListOf<AlarmList>(AlarmList("섭취 시간", "오전 09:00"))
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +42,19 @@ class AlarmCreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
+
+        alarmAdapter = AlarmAdapter(requireContext(), alarmList)
+
+        binding.rvEatDrugTimeLayout.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(
+                DividerItemDecoration(requireContext(),
+                    DividerItemDecoration.VERTICAL)
+            )
+            adapter = alarmAdapter
+        }
+
         goBack()
         showNumberPickerDialog()
         showDatePickerDialog()
@@ -84,12 +106,16 @@ class AlarmCreateFragment : Fragment() {
     }
 
     private fun showDatePickerDialog(){
-        binding.tvEatDrugTime.setOnClickListener {
-            callDatePickerDialog()
-        }
+        alarmAdapter?.setItemClickListener(object : AlarmAdapter.ItemClickListener {
+            override fun onItemClick(position: Int) {
+                callDatePickerDialog(position)
+                Log.e(TAG,"@@@@@ 아이템 클릭 포지션 = $position")
+                Log.e(TAG,"@@@@@ 아이템 클릭${alarmList[position].eatDrugTextView}")
+            }
+        })
     }
 
-    private fun callDatePickerDialog(){
+    private fun callDatePickerDialog(position:Int){
         val currentTime = Calendar.getInstance()
         val hour = currentTime.get(Calendar.HOUR_OF_DAY)
         var minute = currentTime.get(Calendar.MINUTE)
@@ -101,7 +127,7 @@ class AlarmCreateFragment : Fragment() {
                 } else {
                     AM_PM = "오후"
                 }
-                binding.tvEatDrugTime.text = "${AM_PM} ${String.format("%02d:%02d", p1, p2)}"
+                alarmAdapter.modifyItem(position, "${AM_PM} ${String.format("%02d:%02d", p1, p2)}")
             }
         },hour,minute,false)
         timePicker.show()
@@ -116,6 +142,7 @@ class AlarmCreateFragment : Fragment() {
             minValue = 1
             wrapSelectorWheel = false
             setOnValueChangedListener { _,_,newVal ->
+                Log.e(TAG,"?????? 개수가?${newVal}")
                 number = newVal
             }
         }
@@ -124,7 +151,13 @@ class AlarmCreateFragment : Fragment() {
             setTitle("1일 섭취 횟수를 선택해주세요")
             setView(dialogBinding.root)
             setPositiveButton(android.R.string.ok){ _,_ ->
+                Log.e(TAG,"?????? 개수가?${number}")
+                number = numberPicker.value
                 binding.btnEatDrugCount.text = "${number}회"
+                alarmAdapter.removeItemAll()
+                for(i in 1..number){
+                    alarmAdapter.addItem(AlarmList("섭취 시간", "오전 09:00"))
+                }
             }
             setNegativeButton(android.R.string.cancel){_,_ ->
                 return@setNegativeButton
