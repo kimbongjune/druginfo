@@ -110,7 +110,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
-                    android:text="매주 일요일"
+                    android:text="한번"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     app:layout_constraintStart_toEndOf="@+id/tv_eat_drug_cycle"
@@ -130,7 +130,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_eat_drug_layout">
 
-                <RadioGroup
+                <LinearLayout
                     android:id="@+id/rg_choose_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -140,7 +140,7 @@
                     android:paddingRight="20dp">
 
                     <CheckBox
-                        android:id="@+id/rb_alarm_sunday"
+                        android:id="@+id/cb_alarm_sunday"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/selector_radio_round_button"
@@ -157,7 +157,7 @@
                         android:layout_weight="1"/>
 
                     <CheckBox
-                        android:id="@+id/rb_alarm_monday"
+                        android:id="@+id/cb_alarm_monday"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/selector_radio_round_button"
@@ -174,7 +174,7 @@
                         android:layout_weight="1"/>
 
                     <CheckBox
-                        android:id="@+id/rb_alarm_tuesday"
+                        android:id="@+id/cb_alarm_tuesday"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/selector_radio_round_button"
@@ -191,7 +191,7 @@
                         android:layout_weight="1"/>
 
                     <CheckBox
-                        android:id="@+id/rb_alarm_wednesday"
+                        android:id="@+id/cb_alarm_wednesday"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/selector_radio_round_button"
@@ -208,7 +208,7 @@
                         android:layout_weight="1"/>
 
                     <CheckBox
-                        android:id="@+id/rb_alarm_thursday"
+                        android:id="@+id/cb_alarm_thursday"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/selector_radio_round_button"
@@ -225,7 +225,7 @@
                         android:layout_weight="1"/>
 
                     <CheckBox
-                        android:id="@+id/rb_alarm_friday"
+                        android:id="@+id/cb_alarm_friday"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/selector_radio_round_button"
@@ -242,7 +242,7 @@
                         android:layout_weight="1"/>
 
                     <CheckBox
-                        android:id="@+id/rb_alarm_saturday"
+                        android:id="@+id/cb_alarm_saturday"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/selector_radio_round_button"
@@ -253,7 +253,7 @@
                         android:button="@null"
                         android:gravity="center"/>
 
-                </RadioGroup>
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -302,6 +302,18 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--<androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_eat_drug_time_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_eat_drug_count_layout"/>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_eat_drug_time_layout"

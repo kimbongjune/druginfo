@@ -17,9 +17,8 @@ import com.nocdu.druginformation.databinding.NumberPickerDialogBinding
 import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import java.util.*
 
-// TODO: Rename parameter a
 class AlarmCreateFragment : Fragment() {
-    final val TAG:String = "AlarmCreateFragment"
+    val TAG:String = "AlarmCreateFragment"
     private var _binding: FragmentAlarmCreateBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -38,6 +37,7 @@ class AlarmCreateFragment : Fragment() {
         showNumberPickerDialog()
         showDatePickerDialog()
         showOneTimeEatPickerDialog()
+        changeAlarmDate()
     }
 
     override fun onStop() {
@@ -97,9 +97,9 @@ class AlarmCreateFragment : Fragment() {
             override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
                 var AM_PM:String = ""
                 if(p1 < 12) {
-                    AM_PM = "오전";
+                    AM_PM = "오전"
                 } else {
-                    AM_PM = "오후";
+                    AM_PM = "오후"
                 }
                 binding.tvEatDrugTime.text = "${AM_PM} ${String.format("%02d:%02d", p1, p2)}"
             }
@@ -110,7 +110,7 @@ class AlarmCreateFragment : Fragment() {
     private fun callNumberPickerDialog(){
         val dialogBinding:NumberPickerDialogBinding = NumberPickerDialogBinding.inflate(layoutInflater)
 
-        var number = 0;
+        var number = 0
         val numberPicker = dialogBinding.npEatDrugNumberPicker.apply {
             maxValue = 5
             minValue = 1
@@ -127,7 +127,7 @@ class AlarmCreateFragment : Fragment() {
                 binding.btnEatDrugCount.text = "${number}회"
             }
             setNegativeButton(android.R.string.cancel){_,_ ->
-
+                return@setNegativeButton
             }
         }
         val alertNumberPickerDialog = dialogBuilder.create()
@@ -137,8 +137,8 @@ class AlarmCreateFragment : Fragment() {
     private fun callOneTimeEatPickerDialog(){
         val dialogBinding:OnetimeEatPickerDialogBinding = OnetimeEatPickerDialogBinding.inflate(layoutInflater)
 
-        var number = 0;
-        val numberPicker = dialogBinding.npEatDrugOnetimePicker.apply {
+        var number = 0
+        dialogBinding.npEatDrugOnetimePicker.apply {
             maxValue = 5
             minValue = 1
             wrapSelectorWheel = false
@@ -151,13 +151,75 @@ class AlarmCreateFragment : Fragment() {
             setTitle("1회 섭취량을 선택해주세요")
             setView(dialogBinding.root)
             setPositiveButton(android.R.string.ok){ _,_ ->
-                binding.btnEatDrugCount.text = "${number}개"
+                binding.btnEatDrugOnetime.text = "${number}개"
             }
             setNegativeButton(android.R.string.cancel){_,_ ->
-
+                return@setNegativeButton
             }
         }
         val alertNumberPickerDialog = dialogBuilder.create()
         alertNumberPickerDialog.show()
+    }
+
+    private fun changeAlarmDate(){
+        binding.cbAlarmMonday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
+        binding.cbAlarmTuesday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
+        binding.cbAlarmWednesday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
+        binding.cbAlarmThursday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
+        binding.cbAlarmFriday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
+        binding.cbAlarmSaturday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
+        binding.cbAlarmSunday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
+    }
+
+    private fun handleCheckboxClick(){
+        val checkedDays = mutableListOf<String>()
+        if(binding.cbAlarmMonday.isChecked) checkedDays.add("월")
+        if(binding.cbAlarmTuesday.isChecked) checkedDays.add("화")
+        if(binding.cbAlarmWednesday.isChecked) checkedDays.add("수")
+        if(binding.cbAlarmThursday.isChecked) checkedDays.add("목")
+        if(binding.cbAlarmFriday.isChecked) checkedDays.add("금")
+        if(binding.cbAlarmSaturday.isChecked) checkedDays.add("토")
+        if(binding.cbAlarmSunday.isChecked) checkedDays.add("일")
+
+        if(!binding.cbAlarmMonday.isChecked) checkedDays.remove("월")
+        if(!binding.cbAlarmTuesday.isChecked) checkedDays.remove("화")
+        if(!binding.cbAlarmWednesday.isChecked) checkedDays.remove("수")
+        if(!binding.cbAlarmThursday.isChecked) checkedDays.remove("목")
+        if(!binding.cbAlarmFriday.isChecked) checkedDays.remove("금")
+        if(!binding.cbAlarmSaturday.isChecked) checkedDays.remove("토")
+        if(!binding.cbAlarmSunday.isChecked) checkedDays.remove("일")
+
+        val sortedDaysOfWeek = checkedDays.sortedBy { getDayOfWeekNumber(it) }
+
+        binding.tvEatDrugCycleName.text = when {
+            sortedDaysOfWeek.isEmpty() -> {
+                "한번"
+            }
+            sortedDaysOfWeek.size == 7 -> {
+                "매일"
+            }
+            sortedDaysOfWeek.containsAll(listOf("토", "일")) -> {
+                "매주 주말"
+            }
+            sortedDaysOfWeek == listOf("월", "화", "수", "목", "금") -> {
+                "매주 평일"
+            }
+            else -> {
+                "매주 "+sortedDaysOfWeek.joinToString(", ")
+            }
+        }
+    }
+
+    private fun getDayOfWeekNumber(dayOfWeek: String): Int {
+        return when (dayOfWeek) {
+            "일" -> 1
+            "월" -> 2
+            "화" -> 3
+            "수" -> 4
+            "목" -> 5
+            "금" -> 6
+            "토" -> 7
+            else -> throw IllegalArgumentException("Invalid day of week")
+        }
     }
 }
