@@ -110,7 +110,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
-                    android:text="한번"
+                    android:text="요일을 선택해주세요"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     app:layout_constraintStart_toEndOf="@+id/tv_eat_drug_cycle"
@@ -305,7 +305,7 @@
             <RelativeLayout
                 android:id="@+id/rl_eat_drug_time_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:descendantFocusability="blocksDescendants"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constrainedHeight="true"
@@ -318,9 +318,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    app:layout_constrainedHeight="true"
                     android:orientation="horizontal"
-                    android:paddingBottom="5dp"/>
+                    android:paddingBottom="5dp"
+                    app:layout_constrainedHeight="true" />
 
             </RelativeLayout>
 
@@ -566,7 +566,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/black"
-                android:text="취소"
+                android:text="초기화"
                 android:textColor="@color/white"
                 app:layout_constraintWidth_percent="0.3"
                 app:layout_constraintTop_toBottomOf="@+id/cl_eat_drug_remaining_layout"

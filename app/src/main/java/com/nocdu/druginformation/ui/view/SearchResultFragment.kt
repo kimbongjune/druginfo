@@ -1,6 +1,7 @@
 package com.nocdu.druginformation.ui.view
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.*
 import android.widget.Button
@@ -122,7 +123,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.useMethodQesitm.isNullOrEmpty()){
             binding.tvUseMethodQesitm.visibility = View.VISIBLE
-            binding.tvUseMethodQesitm.text = data.useMethodQesitm
+            binding.tvUseMethodQesitm.text = splitStringByKeyword(data.useMethodQesitm)
             binding.tvUseMethodQesitmTitme.visibility = View.VISIBLE
         }else{
             binding.tvUseMethodQesitm.visibility = View.GONE
@@ -131,7 +132,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.warningText.isNullOrEmpty()){
             binding.tvWarningText.visibility = View.VISIBLE
-            binding.tvWarningText.text = data.warningText
+            binding.tvWarningText.text = splitStringByKeyword(data.warningText)
             binding.tvWarningTextTitle.visibility = View.VISIBLE
         }else{
             binding.tvWarningText.visibility = View.GONE
@@ -140,7 +141,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.noInject.isNullOrEmpty()){
             binding.tvNoInject.visibility = View.VISIBLE
-            binding.tvNoInject.text = data.noInject
+            binding.tvNoInject.text = splitStringByKeyword(data.noInject)
             binding.tvNoInjectTitle.visibility = View.VISIBLE
         }else{
             binding.tvNoInject.visibility = View.GONE
@@ -149,7 +150,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.cautionInject.isNullOrEmpty()){
             binding.tvCautionInject.visibility = View.VISIBLE
-            binding.tvCautionInject.text = data.cautionInject
+            binding.tvCautionInject.text = splitStringByKeyword(data.cautionInject)
             binding.tvCautionInjectTitle.visibility = View.VISIBLE
         }else{
             binding.tvCautionInject.visibility = View.GONE
@@ -158,7 +159,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.allegyReaction.isNullOrEmpty()){
             binding.tvAllegyReaction.visibility = View.VISIBLE
-            binding.tvAllegyReaction.text = data.allegyReaction
+            binding.tvAllegyReaction.text = splitStringByKeyword(data.allegyReaction)
             binding.tvAllegyReactionTitle.visibility = View.VISIBLE
         }else{
             binding.tvAllegyReaction.visibility = View.GONE
@@ -167,7 +168,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.multieInjectWarning.isNullOrEmpty()){
             binding.tvMultieInjectWarning.visibility = View.VISIBLE
-            binding.tvMultieInjectWarning.text = data.multieInjectWarning
+            binding.tvMultieInjectWarning.text = splitStringByKeyword(data.multieInjectWarning)
             binding.tvMultieInjectWarningTitle.visibility = View.VISIBLE
         }else{
             binding.tvMultieInjectWarning.visibility = View.GONE
@@ -176,7 +177,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.pregnantWomenInjectWarning.isNullOrEmpty()){
             binding.tvPregnantWomenInjectWarning.visibility = View.VISIBLE
-            binding.tvPregnantWomenInjectWarning.text = data.pregnantWomenInjectWarning
+            binding.tvPregnantWomenInjectWarning.text = splitStringByKeyword(data.pregnantWomenInjectWarning)
             binding.tvPregnantWomenInjectWarningTitle.visibility = View.VISIBLE
         }else{
             binding.tvPregnantWomenInjectWarning.visibility = View.GONE
@@ -185,7 +186,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.lactionWomenInjectWarning.isNullOrEmpty()){
             binding.tvLactionWomenInjectWarning.visibility = View.VISIBLE
-            binding.tvLactionWomenInjectWarning.text = data.lactionWomenInjectWarning
+            binding.tvLactionWomenInjectWarning.text = splitStringByKeyword(data.lactionWomenInjectWarning)
             binding.tvLactionWomenInjectWarningTitle.visibility = View.VISIBLE
         }else{
             binding.tvLactionWomenInjectWarning.visibility = View.GONE
@@ -194,7 +195,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.pregnantWomenWithLactationWomanWarning.isNullOrEmpty()){
             binding.tvPregnantWomenWithLactationWomanWarning.visibility = View.VISIBLE
-            binding.tvPregnantWomenWithLactationWomanWarning.text = data.pregnantWomenWithLactationWomanWarning
+            binding.tvPregnantWomenWithLactationWomanWarning.text = splitStringByKeyword(data.pregnantWomenWithLactationWomanWarning)
             binding.tvPregnantWomenWithLactationWomanWarningTitle.visibility = View.VISIBLE
         }else{
             binding.tvPregnantWomenWithLactationWomanWarning.visibility = View.GONE
@@ -203,7 +204,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.childInjectWarning.isNullOrEmpty()){
             binding.tvChildInjectWarning.visibility = View.VISIBLE
-            binding.tvChildInjectWarning.text = data.childInjectWarning
+            binding.tvChildInjectWarning.text = splitStringByKeyword(data.childInjectWarning)
             binding.tvChildInjectWarningTitle.visibility = View.VISIBLE
         }else{
             binding.tvChildInjectWarning.visibility = View.GONE
@@ -212,7 +213,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.oldmanInjectWarning.isNullOrEmpty()){
             binding.tvOldmanInjectWarning.visibility = View.VISIBLE
-            binding.tvOldmanInjectWarning.text = data.oldmanInjectWarning
+            binding.tvOldmanInjectWarning.text = splitStringByKeyword(data.oldmanInjectWarning)
             binding.tvOldmanInjectWarningTitle.visibility = View.VISIBLE
         }else{
             binding.tvOldmanInjectWarning.visibility = View.GONE
@@ -221,7 +222,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.overdoseTreatment.isNullOrEmpty()){
             binding.tvOverdoseTreatment.visibility = View.VISIBLE
-            binding.tvOverdoseTreatment.text = data.overdoseTreatment
+            binding.tvOverdoseTreatment.text = splitStringByKeyword(data.overdoseTreatment)
             binding.tvOverdoseTreatmentTitle.visibility = View.VISIBLE
         }else{
             binding.tvOverdoseTreatment.visibility = View.GONE
@@ -230,7 +231,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.doseCaution.isNullOrEmpty()){
             binding.tvDoseCaution.visibility = View.VISIBLE
-            binding.tvDoseCaution.text = data.doseCaution
+            binding.tvDoseCaution.text = splitStringByKeyword(data.doseCaution)
             binding.tvDoseCautionTitle.visibility = View.VISIBLE
         }else{
             binding.tvDoseCaution.visibility = View.GONE
@@ -239,7 +240,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.beforeConsultDoctor.isNullOrEmpty()){
             binding.tvBeforeConsultDoctor.visibility = View.VISIBLE
-            binding.tvBeforeConsultDoctor.text = data.beforeConsultDoctor
+            binding.tvBeforeConsultDoctor.text = splitStringByKeyword(data.beforeConsultDoctor)
             binding.tvBeforeConsultDoctorTitle.visibility = View.VISIBLE
         }else{
             binding.tvBeforeConsultDoctor.visibility = View.GONE
@@ -248,7 +249,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.afterConsultDoctor.isNullOrEmpty()){
             binding.tvAfterConsultDoctor.visibility = View.VISIBLE
-            binding.tvAfterConsultDoctor.text = data.afterConsultDoctor
+            binding.tvAfterConsultDoctor.text = splitStringByKeyword(data.afterConsultDoctor)
             binding.tvAfterConsultDoctorTitle.visibility = View.VISIBLE
         }else{
             binding.tvAfterConsultDoctor.visibility = View.GONE
@@ -257,7 +258,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.interactionCaution.isNullOrEmpty()){
             binding.tvInteractionCaution.visibility = View.VISIBLE
-            binding.tvInteractionCaution.text = data.interactionCaution
+            binding.tvInteractionCaution.text = splitStringByKeyword(data.interactionCaution)
             binding.tvInteractionCautionTitle.visibility = View.VISIBLE
         }else{
             binding.tvInteractionCaution.visibility = View.GONE
@@ -266,7 +267,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.extraCaution.isNullOrEmpty()){
             binding.tvExtraCaution.visibility = View.VISIBLE
-            binding.tvExtraCaution.text = data.extraCaution
+            binding.tvExtraCaution.text = splitStringByKeyword(data.extraCaution)
             binding.tvExtraCautionTitle.visibility = View.VISIBLE
         }else{
             binding.tvExtraCaution.visibility = View.GONE
@@ -275,7 +276,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.storageMethod.isNullOrEmpty()){
             binding.tvStorageMethod.visibility = View.VISIBLE
-            binding.tvStorageMethod.text = data.storageMethod
+            binding.tvStorageMethod.text = splitStringByKeyword(data.storageMethod)
             binding.tvStorageMethodTitle.visibility = View.VISIBLE
         }else{
             binding.tvStorageMethod.visibility = View.GONE
@@ -302,7 +303,7 @@ class SearchResultFragment : Fragment() {
 
         if(!data.generalCaution.isNullOrEmpty()){
             binding.tvGeneralCaution.visibility = View.VISIBLE
-            binding.tvGeneralCaution.text = data.generalCaution
+            binding.tvGeneralCaution.text = splitStringByKeyword(data.generalCaution)
             binding.tvGeneralCautionTitle.visibility = View.VISIBLE
         }else{
             binding.tvGeneralCaution.visibility = View.GONE
@@ -316,4 +317,29 @@ class SearchResultFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
+
+    private fun splitStringByKeyword(str: String): String {
+        val regex = Regex("(\\d+\\))|(\\(\\d+\\))") // 숫자 뒤 괄호 또는 괄호 안의 숫자를 찾는 정규식
+        val newText = regex.replace(str) { matchResult ->
+            val matchValue = matchResult.value
+            if (matchValue.matches("\\d+\\)".toRegex())) { // 숫자 뒤 괄호 문자일 때
+                if (matchResult.range.first == 0) { // 텍스트가 첫 줄일 경우
+                    "$matchValue" // 줄바꿈 없이 매치된 문자열만 추가
+                } else {
+                    "\n\n$matchValue" // 줄바꿈을 두 번 하고 매치된 문자열을 추가
+                }
+                //"\n\n$matchValue" // 줄바꿈을 두 번 하고 매치된 문자열을 추가
+            } else { // 괄호 안 숫자일 때
+                if (matchResult.range.first == 0) { // 텍스트가 첫 줄일 경우
+                    "$matchValue" // 줄바꿈 없이 매치된 문자열만 추가
+                } else {
+                    "\n\t$matchValue" // 줄바꿈을 두 번 하고 매치된 문자열을 추가
+                }
+                //"\n\t$matchValue" // 줄바꿈을 한 번 하고 탭을 추가하여 매치된 문자열을 추가
+            }
+        }
+
+        return newText
+    }
+
 }

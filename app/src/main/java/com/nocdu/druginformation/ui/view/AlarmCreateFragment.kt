@@ -20,6 +20,7 @@ import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AlarmCreateFragment : Fragment() {
@@ -28,8 +29,10 @@ class AlarmCreateFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var alarmAdapter: AlarmAdapter
+    private var checkedDays:MutableList<String>? = null
 
-    var alarmList = arrayListOf<AlarmList>(AlarmList("섭취 시간", "오전 09:00"))
+    var alarmList = arrayListOf<AlarmList>(AlarmList(intIndexToStringIndex(1), "오전 09:00"))
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,24 +45,16 @@ class AlarmCreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
-
-        alarmAdapter = AlarmAdapter(requireContext(), alarmList)
-
-        binding.rvEatDrugTimeLayout.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(
-                DividerItemDecoration(requireContext(),
-                    DividerItemDecoration.VERTICAL)
-            )
-            adapter = alarmAdapter
-        }
-
+        checkedDays = mutableListOf<String>()
+        setAdapter()
         goBack()
         showNumberPickerDialog()
         showDatePickerDialog()
         showOneTimeEatPickerDialog()
         changeAlarmDate()
+        setCleanButton()
+        setSendButton()
+        //binding.tvEatDrugCycleName.text = setCycleTime(9, 0)
     }
 
     override fun onStop() {
@@ -115,19 +110,64 @@ class AlarmCreateFragment : Fragment() {
         })
     }
 
+    private fun setAdapter(){
+        alarmAdapter = AlarmAdapter(requireContext(), alarmList)
+
+        binding.rvEatDrugTimeLayout.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(
+                DividerItemDecoration(requireContext(),
+                    DividerItemDecoration.VERTICAL)
+            )
+            adapter = alarmAdapter
+        }
+    }
+
+    private fun setCleanButton(){
+        binding.btnTermClear.setOnClickListener {
+            binding.etAlarmName.setText("")
+            binding.etEatDrug.setText("")
+            binding.cbAlarmMonday.isChecked = false
+            binding.cbAlarmTuesday.isChecked = false
+            binding.cbAlarmWednesday.isChecked = false
+            binding.cbAlarmThursday.isChecked = false
+            binding.cbAlarmFriday.isChecked = false
+            binding.cbAlarmSaturday.isChecked = false
+            binding.cbAlarmSunday.isChecked = false
+            binding.btnEatDrugCount.text = "1회"
+            alarmAdapter.removeItemAll()
+            alarmAdapter.addItem(AlarmList("섭취 시간", "오전 09:00"))
+            binding.btnEatDrugOnetime.text = "1개"
+            binding.swEatDrugBeforehandCycle.isChecked = false
+            binding.edEatDrugRemaining.setText("")
+            binding.edEatDrugSmallest.setText("")
+            binding.tvEatDrugCycleName.text = "요일을 선택해주세요"
+        }
+    }
+
+    private fun setSendButton(){
+        binding.btnViewSearchSend.setOnClickListener {
+            Log.e(TAG,"알람 제목 : ${binding.etAlarmName.text}")
+            Log.e(TAG,"의약품 이름 : ${binding.etEatDrug.text}")
+            Log.e(TAG,"선택된 날짜 : ${checkedDays!!.size}")
+            Log.e(TAG,"알람 개수 : ${alarmAdapter.itemCount}")
+            Log.e(TAG,"일회 섭취 의약품 개수 : ${binding.btnEatDrugOnetime.text.toString().replace("개", "")}")
+            Log.e(TAG,"의약품 제고 알림 여부 : ${binding.swEatDrugBeforehandCycle.isChecked}")
+            Log.e(TAG,"잔여 의약품 개수 : ${binding.edEatDrugRemaining.text}")
+            Log.e(TAG,"잔여 의약품 최소 보유량 : ${binding.edEatDrugSmallest.text}")
+        }
+    }
+
     private fun callDatePickerDialog(position:Int){
         val currentTime = Calendar.getInstance()
         val hour = currentTime.get(Calendar.HOUR_OF_DAY)
         var minute = currentTime.get(Calendar.MINUTE)
         val timePicker:TimePickerDialog = TimePickerDialog(activity, object :TimePickerDialog.OnTimeSetListener{
             override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
-                var AM_PM:String = ""
-                if(p1 < 12) {
-                    AM_PM = "오전"
-                } else {
-                    AM_PM = "오후"
-                }
-                alarmAdapter.modifyItem(position, "${AM_PM} ${String.format("%02d:%02d", p1, p2)}")
+                var AM_PM:String = if(p1 < 12) "오전" else "오후"
+                val hour = if (p1 % 12 == 0) 12 else p1 % 12
+                alarmAdapter.modifyItem(position, "${AM_PM} ${String.format("%02d:%02d", hour, p2)}")
             }
         },hour,minute,false)
         timePicker.show()
@@ -156,7 +196,7 @@ class AlarmCreateFragment : Fragment() {
                 binding.btnEatDrugCount.text = "${number}회"
                 alarmAdapter.removeItemAll()
                 for(i in 1..number){
-                    alarmAdapter.addItem(AlarmList("섭취 시간", "오전 09:00"))
+                    alarmAdapter.addItem(AlarmList(intIndexToStringIndex(i), "오전 09:00"))
                 }
             }
             setNegativeButton(android.R.string.cancel){_,_ ->
@@ -205,33 +245,34 @@ class AlarmCreateFragment : Fragment() {
     }
 
     private fun handleCheckboxClick(){
-        val checkedDays = mutableListOf<String>()
-        if(binding.cbAlarmMonday.isChecked) checkedDays.add("월")
-        if(binding.cbAlarmTuesday.isChecked) checkedDays.add("화")
-        if(binding.cbAlarmWednesday.isChecked) checkedDays.add("수")
-        if(binding.cbAlarmThursday.isChecked) checkedDays.add("목")
-        if(binding.cbAlarmFriday.isChecked) checkedDays.add("금")
-        if(binding.cbAlarmSaturday.isChecked) checkedDays.add("토")
-        if(binding.cbAlarmSunday.isChecked) checkedDays.add("일")
+        checkedDays = mutableListOf<String>()
+        if(binding.cbAlarmMonday.isChecked) checkedDays!!.add("월")
+        if(binding.cbAlarmTuesday.isChecked) checkedDays!!.add("화")
+        if(binding.cbAlarmWednesday.isChecked) checkedDays!!.add("수")
+        if(binding.cbAlarmThursday.isChecked) checkedDays!!.add("목")
+        if(binding.cbAlarmFriday.isChecked) checkedDays!!.add("금")
+        if(binding.cbAlarmSaturday.isChecked) checkedDays!!.add("토")
+        if(binding.cbAlarmSunday.isChecked) checkedDays!!.add("일")
 
-        if(!binding.cbAlarmMonday.isChecked) checkedDays.remove("월")
-        if(!binding.cbAlarmTuesday.isChecked) checkedDays.remove("화")
-        if(!binding.cbAlarmWednesday.isChecked) checkedDays.remove("수")
-        if(!binding.cbAlarmThursday.isChecked) checkedDays.remove("목")
-        if(!binding.cbAlarmFriday.isChecked) checkedDays.remove("금")
-        if(!binding.cbAlarmSaturday.isChecked) checkedDays.remove("토")
-        if(!binding.cbAlarmSunday.isChecked) checkedDays.remove("일")
+        if(!binding.cbAlarmMonday.isChecked) checkedDays!!.remove("월")
+        if(!binding.cbAlarmTuesday.isChecked) checkedDays!!.remove("화")
+        if(!binding.cbAlarmWednesday.isChecked) checkedDays!!.remove("수")
+        if(!binding.cbAlarmThursday.isChecked) checkedDays!!.remove("목")
+        if(!binding.cbAlarmFriday.isChecked) checkedDays!!.remove("금")
+        if(!binding.cbAlarmSaturday.isChecked) checkedDays!!.remove("토")
+        if(!binding.cbAlarmSunday.isChecked) checkedDays!!.remove("일")
 
-        val sortedDaysOfWeek = checkedDays.sortedBy { getDayOfWeekNumber(it) }
+        val sortedDaysOfWeek = checkedDays!!.sortedBy { getDayOfWeekNumber(it) }
 
         binding.tvEatDrugCycleName.text = when {
             sortedDaysOfWeek.isEmpty() -> {
-                "한번"
+                //setCycleTime(9, 0)
+                "요일을 선택해주세요"
             }
             sortedDaysOfWeek.size == 7 -> {
                 "매일"
             }
-            sortedDaysOfWeek.containsAll(listOf("토", "일")) -> {
+            sortedDaysOfWeek == listOf("토", "일") -> {
                 "매주 주말"
             }
             sortedDaysOfWeek == listOf("월", "화", "수", "목", "금") -> {
@@ -245,14 +286,47 @@ class AlarmCreateFragment : Fragment() {
 
     private fun getDayOfWeekNumber(dayOfWeek: String): Int {
         return when (dayOfWeek) {
-            "일" -> 1
-            "월" -> 2
-            "화" -> 3
-            "수" -> 4
-            "목" -> 5
-            "금" -> 6
-            "토" -> 7
+            "일" -> 7
+            "월" -> 1
+            "화" -> 2
+            "수" -> 3
+            "목" -> 4
+            "금" -> 5
+            "토" -> 6
             else -> throw IllegalArgumentException("Invalid day of week")
         }
+    }
+
+    private fun setCycleTime(hour:Int, minute:Int):String{
+        val calendar = Calendar.getInstance()
+
+        var todayOrNextDate:String = ""
+
+        // 현재 시간이 오전 9시 00분을 넘었는지 확인
+        if (calendar.get(Calendar.HOUR_OF_DAY) > 9 || (calendar.get(Calendar.HOUR_OF_DAY) == hour && calendar.get(Calendar.MINUTE) >= minute)) {
+            // 내일 날짜(월,일) 구하기
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+            todayOrNextDate = "내일-"
+        }else{
+            todayOrNextDate = "오늘-"
+        }
+
+        // 월, 일 형식으로 포맷팅한 날짜 문자열 생성
+        val dateFormat = SimpleDateFormat("M월 d일(E)", Locale.getDefault())
+        val dateString = dateFormat.format(calendar.time)
+
+        // TextView에 날짜 문자열 설정
+        return todayOrNextDate+dateString
+    }
+
+    private fun intIndexToStringIndex(index:Int):String{
+        return when(index){
+            1 -> "첫"
+            2 -> "두"
+            3 -> "세"
+            4 -> "네"
+            5 -> "다섯"
+            else -> throw IllegalArgumentException("Invalid day of week")
+        }+"번째 섭취시간"
     }
 }

@@ -39,8 +39,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:paddingBottom="20dp">
 
             <TextView
@@ -65,7 +63,7 @@
 
             <TextView
                 android:id="@+id/tv_class_name_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="분류"
@@ -79,16 +77,18 @@
 
             <TextView
                 android:id="@+id/tv_class_name"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="일반"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_class_name_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_class_name_title"
+                app:layout_constraintTop_toBottomOf="@+id/iv_item_image"/>
 
             <TextView
                 android:id="@+id/tv_entp_name_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="제약사"
@@ -101,16 +101,18 @@
 
             <TextView
                 android:id="@+id/tv_entp_name"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="경동제약(주)"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_entp_name_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_entp_name_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_class_name"/>
 
             <TextView
                 android:id="@+id/tv_seller_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="판매사"
@@ -123,16 +125,18 @@
 
             <TextView
                 android:id="@+id/tv_seller"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="경동제약(주)"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_seller_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_seller_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_entp_name"/>
 
             <TextView
                 android:id="@+id/tv_efcy_qesitm_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="효능"
@@ -145,16 +149,18 @@
 
             <TextView
                 android:id="@+id/tv_efcy_qesitm"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="혈전 생성 억제제 : 혈소판 응집 저해제"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_efcy_qesitm_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_efcy_qesitm_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_seller"/>
 
             <TextView
                 android:id="@+id/tv_use_method_qesitm_titme"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="복용법"
@@ -167,19 +173,21 @@
 
             <TextView
                 android:id="@+id/tv_use_method_qesitm"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="성인 1일 1회 1정,
 의사의 처방 없이 고용량을 복용하지 않는다.
 아스피린을 함유하는 제제는 위장관 출혈의 이상반응으로 인하여 공복에 투여하지 않는 것이 일반적이나, 이 제제는 장용정이므로 충분한 물과 함께 식전에 복용할 수 있다.
 출혈의 위험이 있으므로 수술(치과수술 포함)을 하는 경우에는 담당의사에게 아스피린 제제를 복용하고 있음을 알리고 상담을 실시하여야 한다."
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_use_method_qesitm_titme"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_use_method_qesitm_titme"
+                app:layout_constraintTop_toBottomOf="@+id/tv_efcy_qesitm"/>
 
             <TextView
                 android:id="@+id/tv_general_caution_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="일반적 주의"
@@ -193,16 +201,18 @@
 
             <TextView
                 android:id="@+id/tv_general_caution"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="일반적 주의"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_general_caution_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_general_caution_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_use_method_qesitm"/>
 
             <TextView
                 android:id="@+id/tv_warning_text_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="복용 전 주의사항"
@@ -217,16 +227,18 @@
 
             <TextView
                 android:id="@+id/tv_warning_text"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="매일 세잔 이상 정기적으로 술을 마시는 사람이 이 약이나 다른 해열진통제를 복용해야 할 경우 반드시 의사 또는 약사와 상의해야 한다. 이러한 사람이 이 약을 복용하면 위장출혈이 유발될 수 있다."
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warning_text_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_warning_text_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_general_caution"/>
 
             <TextView
                 android:id="@+id/tv_no_inject_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="복용 금지 환자"
@@ -241,8 +253,9 @@
 
             <TextView
                 android:id="@+id/tv_no_inject"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="1) 이 약 또는 다른 살리실산제제에 과민증의 병력이 있는 환자
 2) 소화성궤양 환자
 3) 아스피린천식(비스테로이드성 소염진통제 등에 의한 천식발작의 유발) 또는 그 병력이 있는 환자
@@ -255,11 +268,12 @@
 10) 임신 3기에 해당하는 임부"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_no_inject_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_no_inject_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_warning_text"/>
 
             <TextView
                 android:id="@+id/tv_caution_inject_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="복용 신중 환자"
@@ -274,8 +288,9 @@
 
             <TextView
                 android:id="@+id/tv_caution_inject"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="1) 신장애 환자 또는 심혈관 순환 기능 이상 환자(신혈관 질환, 울혈성 심부전, 체액 감소, 큰 수술, 패혈증 또는 주요 출혈 사고 등)
 2) 간장애 또는 그의 병력이 있는 환자
 3) 심기능이상 환자
@@ -289,11 +304,12 @@
 11) 포도당-6-인산염 탈수소효소(G6PD) 결핍 환자. 이 약이 용혈 및 용혈성 빈혈을 유도할 수 있다. 용혈의 위험을 증가시킬 수 있는 요인은 고용량 투여, 열, 급성감염이다."
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_caution_inject_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_caution_inject_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_no_inject"/>
 
             <TextView
                 android:id="@+id/tv_allegy_reaction_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="신체 이상반응"
@@ -307,8 +323,9 @@
 
             <TextView
                 android:id="@+id/tv_allegy_reaction"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="기재된 이상약물반응은 아스피린 제제의 단기, 장기 경구 투여를 포함한 자발적 시판 후 보고에 근거하였다.
 1) 쇽 : 쇽 및 아나필락시양 증상(호흡곤란, 전신조홍, 혈관부종, 두드러기 등)이 나타나는 경우가 있으므로 충분히 관찰하여 이상이 확인될 경우에는 투여를 중지하고 적절한 처치를 할 것. 이 약은 천식발작을 유발할 수 있다.
 2) 과민증 : 홍반, 간지러움, 코막힘, 심장-호흡기 장애, 때때로 발진, 부종, 두드러기, 비염양 증상, 결막염 등의 과민증상이 나타날 수 있으므로 이러한 증상이 나타날 경우에는 투여를 중지한다.
@@ -321,11 +338,12 @@
 9) 기타 : 과호흡, 대사성 산증 등이 나타날 경우에는 혈중농도가 현저하게 상승될 수 있으므로 용량을 줄이거나 투여를 중지한다."
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_allegy_reaction_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_allegy_reaction_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_caution_inject"/>
 
             <TextView
                 android:id="@+id/tv_multie_inject_warning_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="임부, 수유부, 유아, 노년 주의사항"
@@ -339,16 +357,18 @@
 
             <TextView
                 android:id="@+id/tv_multie_inject_warning"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="임부, 수유부, 유아, 노년 주의사항"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_multie_inject_warning_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_multie_inject_warning_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_allegy_reaction"/>
 
             <TextView
                 android:id="@+id/tv_pregnant_women_inject_warning_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="임부 주의사항"
@@ -362,16 +382,18 @@
 
             <TextView
                 android:id="@+id/tv_pregnant_women_inject_warning"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="임부 주의사항"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_pregnant_women_inject_warning_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_pregnant_women_inject_warning_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_multie_inject_warning"/>
 
             <TextView
                 android:id="@+id/tv_laction_women_inject_warning_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="수유부 주의사항"
@@ -385,16 +407,18 @@
 
             <TextView
                 android:id="@+id/tv_laction_women_inject_warning"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="수유부 주의사항"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_laction_women_inject_warning_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_laction_women_inject_warning_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_pregnant_women_inject_warning"/>
 
             <TextView
                 android:id="@+id/tv_pregnant_women_with_lactation_woman_warning_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="임부 및 수유부 주의사항"
@@ -408,16 +432,18 @@
 
             <TextView
                 android:id="@+id/tv_pregnant_women_with_lactation_woman_warning"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="임부 및 수유부 주의사항"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_pregnant_women_with_lactation_woman_warning_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_pregnant_women_with_lactation_woman_warning_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_laction_women_inject_warning"/>
 
             <TextView
                 android:id="@+id/tv_child_inject_warning_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="소아 주의사항"
@@ -431,16 +457,18 @@
 
             <TextView
                 android:id="@+id/tv_child_inject_warning"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="소아 주의사항"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_child_inject_warning_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_child_inject_warning_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_pregnant_women_with_lactation_woman_warning"/>
 
             <TextView
                 android:id="@+id/tv_oldman_inject_warning_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="노인 주의사항"
@@ -454,16 +482,18 @@
 
             <TextView
                 android:id="@+id/tv_oldman_inject_warning"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="노인 주의사항"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_oldman_inject_warning_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_oldman_inject_warning_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_child_inject_warning"/>
 
             <TextView
                 android:id="@+id/tv_overdose_treatment_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="과다복용시 처치"
@@ -477,16 +507,18 @@
 
             <TextView
                 android:id="@+id/tv_overdose_treatment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="과다복용시 처치"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_overdose_treatment_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_overdose_treatment_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_oldman_inject_warning"/>
 
             <TextView
                 android:id="@+id/tv_dose_caution_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="적용상의 주의"
@@ -500,16 +532,18 @@
 
             <TextView
                 android:id="@+id/tv_dose_caution"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="적용상의 주의"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_dose_caution_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_dose_caution_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_overdose_treatment"/>
 
             <TextView
                 android:id="@+id/tv_before_consult_doctor_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="먹기 전 의사에게"
@@ -523,16 +557,18 @@
 
             <TextView
                 android:id="@+id/tv_before_consult_doctor"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="먹기 전 의사에게"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_before_consult_doctor_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_before_consult_doctor_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_dose_caution"/>
 
             <TextView
                 android:id="@+id/tv_after_consult_doctor_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="먹은 후 의사에게"
@@ -546,16 +582,18 @@
 
             <TextView
                 android:id="@+id/tv_after_consult_doctor"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="먹은 후 의사에게"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_after_consult_doctor_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_after_consult_doctor_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_before_consult_doctor"/>
 
             <TextView
                 android:id="@+id/tv_interaction_caution_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="상호작용"
@@ -569,16 +607,18 @@
 
             <TextView
                 android:id="@+id/tv_interaction_caution"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="상호작용"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_interaction_caution_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_interaction_caution_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_after_consult_doctor"/>
 
             <TextView
                 android:id="@+id/tv_extra_caution_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="기타 주의사항"
@@ -592,16 +632,18 @@
 
             <TextView
                 android:id="@+id/tv_extra_caution"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="기타 주의사항"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_extra_caution_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_extra_caution_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_interaction_caution"/>
 
             <TextView
                 android:id="@+id/tv_storage_method_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="보관 방법"
@@ -615,16 +657,18 @@
 
             <TextView
                 android:id="@+id/tv_storage_method"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="보관 방법"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_storage_method_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_storage_method_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_extra_caution"/>
 
             <TextView
                 android:id="@+id/tv_valid_term_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="유통기한"
@@ -638,16 +682,18 @@
 
             <TextView
                 android:id="@+id/tv_valid_term"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="유통기한"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_valid_term_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_valid_term_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_storage_method"/>
 
             <TextView
                 android:id="@+id/tv_edi_code_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="보험코드"
@@ -661,12 +707,14 @@
 
             <TextView
                 android:id="@+id/tv_edi_code"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:text="보험코드"
                 android:padding="4dp"
                 app:layout_constraintWidth_percent="0.7"
-                app:layout_constraintTop_toBottomOf="@+id/tv_edi_code_title"/>
+                app:layout_constraintStart_toEndOf="@+id/tv_edi_code_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_valid_term"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
