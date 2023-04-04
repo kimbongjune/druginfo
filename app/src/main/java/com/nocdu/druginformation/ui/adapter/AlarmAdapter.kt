@@ -21,6 +21,10 @@ class AlarmAdapter(private val context: Context, private var dataList:ArrayList<
         mPosition = position
     }
 
+    fun getItem(position: Int):AlarmList {
+        return dataList[position]
+    }
+
     fun addItem(alarmList: AlarmList) {
         dataList.add(alarmList)
         //갱신처리 반드시 해야함
@@ -35,7 +39,7 @@ class AlarmAdapter(private val context: Context, private var dataList:ArrayList<
     }
 
     fun modifyItem(position: Int, text:String){
-        dataList.set(position, AlarmList("섭취 시간", text))
+        dataList.set(position, AlarmList( text))
         notifyDataSetChanged()
     }
 
@@ -71,7 +75,6 @@ class AlarmAdapter(private val context: Context, private var dataList:ArrayList<
         private val eatDrugTextView = itemView.findViewById<TextView>(R.id.tv_eat_drug_time)
 
         fun bind(alarmList:AlarmList, context: Context){
-            eatDrugTextViewTitle.text = alarmList.eatDrugTextViewTitle
             eatDrugTextView.text = alarmList.eatDrugTextView
         }
     }
@@ -92,4 +95,4 @@ class AlarmAdapter(private val context: Context, private var dataList:ArrayList<
 
 }
 
-class AlarmList(val eatDrugTextViewTitle:String, val eatDrugTextView:String)
+class AlarmList(val eatDrugTextView:String)

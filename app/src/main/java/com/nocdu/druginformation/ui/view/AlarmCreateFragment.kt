@@ -3,6 +3,7 @@ package com.nocdu.druginformation.ui.view
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
@@ -21,6 +23,8 @@ import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AlarmCreateFragment : Fragment() {
@@ -31,7 +35,7 @@ class AlarmCreateFragment : Fragment() {
     private lateinit var alarmAdapter: AlarmAdapter
     private var checkedDays:MutableList<String>? = null
 
-    var alarmList = arrayListOf<AlarmList>(AlarmList(intIndexToStringIndex(1), "오전 09:00"))
+    var alarmList = arrayListOf<AlarmList>(AlarmList("오전 09:00"))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -137,7 +141,7 @@ class AlarmCreateFragment : Fragment() {
             binding.cbAlarmSunday.isChecked = false
             binding.btnEatDrugCount.text = "1회"
             alarmAdapter.removeItemAll()
-            alarmAdapter.addItem(AlarmList("섭취 시간", "오전 09:00"))
+            alarmAdapter.addItem(AlarmList("오전 09:00"))
             binding.btnEatDrugOnetime.text = "1개"
             binding.swEatDrugBeforehandCycle.isChecked = false
             binding.edEatDrugRemaining.setText("")
@@ -160,16 +164,34 @@ class AlarmCreateFragment : Fragment() {
     }
 
     private fun callDatePickerDialog(position:Int){
-        val currentTime = Calendar.getInstance()
-        val hour = currentTime.get(Calendar.HOUR_OF_DAY)
-        var minute = currentTime.get(Calendar.MINUTE)
+        alarmAdapter.getItem(position).eatDrugTextView
+        val textViewAmPm = alarmAdapter.getItem(position).eatDrugTextView.substring(0, 2).trim()
+        val textViewHour = if(textViewAmPm == "오전"){
+            alarmAdapter.getItem(position).eatDrugTextView.substring(3, 5).toInt()
+        }else{
+            alarmAdapter.getItem(position).eatDrugTextView.substring(3, 5).toInt() + 12
+        }
+        val textViewMinute = alarmAdapter.getItem(position).eatDrugTextView.substring(6, 8).toInt()
+        //val currentTime = Calendar.getInstance()
+        val dialogHour = textViewHour
+        var dialogMinute = textViewMinute
         val timePicker:TimePickerDialog = TimePickerDialog(activity, object :TimePickerDialog.OnTimeSetListener{
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
                 var AM_PM:String = if(p1 < 12) "오전" else "오후"
                 val hour = if (p1 % 12 == 0) 12 else p1 % 12
-                alarmAdapter.modifyItem(position, "${AM_PM} ${String.format("%02d:%02d", hour, p2)}")
+                val time = "${AM_PM} ${String.format("%02d:%02d", hour, p2)}"
+                if(position != 0){
+                    val beforeTime:String = alarmAdapter.getItem(position - 1).eatDrugTextView
+                    if(compareTimes(time, beforeTime)){
+                        Log.e(TAG,"이전 아이템의 시간이 더 큼")
+                    }else if(beforeTime.equals(time)){
+                        Log.e(TAG,"이전 아이템과의 시간이 동일함")
+                    }
+                }
+                alarmAdapter.modifyItem(position, time)
             }
-        },hour,minute,false)
+        },dialogHour,dialogMinute,false)
         timePicker.show()
     }
 
@@ -182,8 +204,7 @@ class AlarmCreateFragment : Fragment() {
             minValue = 1
             wrapSelectorWheel = false
             setOnValueChangedListener { _,_,newVal ->
-                Log.e(TAG,"?????? 개수가?${newVal}")
-                number = newVal
+                //Log.e(TAG,"?????? 개수가?${newVal}")
             }
         }
 
@@ -191,13 +212,21 @@ class AlarmCreateFragment : Fragment() {
             setTitle("1일 섭취 횟수를 선택해주세요")
             setView(dialogBinding.root)
             setPositiveButton(android.R.string.ok){ _,_ ->
-                Log.e(TAG,"?????? 개수가?${number}")
                 number = numberPicker.value
+                Log.e(TAG,"?????? 선택한 개수가?${number}")
+                Log.e(TAG,"?????? 기존 개수가?${alarmAdapter.itemCount}")
                 binding.btnEatDrugCount.text = "${number}회"
-                alarmAdapter.removeItemAll()
-                for(i in 1..number){
-                    alarmAdapter.addItem(AlarmList(intIndexToStringIndex(i), "오전 09:00"))
+                if(number < alarmAdapter.itemCount){
+                    for(i in alarmAdapter.itemCount - 1 downTo  number){
+                        alarmAdapter.removeItem(i)
+                    }
+                }else if(number > alarmAdapter.itemCount){
+                    for(i in alarmAdapter.itemCount until number){
+                        alarmAdapter.addItem(AlarmList("오전 09:00"))
+                    }
                 }
+                //alarmAdapter.removeItemAll()
+
             }
             setNegativeButton(android.R.string.cancel){_,_ ->
                 return@setNegativeButton
@@ -319,14 +348,12 @@ class AlarmCreateFragment : Fragment() {
         return todayOrNextDate+dateString
     }
 
-    private fun intIndexToStringIndex(index:Int):String{
-        return when(index){
-            1 -> "첫"
-            2 -> "두"
-            3 -> "세"
-            4 -> "네"
-            5 -> "다섯"
-            else -> throw IllegalArgumentException("Invalid day of week")
-        }+"번째 섭취시간"
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun compareTimes(beforeTime: String, afterTime: String): Boolean {
+        val formatter = DateTimeFormatter.ofPattern("a hh:mm") // "오전/오후 hh:mm" 형식에 맞게 포맷터 생성
+        val localBeforeTime = LocalTime.parse(beforeTime, formatter) // 문자열을 LocalTime 객체로 파싱
+        val localAfterTime = LocalTime.parse(afterTime, formatter)
+
+        return localBeforeTime.isBefore(localAfterTime)
     }
 }
