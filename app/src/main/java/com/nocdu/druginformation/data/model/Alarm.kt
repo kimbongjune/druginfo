@@ -17,7 +17,7 @@ data class Alarm(
     @Json(name = "title") var title: String,
     @Json(name = "medicines") var medicines: String,
     @Json(name = "daily_dosage") var dailyDosage: Int,
-    @Json(name = "doses_time") var dosesTime: Int,
+    @Json(name = "daily_repeat_time") var dailyRepeatTime: Int,
     @Json(name = "is_active") var isActive: Boolean,
     @Json(name = "alarm_date") var alarmDate: List<String>,
     @Json(name = "alarm_date_int") var alarmDateInt: List<Int>,

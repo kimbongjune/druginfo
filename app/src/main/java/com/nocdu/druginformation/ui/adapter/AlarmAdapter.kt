@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nocdu.druginformation.R
+import com.nocdu.druginformation.data.model.DoseTime
 
 class AlarmAdapter(private val context: Context, private var dataList:ArrayList<AlarmList>):
     RecyclerView.Adapter<AlarmAdapter.ItemViewHolder>() {
@@ -23,6 +24,10 @@ class AlarmAdapter(private val context: Context, private var dataList:ArrayList<
 
     fun getItem(position: Int):AlarmList {
         return dataList[position]
+    }
+
+    fun getAllItemToDoseTime(alarmId:Int):List<DoseTime> {
+        return dataList.map { DoseTime(time = it.eatDrugTextView, alarmId = alarmId) }
     }
 
     fun addItem(alarmList: AlarmList) {

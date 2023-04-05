@@ -1,5 +1,9 @@
 package com.nocdu.druginformation.ui.view
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -10,14 +14,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
+import android.widget.EditText
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Alarm
+import com.nocdu.druginformation.data.model.DoseTime
 import com.nocdu.druginformation.databinding.FragmentAlarmCreateBinding
 import com.nocdu.druginformation.databinding.NumberPickerDialogBinding
 import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
@@ -28,10 +41,12 @@ import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.utill.collectLatestStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 class AlarmCreateFragment : Fragment() {
     val TAG:String = "AlarmCreateFragment"
     private var _binding: FragmentAlarmCreateBinding? = null
@@ -42,7 +57,7 @@ class AlarmCreateFragment : Fragment() {
 
     private lateinit var alarmViewModel: AlarmViewModel
 
-    var alarmList = arrayListOf<AlarmList>(AlarmList("오전 09:00"))
+    var alarmList = arrayListOf<AlarmList>(AlarmList(getNowTime()))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +68,7 @@ class AlarmCreateFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
@@ -66,6 +82,8 @@ class AlarmCreateFragment : Fragment() {
         changeAlarmDate()
         setCleanButton()
         setSendButton()
+        setSwitchChangeListener()
+        //setConstraintLayoutListener()
         //binding.tvEatDrugCycleName.text = setCycleTime(9, 0)
     }
 
@@ -149,7 +167,7 @@ class AlarmCreateFragment : Fragment() {
             binding.cbAlarmSunday.isChecked = false
             binding.btnEatDrugCount.text = "1회"
             alarmAdapter.removeItemAll()
-            alarmAdapter.addItem(AlarmList("오전 09:00"))
+            alarmAdapter.addItem(AlarmList(getNowTime()))
             binding.btnEatDrugOnetime.text = "1개"
             binding.swEatDrugBeforehandCycle.isChecked = false
             binding.edEatDrugRemaining.setText("")
@@ -161,6 +179,7 @@ class AlarmCreateFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setSendButton(){
         binding.btnViewSearchSend.setOnClickListener {
             Log.e(TAG,"알람 제목 : ${binding.etAlarmName.text}")
@@ -171,6 +190,10 @@ class AlarmCreateFragment : Fragment() {
             Log.e(TAG,"의약품 제고 알림 여부 : ${binding.swEatDrugBeforehandCycle.isChecked}")
             Log.e(TAG,"잔여 의약품 개수 : ${binding.edEatDrugRemaining.text}")
             Log.e(TAG,"잔여 의약품 최소 보유량 : ${binding.edEatDrugSmallest.text}")
+
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("YYYY년MM월dd일 HH시mm분ss초")
+            val today = current.format(formatter)
 
             val intDaysOfWeek = checkedDays!!.map {
                 when (it) {
@@ -185,21 +208,32 @@ class AlarmCreateFragment : Fragment() {
                 }
             }
 
+            val alarmTitle = if(binding.etAlarmName.text.isEmpty()) {today} else binding.etAlarmName.text
+            val alarmDrugs = if(binding.etEatDrug.text.isEmpty()) {"약"} else binding.etEatDrug.text
+            val alarmDateString = checkedDays!!
+            val alarmDateInt = intDaysOfWeek
+            val dailyDosage = binding.btnEatDrugCount.text.toString().replace("회", "").toInt()
+            val dailyRepeatTime = binding.btnEatDrugOnetime.text.toString().replace("개", "").toInt()
+            val lowStockAlert = binding.swEatDrugBeforehandCycle.isChecked
+            val stockQuantity = if(lowStockAlert) binding.edEatDrugRemaining.text.toString().toInt() else 0
+            val minStockQuantity = if(lowStockAlert) binding.edEatDrugSmallest.text.toString().toInt() else 0
+
             val newAlarm = Alarm(
-                title = "아침 알람",
-                medicines = "아침 약",
-                dailyDosage = 2,
-                dosesTime = 3,
+                title = alarmTitle.toString(),
+                medicines = alarmDrugs.toString(),
+                dailyRepeatTime = dailyRepeatTime,
+                dailyDosage = dailyDosage,
                 isActive = true,
-                alarmDate = checkedDays!!,
-                alarmDateInt = intDaysOfWeek,
-                lowStockAlert = true,
-                stockQuantity = 10,
-                minStockQuantity = 5,
+                alarmDate = alarmDateString,
+                alarmDateInt = alarmDateInt,
+                lowStockAlert = lowStockAlert,
+                stockQuantity = stockQuantity,
+                minStockQuantity = minStockQuantity,
             )
             lifecycleScope.launch {
                 val alarmId: Long = alarmViewModel.addAlarm(newAlarm).await()
                 Log.e(TAG,"인서트 아이디 = ${alarmId}")
+                alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmId.toInt()))
                 // 반환된 id 값을 사용합니다.
             }
         }
@@ -264,7 +298,7 @@ class AlarmCreateFragment : Fragment() {
                     }
                 }else if(number > alarmAdapter.itemCount){
                     for(i in alarmAdapter.itemCount until number){
-                        alarmAdapter.addItem(AlarmList("오전 09:00"))
+                        alarmAdapter.addItem(AlarmList(getNowTime()))
                     }
                 }
                 //alarmAdapter.removeItemAll()
@@ -368,29 +402,6 @@ class AlarmCreateFragment : Fragment() {
         }
     }
 
-    private fun setCycleTime(hour:Int, minute:Int):String{
-        val calendar = Calendar.getInstance()
-
-        var todayOrNextDate:String = ""
-
-        // 현재 시간이 오전 9시 00분을 넘었는지 확인
-        if (calendar.get(Calendar.HOUR_OF_DAY) > 9 || (calendar.get(Calendar.HOUR_OF_DAY) == hour && calendar.get(Calendar.MINUTE) >= minute)) {
-            // 내일 날짜(월,일) 구하기
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-            todayOrNextDate = "내일-"
-        }else{
-            todayOrNextDate = "오늘-"
-        }
-
-        // 월, 일 형식으로 포맷팅한 날짜 문자열 생성
-        val dateFormat = SimpleDateFormat("M월 d일(E)", Locale.getDefault())
-        val dateString = dateFormat.format(calendar.time)
-
-        // TextView에 날짜 문자열 설정
-        return todayOrNextDate+dateString
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun compareTimes(beforeTime: String, afterTime: String): Boolean {
         val formatter = DateTimeFormatter.ofPattern("a hh:mm") // "오전/오후 hh:mm" 형식에 맞게 포맷터 생성
         val localBeforeTime = LocalTime.parse(beforeTime, formatter) // 문자열을 LocalTime 객체로 파싱
@@ -398,4 +409,38 @@ class AlarmCreateFragment : Fragment() {
 
         return localBeforeTime.isBefore(localAfterTime)
     }
+
+    private fun getNowTime():String{
+        val now = LocalDateTime.now().plusMinutes(1)
+        val formatter = DateTimeFormatter.ofPattern("a hh:mm")
+        val formatted = now.format(formatter)
+        return formatted
+    }
+
+    private fun setSwitchChangeListener(){
+        binding.swEatDrugBeforehandCycle.setOnCheckedChangeListener { buttonView, isChecked  ->
+            val layout = binding.clEatDrugRemainingLayout
+            val newHeight = if (isChecked) {
+                // 높이를 80dp로 변경하여 나타낸다.
+                resources.getDimension(R.dimen.height_80dp).toInt()
+            } else {
+                // 높이를 0dp로 변경하여 숨긴다.
+                binding.edEatDrugRemaining.setText("")
+                binding.edEatDrugSmallest.setText("")
+                0
+            }
+            // 높이 변경 애니메이션 추가
+            val valueAnimator = ValueAnimator.ofInt(layout.height, newHeight)
+            valueAnimator.addUpdateListener { animator ->
+                val height = animator.animatedValue as Int
+                val params = layout.layoutParams
+                params.height = height
+                layout.layoutParams = params
+            }
+            valueAnimator.duration = 500
+            valueAnimator.interpolator = AccelerateDecelerateInterpolator()
+            valueAnimator.start()
+        }
+    }
+
 }
