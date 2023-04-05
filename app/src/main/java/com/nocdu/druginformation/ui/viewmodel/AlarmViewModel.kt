@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.DoseTime
 import com.nocdu.druginformation.data.repository.AlarmRepository
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -13,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel()  {
 
-    fun addAlarm(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun addAlarm(alarm: Alarm): Deferred<Long> = viewModelScope.async(Dispatchers.IO) {
         alarmRepository.addAlarm(alarm)
     }
 

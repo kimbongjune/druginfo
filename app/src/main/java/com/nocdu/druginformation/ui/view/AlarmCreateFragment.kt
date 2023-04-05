@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
@@ -25,6 +26,7 @@ import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.utill.collectLatestStateFlow
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -195,8 +197,11 @@ class AlarmCreateFragment : Fragment() {
                 stockQuantity = 10,
                 minStockQuantity = 5,
             )
-
-            alarmViewModel.addAlarm(newAlarm)
+            lifecycleScope.launch {
+                val alarmId: Long = alarmViewModel.addAlarm(newAlarm).await()
+                Log.e(TAG,"인서트 아이디 = ${alarmId}")
+                // 반환된 id 값을 사용합니다.
+            }
         }
     }
 
