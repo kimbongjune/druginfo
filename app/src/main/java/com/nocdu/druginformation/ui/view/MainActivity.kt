@@ -9,9 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.adapter.ViewPagerAdapter
+import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.data.database.DrugSearchDatabase
+import com.nocdu.druginformation.data.repository.AlarmRepositoryImpl
 import com.nocdu.druginformation.data.repository.DrugSearchRepositoryImpl
 import com.nocdu.druginformation.databinding.ActivityMainBinding
+import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
+import com.nocdu.druginformation.ui.viewmodel.AlarmViewModelProviderFactory
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
 
@@ -28,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var drugSearchViewModel: DrugSearchViewModel
+
+    lateinit var alarmViewModel: AlarmViewModel
 
     private val tabTitleArray = arrayOf(
         "홈",
@@ -58,6 +64,11 @@ class MainActivity : AppCompatActivity() {
         val drugSearchRepository = DrugSearchRepositoryImpl(database)
         val factory = DrugSearchViewModelProviderFactory(drugSearchRepository)
         drugSearchViewModel = ViewModelProvider(this, factory)[DrugSearchViewModel::class.java]
+
+        val alarmDatase = AlarmDatabase.getDatabase(this)
+        var alarmRepository = AlarmRepositoryImpl(alarmDatase)
+        var alarmFactory = AlarmViewModelProviderFactory(alarmRepository)
+        alarmViewModel = ViewModelProvider(this, alarmFactory)[AlarmViewModel::class.java]
 
         setUpTabLayoutWithViewpager()
     }

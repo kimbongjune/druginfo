@@ -16,12 +16,15 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
+import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.databinding.FragmentAlarmCreateBinding
 import com.nocdu.druginformation.databinding.NumberPickerDialogBinding
 import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
+import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
+import com.nocdu.druginformation.utill.collectLatestStateFlow
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -34,6 +37,8 @@ class AlarmCreateFragment : Fragment() {
 
     private lateinit var alarmAdapter: AlarmAdapter
     private var checkedDays:MutableList<String>? = null
+
+    private lateinit var alarmViewModel: AlarmViewModel
 
     var alarmList = arrayListOf<AlarmList>(AlarmList("오전 09:00"))
 
@@ -49,6 +54,7 @@ class AlarmCreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
+        alarmViewModel = (activity as MainActivity).alarmViewModel
         checkedDays = mutableListOf<String>()
         setAdapter()
         goBack()
@@ -147,6 +153,9 @@ class AlarmCreateFragment : Fragment() {
             binding.edEatDrugRemaining.setText("")
             binding.edEatDrugSmallest.setText("")
             binding.tvEatDrugCycleName.text = "요일을 선택해주세요"
+//            collectLatestStateFlow(alarmViewModel.getAlarms()){
+//                Log.e(TAG,"??${it}")
+//            }
         }
     }
 
@@ -160,6 +169,34 @@ class AlarmCreateFragment : Fragment() {
             Log.e(TAG,"의약품 제고 알림 여부 : ${binding.swEatDrugBeforehandCycle.isChecked}")
             Log.e(TAG,"잔여 의약품 개수 : ${binding.edEatDrugRemaining.text}")
             Log.e(TAG,"잔여 의약품 최소 보유량 : ${binding.edEatDrugSmallest.text}")
+
+            val intDaysOfWeek = checkedDays!!.map {
+                when (it) {
+                    "일" -> 1
+                    "월" -> 2
+                    "화" -> 3
+                    "수" -> 4
+                    "목" -> 5
+                    "금" -> 6
+                    "토" -> 7
+                    else -> throw IllegalArgumentException("Invalid day of week: $it")
+                }
+            }
+
+            val newAlarm = Alarm(
+                title = "아침 알람",
+                medicines = "아침 약",
+                dailyDosage = 2,
+                dosesTime = 3,
+                isActive = true,
+                alarmDate = checkedDays!!,
+                alarmDateInt = intDaysOfWeek,
+                lowStockAlert = true,
+                stockQuantity = 10,
+                minStockQuantity = 5,
+            )
+
+            alarmViewModel.addAlarm(newAlarm)
         }
     }
 
