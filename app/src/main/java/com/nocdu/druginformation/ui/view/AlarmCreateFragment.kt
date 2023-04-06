@@ -7,6 +7,7 @@ import android.animation.ValueAnimator
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -179,9 +180,11 @@ class AlarmCreateFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setSendButton(){
         binding.btnViewSearchSend.setOnClickListener {
+            if(checkedDays!!.isEmpty()){
+                createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_no_select_date))
+            }
             Log.e(TAG,"알람 제목 : ${binding.etAlarmName.text}")
             Log.e(TAG,"의약품 이름 : ${binding.etEatDrug.text}")
             Log.e(TAG,"선택된 날짜 : ${checkedDays!!.size}")
@@ -268,6 +271,14 @@ class AlarmCreateFragment : Fragment() {
                 alarmAdapter.modifyItem(position, time)
             }
         },dialogHour,dialogMinute,false)
+
+        timePicker.setOnShowListener {
+            val positiveButton = timePicker.getButton(DialogInterface.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_blue))
+
+            val negativeButton = timePicker.getButton(DialogInterface.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_red))
+        }
         timePicker.show()
     }
 
@@ -309,6 +320,13 @@ class AlarmCreateFragment : Fragment() {
             }
         }
         val alertNumberPickerDialog = dialogBuilder.create()
+        alertNumberPickerDialog.setOnShowListener {
+            val positiveButton = alertNumberPickerDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_blue))
+
+            val negativeButton = alertNumberPickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_red))
+        }
         alertNumberPickerDialog.show()
     }
 
@@ -336,6 +354,14 @@ class AlarmCreateFragment : Fragment() {
             }
         }
         val alertNumberPickerDialog = dialogBuilder.create()
+
+        alertNumberPickerDialog.setOnShowListener {
+            val positiveButton = alertNumberPickerDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_blue))
+
+            val negativeButton = alertNumberPickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_red))
+        }
         alertNumberPickerDialog.show()
     }
 
@@ -441,6 +467,21 @@ class AlarmCreateFragment : Fragment() {
             valueAnimator.interpolator = AccelerateDecelerateInterpolator()
             valueAnimator.start()
         }
+    }
+
+    private fun createDialog(title:String, body:String){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(title)
+        builder.setMessage(body)
+        builder.setPositiveButton("확인") { dialog, which ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_blue))
+        }
+        dialog.show()
     }
 
 }

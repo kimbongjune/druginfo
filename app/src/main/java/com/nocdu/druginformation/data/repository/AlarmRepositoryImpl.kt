@@ -1,8 +1,13 @@
 package com.nocdu.druginformation.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.data.model.Alarm
+import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
+import com.nocdu.druginformation.utill.Constants
 import kotlinx.coroutines.flow.Flow
 
 class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
@@ -14,8 +19,20 @@ class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
         return db.alarmDao().getAlarm(id)
     }
 
-    override fun getAlarms(): Flow<List<Alarm>> {
-        return db.alarmDao().getAlarms()
+    override fun getAlarmCount(): Int {
+        return db.alarmDao().getAlarmCount()
+    }
+
+    override fun getAlarms(): Flow<PagingData<AlarmWithDosetime>> {
+        val pagingSourceFactory = {db.alarmDao().getAlarms()}
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.PAGING_SIZE,
+                enablePlaceholders = false,
+                maxSize = Constants.PAGING_SIZE * 3
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
     }
 
     override fun updateAlarm(alarm: Alarm) {

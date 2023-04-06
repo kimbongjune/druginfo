@@ -1,6 +1,8 @@
 package com.nocdu.druginformation.data.repository
 
+import androidx.paging.PagingData
 import com.nocdu.druginformation.data.model.Alarm
+import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
 import kotlinx.coroutines.flow.Flow
 
@@ -10,7 +12,9 @@ interface AlarmRepository {
 
     suspend fun getAlarm(id: Int): Alarm
 
-    fun getAlarms(): Flow<List<Alarm>>
+    fun getAlarms(): Flow<PagingData<AlarmWithDosetime>>
+
+    fun getAlarmCount(): Int
 
     fun updateAlarm(alarm: Alarm)
 

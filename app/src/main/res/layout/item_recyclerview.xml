@@ -54,4 +54,5 @@
         app:layout_constraintStart_toEndOf="@id/iv_article_image"
         app:layout_constraintTop_toBottomOf="@id/tv_maker"/>
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>
