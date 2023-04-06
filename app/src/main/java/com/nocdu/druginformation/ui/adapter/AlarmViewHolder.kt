@@ -16,8 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AlarmViewHolder(private val binding: ItemAlarmRecyclerviewBinding): RecyclerView.ViewHolder(binding.root) {
+
     fun bind(alarm: AlarmWithDosetime){
         val title = alarm.alarm.title
+        val medicines = alarm.alarm.medicines
         val stockQuantity = alarm.alarm.stockQuantity
         val alarmDate = alarm.alarm.alarmDate
         val dailyDosage = alarm.alarm.dailyDosage
@@ -25,8 +27,8 @@ class AlarmViewHolder(private val binding: ItemAlarmRecyclerviewBinding): Recycl
         val doseTimesByAlarmId = alarm.doseTime
         val lowStockAlert = alarm.alarm.lowStockAlert
 
-        binding.tvDrugName.text = title
-        binding.tvDrugResidualCount.text = if(lowStockAlert) "잔여약 ${stockQuantity}개" else "잔여약 알림설정 X"
+        binding.tvDrugName.text = "${title}(${medicines})"
+        binding.tvDrugResidualCount.text = if(lowStockAlert) "잔여의약품 : ${stockQuantity}개" else ""
         binding.tvDrugDate.text  = when {
             alarmDate.isEmpty() -> {
                 //setCycleTime(9, 0)
@@ -44,10 +46,15 @@ class AlarmViewHolder(private val binding: ItemAlarmRecyclerviewBinding): Recycl
             else -> {
                 "매주 "+alarmDate.joinToString(", ")
             }
-        } + " ${dailyDosage}회"
+        } //+ "\n${dailyDosage}회"
 
         Log.e("SSSSSSSSSSSSSS","SSSSSSS${doseTimesByAlarmId}")
-        binding.tvDrugTime.text = doseTimesByAlarmId.map { "${it.time}\n" }.toString().replace(Regex("[\\[\\],]+\\s*"), "\n").replace("\n\n", "\n")
+        binding.tvDrugTime.text = if(doseTimesByAlarmId.size > 1) {
+            doseTimesByAlarmId[0].time.replace(Regex("[\\[\\]]+\\s*"), "").replace(", ","")
+        } else {
+            doseTimesByAlarmId[0].time.replace(Regex("[\\[\\]]+\\s*"), "").replace(", ","")
+        }
+        binding.tvDrugNameReminingTime.text = "하루 ${dailyDosage}회"
         binding.swEatDrugBeforehandCycle.isChecked = isActive
     }
 }

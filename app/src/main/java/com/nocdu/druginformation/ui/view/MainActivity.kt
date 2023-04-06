@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         "검색",
         "알람",
         //"내 정보"
-        "즐겨찾기"
+        "북마크"
     )
 
     private val tabIconArray = arrayOf(

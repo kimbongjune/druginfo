@@ -18,7 +18,7 @@ interface AlarmDao {
 //    @Query("SELECT * FROM alarm")
 //    fun getAlarms(): PagingSource<Int, Alarm>
 
-    @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id")
+    @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id")
     fun getAlarms(): PagingSource<Int, AlarmWithDosetime>
 
     // 모든 알람 개수 가져오기

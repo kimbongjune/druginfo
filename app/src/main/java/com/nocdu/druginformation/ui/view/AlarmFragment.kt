@@ -1,5 +1,6 @@
 package com.nocdu.druginformation.ui.view
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,16 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.databinding.FragmentAlarmBinding
 import com.nocdu.druginformation.databinding.FragmentHomeBinding
 import com.nocdu.druginformation.ui.adapter.AlarmPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
+import com.nocdu.druginformation.utill.DividerItemDecorator
 import com.nocdu.druginformation.utill.collectLatestStateFlow
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
@@ -45,6 +51,15 @@ class AlarmFragment : Fragment() {
         alarmViewModel = (activity as MainActivity).alarmViewModel
         setupRecyclerView()
         createAlarm()
+
+
+//        binding.rvAlarmList.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL, false)
+//        var dividerItemDecoration:RecyclerView.ItemDecoration = getDrawable(requireContext(), R.drawable.divider)?.let {
+//            DividerItemDecorator(
+//                it
+//            )
+//        }!!
+//        binding.rvAlarmList.addItemDecoration(dividerItemDecoration)
 
         setupLoadState()
 
@@ -117,7 +132,9 @@ class AlarmFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(
                 DividerItemDecoration(requireContext(),
-                    DividerItemDecoration.VERTICAL)
+                    DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(resources.getDrawable(R.drawable.divider))
+                }
             )
             adapter = alarmPagingAdapter
         }
