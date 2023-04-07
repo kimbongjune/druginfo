@@ -4,11 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
-import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.ItemAlarmRecyclerviewBinding
-import com.nocdu.druginformation.databinding.ItemRecyclerviewBinding
 
 class AlarmPagingAdapter: PagingDataAdapter<AlarmWithDosetime, AlarmViewHolder>(DrugDiffCallback) {
 
@@ -19,6 +16,10 @@ class AlarmPagingAdapter: PagingDataAdapter<AlarmWithDosetime, AlarmViewHolder>(
             holder.itemView.setOnClickListener {
                 onItemClickListener?.let { it(alarm) }
             }
+            holder.binding.swEatDrugBeforehandCycle.setOnCheckedChangeListener { compoundButton, b ->
+                onCheckedChangeListener?.let { it(alarm,b) }
+            }
+
         }
     }
 
@@ -32,6 +33,12 @@ class AlarmPagingAdapter: PagingDataAdapter<AlarmWithDosetime, AlarmViewHolder>(
 
     fun setOnItemClickListener(listener:(AlarmWithDosetime) -> Unit){
         onItemClickListener = listener
+    }
+
+    private var onCheckedChangeListener: ((AlarmWithDosetime, Boolean) -> Unit)? = null
+
+    fun setOnCheckedChangeListener(listener: (AlarmWithDosetime, Boolean) -> Unit){
+        onCheckedChangeListener = listener
     }
 
     companion object {

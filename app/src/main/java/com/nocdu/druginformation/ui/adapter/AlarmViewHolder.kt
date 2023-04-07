@@ -1,9 +1,9 @@
 package com.nocdu.druginformation.ui.adapter
 
 import android.util.Log
-import androidx.lifecycle.viewModelScope
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.nocdu.druginformation.data.database.AlarmDatabase
+import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
@@ -15,8 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AlarmViewHolder(private val binding: ItemAlarmRecyclerviewBinding): RecyclerView.ViewHolder(binding.root) {
+class AlarmViewHolder(var binding: ItemAlarmRecyclerviewBinding): RecyclerView.ViewHolder(binding.root) {
 
+    private val TAG = "AlarmViewHolder"
     fun bind(alarm: AlarmWithDosetime){
         val title = alarm.alarm.title
         val medicines = alarm.alarm.medicines
@@ -26,9 +27,21 @@ class AlarmViewHolder(private val binding: ItemAlarmRecyclerviewBinding): Recycl
         val isActive = alarm.alarm.isActive
         val doseTimesByAlarmId = alarm.doseTime
         val lowStockAlert = alarm.alarm.lowStockAlert
+        val minStockQuantity = alarm.alarm.minStockQuantity
 
         binding.tvDrugName.text = "${title}(${medicines})"
-        binding.tvDrugResidualCount.text = if(lowStockAlert) "잔여의약품 : ${stockQuantity}개" else ""
+        binding.tvDrugResidualCount.apply {
+            if(lowStockAlert) {
+                this.text = "잔여의약품 : ${stockQuantity}개"
+                if(stockQuantity < minStockQuantity){
+                    this.setTextColor(ContextCompat.getColor(context, R.color.soft_red))
+                }
+            }else {
+                this.text = ""
+            }
+        }
+
+        this.binding
         binding.tvDrugDate.text  = when {
             alarmDate.isEmpty() -> {
                 //setCycleTime(9, 0)
@@ -56,5 +69,10 @@ class AlarmViewHolder(private val binding: ItemAlarmRecyclerviewBinding): Recycl
         }
         binding.tvDrugNameReminingTime.text = "하루 ${dailyDosage}회"
         binding.swEatDrugBeforehandCycle.isChecked = isActive
+
+//        binding.swEatDrugBeforehandCycle.setOnCheckedChangeListener { compoundButton, b ->
+//            Log.e(TAG,"스위치 변경 이벤트 인덱스는 = ${bindingAdapterPosition}, 데이터베이스 아이디는 ${alarm.alarm.id}")
+//        }
     }
+
 }

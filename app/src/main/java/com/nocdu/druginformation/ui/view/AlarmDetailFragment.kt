@@ -1,58 +1,45 @@
 package com.nocdu.druginformation.ui.view
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnimationUtils
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TimePicker
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.textfield.TextInputEditText
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Alarm
-import com.nocdu.druginformation.data.model.DoseTime
+import com.nocdu.druginformation.data.model.AlarmWithDosetime
+import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentAlarmCreateBinding
+import com.nocdu.druginformation.databinding.FragmentAlarmDetailBinding
 import com.nocdu.druginformation.databinding.NumberPickerDialogBinding
 import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
-import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
-import com.nocdu.druginformation.utill.collectLatestStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
-class AlarmCreateFragment : Fragment() {
+class AlarmDetailFragment : Fragment() {
+
     val TAG:String = "AlarmCreateFragment"
-    private var _binding: FragmentAlarmCreateBinding? = null
+
+    private var _binding: FragmentAlarmDetailBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var alarmAdapter: AlarmAdapter
@@ -64,22 +51,26 @@ class AlarmCreateFragment : Fragment() {
         activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
-    var alarmList = arrayListOf<AlarmList>(AlarmList(getNowTime()))
+    var alarmList = arrayListOf<AlarmList>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAlarmCreateBinding.inflate(inflater, container, false)
+        _binding = FragmentAlarmDetailBinding.inflate(inflater, container, false)
         Log.e(TAG, "${TAG} is oncteated")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
+
+        var data: AlarmWithDosetime = (arguments?.getSerializable("data") as AlarmWithDosetime).apply {
+            Log.e(TAG,"데이터 전달${this}")
+        }
         super.onViewCreated(view, savedInstanceState)
         alarmViewModel = (activity as MainActivity).alarmViewModel
-        checkedDays = mutableListOf<String>()
+
         setAdapter()
         goBack()
         showNumberPickerDialog()
@@ -89,8 +80,6 @@ class AlarmCreateFragment : Fragment() {
         setCleanButton()
         setSendButton()
         setSwitchChangeListener()
-        //setConstraintLayoutListener()
-        //binding.tvEatDrugCycleName.text = setCycleTime(9, 0)
     }
 
     override fun onStop() {
@@ -117,12 +106,6 @@ class AlarmCreateFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    private fun goBack(){
-        binding.tbSearchResultFragment.setNavigationOnClickListener{
-            requireActivity().supportFragmentManager.popBackStack()
-        }
     }
 
     private fun showNumberPickerDialog(){
@@ -233,7 +216,7 @@ class AlarmCreateFragment : Fragment() {
         //val currentTime = Calendar.getInstance()
         val dialogHour = textViewHour
         var dialogMinute = textViewMinute
-        val timePicker:TimePickerDialog = TimePickerDialog(activity, object :TimePickerDialog.OnTimeSetListener{
+        val timePicker: TimePickerDialog = TimePickerDialog(activity, object : TimePickerDialog.OnTimeSetListener{
             override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
                 var AM_PM:String = if(p1 < 12) "오전" else "오후"
                 val hour = if (p1 % 12 == 0) 12 else p1 % 12
@@ -261,7 +244,7 @@ class AlarmCreateFragment : Fragment() {
     }
 
     private fun callNumberPickerDialog(){
-        val dialogBinding:NumberPickerDialogBinding = NumberPickerDialogBinding.inflate(layoutInflater)
+        val dialogBinding: NumberPickerDialogBinding = NumberPickerDialogBinding.inflate(layoutInflater)
 
         var number = 0
         val numberPicker = dialogBinding.npEatDrugNumberPicker.apply {
@@ -309,7 +292,7 @@ class AlarmCreateFragment : Fragment() {
     }
 
     private fun callOneTimeEatPickerDialog(){
-        val dialogBinding:OnetimeEatPickerDialogBinding = OnetimeEatPickerDialogBinding.inflate(layoutInflater)
+        val dialogBinding: OnetimeEatPickerDialogBinding = OnetimeEatPickerDialogBinding.inflate(layoutInflater)
 
         var number = 0
         dialogBinding.npEatDrugOnetimePicker.apply {
@@ -529,6 +512,12 @@ class AlarmCreateFragment : Fragment() {
         dialog.show()
     }
 
+    private fun goBack(){
+        binding.tbSearchResultFragment.setNavigationOnClickListener{
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+
     fun showKeyBoard(editText: EditText){
         editText.requestFocus()
         keyboard.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
@@ -540,5 +529,4 @@ class AlarmCreateFragment : Fragment() {
             InputMethodManager.HIDE_IMPLICIT_ONLY
         )
     }
-
 }
