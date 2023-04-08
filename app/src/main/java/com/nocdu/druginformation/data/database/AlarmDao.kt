@@ -18,6 +18,19 @@ interface AlarmDao {
 //    @Query("SELECT * FROM alarm")
 //    fun getAlarms(): PagingSource<Int, Alarm>
 
+//    @Query("SELECT * FROM alarm " +
+//            "INNER JOIN doses_time " +
+//            "ON alarm.id = doses_time.alarm_id " +
+//            "GROUP BY alarm.id " +
+//            "ORDER BY " +
+//            "CASE WHEN doses_time.time LIKE '오후%' " +
+//            "THEN strftime('%Y-%m-%d ', 'now', 'localtime') || " +
+//            "substr(replace(replace(doses_time.time, '오후', ''), ':', ''), 1, 2) + 12 || " +
+//            "substr(doses_time.time, 5) " +
+//            "ELSE strftime('%Y-%m-%d ', 'now', 'localtime') || " +
+//            "substr(replace(doses_time.time, ':', ''), 1, 4) " +
+//            "END " +
+//            "ASC")
     @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id")
     fun getAlarms(): PagingSource<Int, AlarmWithDosetime>
 
@@ -36,4 +49,5 @@ interface AlarmDao {
     // 알람 삭제
     @Delete
     suspend fun deleteAlarm(alarm: Alarm)
+
 }

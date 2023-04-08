@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "535332996760",
+    "project_id": "druginfo-94e17",
+    "storage_bucket": "druginfo-94e17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535332996760:android:9ade213681ec74684ef2ed",
+        "android_client_info": {
+          "package_name": "com.nocdu.druginformation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "535332996760-q0jlcnoam3c0j2f749m1d6u3o80ev2p9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9XIEXrAQ_TXmCgDsJ_olct9z9DobShA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "535332996760-q0jlcnoam3c0j2f749m1d6u3o80ev2p9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

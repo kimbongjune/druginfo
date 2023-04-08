@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
+import com.nocdu.druginformation.data.model.FcmToken
 import kotlinx.coroutines.flow.Flow
 
 interface AlarmRepository {
@@ -26,5 +27,17 @@ interface AlarmRepository {
 
     suspend fun getDoseTimesByAlarmId(alarmId: Int): List<DoseTime>
 
-    fun updateDoseTime(doseTime: DoseTime)
+    fun updateDoseTime(doseTime: List<DoseTime>)
+
+    suspend fun deleteAllDoseTimeByAlarmId(alarmId: Int)
+
+    suspend fun addToken(token: FcmToken)
+
+    suspend fun removeToken(token: FcmToken)
+
+    suspend fun getAllToken():List<FcmToken>
+
+    suspend fun updateToken(token: FcmToken)
+
+    suspend fun getTokenCount():Int
 }

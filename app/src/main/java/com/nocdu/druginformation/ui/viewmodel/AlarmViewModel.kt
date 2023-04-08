@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
+import com.nocdu.druginformation.data.model.FcmToken
 import com.nocdu.druginformation.data.repository.AlarmRepository
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -54,8 +55,31 @@ class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel() 
         alarmRepository.getDoseTimesByAlarmId(alarmId)
     }
 
-    fun updateDoseTime(doseTime: DoseTime) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateDoseTime(doseTime: List<DoseTime>) = viewModelScope.launch(Dispatchers.IO) {
         alarmRepository.updateDoseTime(doseTime)
     }
 
+    fun deleteAllDoseTimeByAlarmId(alarmId: Int) = viewModelScope.launch(Dispatchers.IO) {
+        alarmRepository.deleteAllDoseTimeByAlarmId(alarmId)
+    }
+
+    fun addToken(token: FcmToken) = viewModelScope.launch(Dispatchers.IO) {
+        alarmRepository.addToken(token)
+    }
+
+    fun removeToken(token: FcmToken) = viewModelScope.launch(Dispatchers.IO) {
+        alarmRepository.removeToken(token)
+    }
+
+    val getAllToken = viewModelScope.async(Dispatchers.IO) {
+        alarmRepository.getAllToken()
+    }
+
+    fun updateToken(token: FcmToken) = viewModelScope.launch(Dispatchers.IO) {
+        alarmRepository.updateToken(token)
+    }
+
+    fun getTokenCount()= viewModelScope.launch(Dispatchers.IO) {
+        alarmRepository.getTokenCount()
+    }
 }

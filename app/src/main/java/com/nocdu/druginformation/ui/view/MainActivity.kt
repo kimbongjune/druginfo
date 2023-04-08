@@ -4,13 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.adapter.ViewPagerAdapter
 import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.data.database.DrugSearchDatabase
+import com.nocdu.druginformation.data.model.FcmToken
 import com.nocdu.druginformation.data.repository.AlarmRepositoryImpl
 import com.nocdu.druginformation.data.repository.DrugSearchRepositoryImpl
 import com.nocdu.druginformation.databinding.ActivityMainBinding
@@ -18,6 +21,7 @@ import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModelProviderFactory
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,6 +63,8 @@ class MainActivity : AppCompatActivity() {
         val tabLayout = binding.tabLayout
 
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+
+        initFirebase()
 
         val database = DrugSearchDatabase.getInstance(this)
         val drugSearchRepository = DrugSearchRepositoryImpl(database)
@@ -123,4 +129,19 @@ class MainActivity : AppCompatActivity() {
         }.attach()
     }
 
+    private fun initFirebase() {
+        FirebaseApp.initializeApp(this)
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                lifecycleScope.launch {
+                    if(alarmViewModel.getAllToken.await().isNotEmpty()){
+                        alarmViewModel.updateToken(alarmViewModel.getAllToken.await()[0].apply { token = task.result.toString() })
+                    }else{
+                        alarmViewModel.addToken(FcmToken(token = task.result))
+                    }
+                }
+                Log.e(TAG,"token = ${task.result}")
+            }
+        }
+    }
 }

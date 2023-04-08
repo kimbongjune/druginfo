@@ -36,6 +36,12 @@ class AlarmAdapter(private val context: Context, private var dataList:ArrayList<
         notifyDataSetChanged()
     }
 
+    fun addAllItem(alarmList: List<DoseTime>) {
+        dataList.addAll(alarmList.map { AlarmList(it.time) })
+        //갱신처리 반드시 해야함
+        notifyDataSetChanged()
+    }
+
     fun removeItemAll() {
         dataList.clear()
         //notifyItemRemoved(position)

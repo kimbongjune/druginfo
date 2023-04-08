@@ -7,6 +7,7 @@ import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
+import com.nocdu.druginformation.data.model.FcmToken
 import com.nocdu.druginformation.utill.Constants
 import kotlinx.coroutines.flow.Flow
 
@@ -55,7 +56,31 @@ class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
         return db.doseTimeDao().getDoseTimesByAlarmId(alarmId)
     }
 
-    override fun updateDoseTime(doseTime: DoseTime) {
+    override fun updateDoseTime(doseTime: List<DoseTime>) {
         db.doseTimeDao().updateDoseTime(doseTime)
+    }
+
+    override suspend fun deleteAllDoseTimeByAlarmId(alarmId: Int){
+        db.doseTimeDao().deleteAllDoseTimeByAlarmId(alarmId)
+    }
+
+    override suspend fun addToken(token: FcmToken) {
+        db.tokenDao().addToken(token)
+    }
+
+    override suspend fun removeToken(token: FcmToken) {
+        db.tokenDao().removeToken(token)
+    }
+
+    override suspend fun getAllToken():List<FcmToken> {
+        return db.tokenDao().getAllToken()
+    }
+
+    override suspend fun updateToken(token: FcmToken){
+        db.tokenDao().updateToken(token)
+    }
+
+    override suspend fun getTokenCount():Int{
+        return db.tokenDao().getTokenCount()
     }
 }

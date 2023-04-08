@@ -1,54 +1,36 @@
 package com.nocdu.druginformation.ui.view
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnimationUtils
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TimePicker
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.textfield.TextInputEditText
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Alarm
-import com.nocdu.druginformation.data.model.DoseTime
 import com.nocdu.druginformation.databinding.FragmentAlarmCreateBinding
 import com.nocdu.druginformation.databinding.NumberPickerDialogBinding
 import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
-import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
-import com.nocdu.druginformation.utill.collectLatestStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class AlarmCreateFragment : Fragment() {
     val TAG:String = "AlarmCreateFragment"

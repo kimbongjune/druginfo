@@ -1,13 +1,14 @@
 package com.nocdu.druginformation.data.model
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -24,4 +25,5 @@ data class Alarm(
     @Json(name = "low_stock_alert") var lowStockAlert: Boolean,
     @Json(name = "stock_quantity") var stockQuantity: Int,
     @Json(name = "min_stock_quantity") var minStockQuantity: Int,
+    @Json(name = "update_time") var updateTime: String = System.currentTimeMillis().let {SimpleDateFormat("yyyy년MM월dd-HH시mm분ss초", Locale.getDefault()).format(Date(it))},
 ) : Parcelable, Serializable

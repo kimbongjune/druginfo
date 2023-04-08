@@ -1,34 +1,21 @@
 package com.nocdu.druginformation.ui.view
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
-import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentAlarmBinding
-import com.nocdu.druginformation.databinding.FragmentHomeBinding
 import com.nocdu.druginformation.ui.adapter.AlarmPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.utill.collectLatestStateFlow
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.launch
 
 
 class AlarmFragment : Fragment() {

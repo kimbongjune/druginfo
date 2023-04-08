@@ -7,12 +7,15 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.DoseTime
+import com.nocdu.druginformation.data.model.FcmToken
 
-@Database(entities = [Alarm::class, DoseTime::class], version = 1, exportSchema = false)
+@Database(entities = [Alarm::class, DoseTime::class, FcmToken::class], version = 1, exportSchema = false)
 @TypeConverters(OrmConverter::class)
 abstract class AlarmDatabase : RoomDatabase() {
     abstract fun alarmDao(): AlarmDao
     abstract fun doseTimeDao(): DoseTimeDao
+
+    abstract fun tokenDao(): FcmTokenDao
 
     companion object {
         @Volatile

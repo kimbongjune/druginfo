@@ -19,9 +19,12 @@ interface DoseTimeDao {
 
     //복용시간 업데이트
     @Update
-    fun updateDoseTime(doseTime: DoseTime)
+    fun updateDoseTime(doseTime: List<DoseTime>)
     
     // 일일 복용시간 삭제
     @Delete
     suspend fun deleteDoseTime(doseTime: DoseTime)
+
+    @Query("DELETE FROM DOSES_TIME WHERE alarm_id = :alarmId")
+    suspend fun deleteAllDoseTimeByAlarmId(alarmId: Int)
 }

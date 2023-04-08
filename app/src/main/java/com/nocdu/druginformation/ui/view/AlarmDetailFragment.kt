@@ -16,21 +16,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
-import com.nocdu.druginformation.data.model.Document
-import com.nocdu.druginformation.databinding.FragmentAlarmCreateBinding
 import com.nocdu.druginformation.databinding.FragmentAlarmDetailBinding
 import com.nocdu.druginformation.databinding.NumberPickerDialogBinding
 import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -68,6 +64,7 @@ class AlarmDetailFragment : Fragment() {
         var data: AlarmWithDosetime = (arguments?.getSerializable("data") as AlarmWithDosetime).apply {
             Log.e(TAG,"데이터 전달${this}")
         }
+
         super.onViewCreated(view, savedInstanceState)
         alarmViewModel = (activity as MainActivity).alarmViewModel
 
@@ -77,9 +74,10 @@ class AlarmDetailFragment : Fragment() {
         showDatePickerDialog()
         showOneTimeEatPickerDialog()
         changeAlarmDate()
-        setCleanButton()
-        setSendButton()
+        setCleanButton(data.alarm)
+        setSendButton(data)
         setSwitchChangeListener()
+        addObject(data)
     }
 
     override fun onStop() {
@@ -144,32 +142,33 @@ class AlarmDetailFragment : Fragment() {
         }
     }
 
-    private fun setCleanButton(){
+    private fun setCleanButton(alarm:Alarm){
         binding.btnTermClear.setOnClickListener {
-            binding.etAlarmName.setText("")
-            binding.etEatDrug.setText("")
-            binding.cbAlarmMonday.isChecked = false
-            binding.cbAlarmTuesday.isChecked = false
-            binding.cbAlarmWednesday.isChecked = false
-            binding.cbAlarmThursday.isChecked = false
-            binding.cbAlarmFriday.isChecked = false
-            binding.cbAlarmSaturday.isChecked = false
-            binding.cbAlarmSunday.isChecked = false
-            binding.btnEatDrugCount.text = "1회"
-            alarmAdapter.removeItemAll()
-            alarmAdapter.addItem(AlarmList(getNowTime()))
-            binding.btnEatDrugOnetime.text = "1개"
-            binding.swEatDrugBeforehandCycle.isChecked = false
-            binding.edEatDrugRemaining.setText("")
-            binding.edEatDrugSmallest.setText("")
-            binding.tvEatDrugCycleName.text = "요일을 선택해주세요"
-//            collectLatestStateFlow(alarmViewModel.getAlarms()){
-//                Log.e(TAG,"??${it}")
-//            }
+            createDeleteDialog(alarm)
+//            binding.etAlarmName.setText("")
+//            binding.etEatDrug.setText("")
+//            binding.cbAlarmMonday.isChecked = false
+//            binding.cbAlarmTuesday.isChecked = false
+//            binding.cbAlarmWednesday.isChecked = false
+//            binding.cbAlarmThursday.isChecked = false
+//            binding.cbAlarmFriday.isChecked = false
+//            binding.cbAlarmSaturday.isChecked = false
+//            binding.cbAlarmSunday.isChecked = false
+//            binding.btnEatDrugCount.text = "1회"
+//            alarmAdapter.removeItemAll()
+//            alarmAdapter.addItem(AlarmList(getNowTime()))
+//            binding.btnEatDrugOnetime.text = "1개"
+//            binding.swEatDrugBeforehandCycle.isChecked = false
+//            binding.edEatDrugRemaining.setText("")
+//            binding.edEatDrugSmallest.setText("")
+//            binding.tvEatDrugCycleName.text = "요일을 선택해주세요"
+////            collectLatestStateFlow(alarmViewModel.getAlarms()){
+////                Log.e(TAG,"??${it}")
+////            }
         }
     }
 
-    private fun setSendButton(){
+    private fun setSendButton(alarmWithDosetime: AlarmWithDosetime){
         binding.btnViewSearchSend.setOnClickListener {
             if(checkedDays!!.isEmpty()){
                 createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_no_select_date))
@@ -187,20 +186,11 @@ class AlarmDetailFragment : Fragment() {
                     return@setOnClickListener
                 }
             }
-//            Log.e(TAG,"알람 제목 : ${binding.etAlarmName.text}")
-//            Log.e(TAG,"의약품 이름 : ${binding.etEatDrug.text}")
-//            Log.e(TAG,"선택된 날짜 : ${checkedDays!!.size}")
-//            Log.e(TAG,"알람 개수 : ${alarmAdapter.itemCount}")
-//            Log.e(TAG,"일회 섭취 의약품 개수 : ${binding.btnEatDrugOnetime.text.toString().replace("개", "")}")
-//            Log.e(TAG,"의약품 제고 알림 여부 : ${binding.swEatDrugBeforehandCycle.isChecked}")
-//            Log.e(TAG,"잔여 의약품 개수 : ${binding.edEatDrugRemaining.text}")
-//            Log.e(TAG,"잔여 의약품 최소 보유량 : ${binding.edEatDrugSmallest.text}")
-
             val dialogText = "알람 주기 : ${binding.tvEatDrugCycleName.text}\n" +
                     "일일 복용 횟수 : ${alarmAdapter.itemCount}번\n" +
                     "일회 복용량 : ${binding.btnEatDrugOnetime.text}\n" +
                     "의약품 재고량 알림 : ${if(binding.swEatDrugBeforehandCycle.isChecked){"ON"} else {"OFF"}}"
-            createSuccessDialog(dialogText)
+            createSuccessDialog(dialogText, alarmWithDosetime)
         }
     }
 
@@ -444,10 +434,33 @@ class AlarmDetailFragment : Fragment() {
         }
         dialog.show()
     }
-
-    private fun createSuccessDialog(body: String){
+    private fun createDeleteDialog(alarm:Alarm){
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("선택하신 내용으로 알람을 등록하시겠습니까?")
+        builder.setTitle("알람을 삭제하시겠습니까?")
+        builder.setMessage("삭제된 알람은 복구할 수 없습니다.")
+        builder.setPositiveButton("확인") { dialog, which ->
+            alarmViewModel.deleteAlarm(alarm).apply {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+
+        builder.setNegativeButton("취소"){ dialog, which ->
+            dialog.dismiss()
+            return@setNegativeButton
+        }
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_blue))
+
+            val negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.soft_red))
+        }
+        dialog.show()
+    }
+    private fun createSuccessDialog(body: String, alarmWithDosetime: AlarmWithDosetime){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("선택하신 내용으로 알람을 수정하시겠습니까??")
         builder.setMessage(body)
         builder.setPositiveButton("확인") { dialog, which ->
             val intDaysOfWeek = checkedDays!!.map {
@@ -482,19 +495,40 @@ class AlarmDetailFragment : Fragment() {
                 medicines = alarmDrugs.toString(),
                 dailyRepeatTime = dailyRepeatTime,
                 dailyDosage = dailyDosage,
-                isActive = true,
+                isActive = alarmWithDosetime.alarm.isActive,
                 alarmDate = alarmDateString,
                 alarmDateInt = alarmDateInt,
                 lowStockAlert = lowStockAlert,
                 stockQuantity = stockQuantity,
                 minStockQuantity = minStockQuantity,
             )
-            lifecycleScope.launch {
-                val alarmId: Long = alarmViewModel.addAlarm(newAlarm).await()
-                Log.e(TAG,"인서트 아이디 = ${alarmId}")
-                alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmId.toInt())).apply {
+
+            Log.e(TAG,"업데이트 알람 제목${alarmTitle.toString()}")
+            Log.e(TAG,"업데이트 약${alarmDrugs.toString()}")
+            Log.e(TAG,"알람 개수${dailyDosage}")
+            Log.e(TAG,"일회 복용회수${dailyRepeatTime}")
+            Log.e(TAG,"알람 날짜${alarmDateString.map { it }}")
+            Log.e(TAG,"알람 날짜숫자형태${alarmDateInt.map { it }}")
+            Log.e(TAG,"약품 미리알림${lowStockAlert}")
+            Log.e(TAG,"약품 미리알림 잔여랑${stockQuantity}")
+            Log.e(TAG,"약품 미리알림 최소 보유량${minStockQuantity}")
+
+            alarmViewModel.updateAlarm(alarmWithDosetime.alarm.apply {
+                this.title = alarmTitle.toString()
+                this.medicines = alarmDrugs.toString()
+                this.dailyRepeatTime = dailyRepeatTime
+                this.dailyDosage = dailyDosage
+                this.isActive = alarmWithDosetime.alarm.isActive
+                this.alarmDate = alarmDateString
+                this.alarmDateInt = alarmDateInt
+                this.lowStockAlert = lowStockAlert
+                this.stockQuantity = stockQuantity
+                this.minStockQuantity = minStockQuantity
+            })
+            alarmViewModel.deleteAllDoseTimeByAlarmId(alarmWithDosetime.alarm.id).apply {
+                alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmWithDosetime.alarm.id).apply {
                     requireActivity().supportFragmentManager.popBackStack()
-                }
+                })
             }
         }
         builder.setNegativeButton("취소"){ dialog, which ->
@@ -528,5 +562,29 @@ class AlarmDetailFragment : Fragment() {
             activity?.currentFocus?.windowToken,
             InputMethodManager.HIDE_IMPLICIT_ONLY
         )
+    }
+
+    private fun addObject(alarmWithDosetime: AlarmWithDosetime) {
+        binding.etAlarmName.setText(alarmWithDosetime.alarm.title)
+        binding.etEatDrug.setText(alarmWithDosetime.alarm.medicines)
+        alarmWithDosetime.alarm.alarmDateInt.map { i: Int -> when(i){
+                1 -> binding.cbAlarmSunday.isChecked = true
+                2 -> binding.cbAlarmMonday.isChecked = true
+                3 -> binding.cbAlarmTuesday.isChecked = true
+                4 -> binding.cbAlarmWednesday.isChecked = true
+                5 -> binding.cbAlarmThursday.isChecked = true
+                6 -> binding.cbAlarmFriday.isChecked = true
+                7 -> binding.cbAlarmSaturday.isChecked = true
+                else -> return@map
+            }
+        }
+        binding.btnEatDrugOnetime.text = alarmWithDosetime.alarm.dailyRepeatTime.toString()
+        alarmAdapter.addAllItem(alarmWithDosetime.doseTime)
+        binding.swEatDrugBeforehandCycle.isChecked = alarmWithDosetime.alarm.lowStockAlert
+        if(alarmWithDosetime.alarm.lowStockAlert){
+            binding.edEatDrugRemaining.setText(alarmWithDosetime.alarm.stockQuantity.toString())
+            binding.edEatDrugSmallest.setText(alarmWithDosetime.alarm.minStockQuantity.toString())
+        }
+        binding.btnEatDrugCount.text = "${alarmAdapter.itemCount}회"
     }
 }
