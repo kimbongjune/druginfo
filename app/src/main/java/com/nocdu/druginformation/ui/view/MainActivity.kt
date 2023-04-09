@@ -1,5 +1,8 @@
 package com.nocdu.druginformation.ui.view
 
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -64,6 +67,15 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
 
+        val intent = intent
+        val data = intent.getIntExtra("alarmClick", 0)
+        if(data != null){
+            Log.e(TAG, "알람 취소")
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(data)
+        }
+
         initFirebase()
 
         val database = DrugSearchDatabase.getInstance(this)
@@ -77,6 +89,17 @@ class MainActivity : AppCompatActivity() {
         alarmViewModel = ViewModelProvider(this, alarmFactory)[AlarmViewModel::class.java]
 
         setUpTabLayoutWithViewpager()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val data = intent?.getIntExtra("alarmClick", 0)
+        if(data != null){
+            Log.e(TAG, "알람 취소sss data = ${data}")
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(data)
+        }
     }
     override fun onStop() {
         super.onStop()
