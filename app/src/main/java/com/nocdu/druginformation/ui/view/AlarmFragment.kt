@@ -22,6 +22,7 @@ import com.nocdu.druginformation.databinding.FragmentAlarmBinding
 import com.nocdu.druginformation.ui.adapter.AlarmPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.utill.collectLatestStateFlow
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -141,6 +142,21 @@ class AlarmFragment : Fragment() {
         }
         alarmPagingAdapter.setOnCheckedChangeListener { alarm, isChecked ->
             alarmViewModel.updateAlarm(alarm.alarm.apply { isActive = isChecked})
+            var alarmTimes = mutableListOf<Triple<Int,Int,Int>>()
+            //TODO 테스트 필요
+            if(isChecked){
+                for(i in 0 until alarm.alarm.alarmDateInt.size){
+                    for(j in 0 until alarm.doseTime.size){
+                        val hour = convertTo24HoursFormat(alarm.doseTime[j].time).first
+                        val minute = convertTo24HoursFormat(alarm.doseTime[j].time).second
+                        Log.e(TAG,"요일 과 시간= ${alarm.alarm.alarmDateInt[i]}, ${hour}, ${minute}")
+                        alarmTimes.add(Triple(alarm.alarm.alarmDateInt[i], hour, minute))
+                    }
+                }
+                MainActivity.getInstance().setAlarm(alarmTimes, alarm.alarm.id)
+            }else{
+                MainActivity.getInstance().removeAlarm(alarm.alarm.id)
+            }
             //Log.e(TAG,"리사이클러뷰 스위치 체인지 리스너 데이터는 = ${alarm.alarm.id}, 체크 여부는 = ${isChecked}")
         }
     }
@@ -243,6 +259,22 @@ class AlarmFragment : Fragment() {
 //                pendingIntent
 //            )
 //        }
+    }
+
+    fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
+        val pattern = "hh:mm"
+        val format = SimpleDateFormat(pattern, Locale.getDefault())
+        val date = format.parse(timeString.substring(3))
+        val calendar = Calendar.getInstance().apply { time = date }
+
+        if (timeString.startsWith("오후")) {
+            calendar.add(Calendar.HOUR, 12)
+        }
+
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        return Pair(hour,minute)
     }
 
 }

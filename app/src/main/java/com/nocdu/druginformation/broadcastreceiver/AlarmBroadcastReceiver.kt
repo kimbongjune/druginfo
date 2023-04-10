@@ -15,8 +15,12 @@ import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.nocdu.druginformation.R
+import com.nocdu.druginformation.data.api.RetrofitInstance
+import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.ui.view.MainActivity
 import com.nocdu.druginformation.utill.Constants.ACTION_CANCEL_NOTIFICATION
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -51,7 +55,35 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
 //                vibrator.vibrate(vibrationEffect)
 //            }
 
-            MainActivity.getInstance().reRegistrationAlarm(id)
+            reRegistrationAlarm(context,id)
+            //removeAlarm(context,id)
+
+            GlobalScope.launch {
+                AlarmDatabase.getDatabase(context).alarmDao().getAlarm(id).apply {
+                    if (this.lowStockAlert) {
+                        this.stockQuantity = this.stockQuantity - this.dailyRepeatTime
+                        if (this.stockQuantity <= this.minStockQuantity) {
+                            //TODO FCM 보내기
+                            RetrofitInstance.api.sendFcm(AlarmDatabase.getDatabase(context).tokenDao().getAllToken()[0].token)
+                        }
+                        //TODO 테스트 필요
+                        AlarmDatabase.getDatabase(context).alarmDao().updateAlarm(this)
+                    }
+                }
+            }
+//            GlobalScope.launch {
+//                MainActivity.getInstance().alarmViewModel.getAlarm(id).await().apply {
+//                    if(this.lowStockAlert){
+//                        this.stockQuantity = this.stockQuantity - this.dailyRepeatTime
+//                        if(this.stockQuantity <= this.minStockQuantity){
+//                            //TODO FCM 보내기
+//                            //MainActivity.getInstance().alarmViewModel.sendFcm(MainActivity.getInstance().alarmViewModel.getAllToken.await()[0].token)
+//                        }
+//                        //TODO 테스트 필요
+//                        MainActivity.getInstance().alarmViewModel.updateAlarm(this)
+//                    }
+//                }
+//            }
 
             val newIntent = Intent(context, NotificationReceiver::class.java)
             newIntent.action = ACTION_CANCEL_NOTIFICATION
@@ -121,5 +153,61 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
         )
 
         Log.e(TAG,"리 세팅 알람")
+    }
+
+    fun reRegistrationAlarm(context: Context, alarmId:Int){
+        var alarmIntent:Intent = Intent(context.applicationContext, AlarmBroadcastReceiver::class.java).apply {
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            putExtra("alarmRequestCode", alarmId)
+            action = "com.example.alarm"
+        }
+
+        var alarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context.applicationContext,
+            alarmId,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.DAY_OF_WEEK)
+        calendar.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY)
+        calendar.set(Calendar.MINUTE, Calendar.MINUTE)
+        calendar.add(Calendar.DATE, 7)
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            //AlarmManager.INTERVAL_DAY * 7,
+            pendingIntent
+        )
+    }
+
+    fun removeAlarm(context: Context, alarmId:Int){
+        var alarmIntent:Intent = Intent(context.applicationContext, AlarmBroadcastReceiver::class.java).apply {
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            putExtra("alarmRequestCode", alarmId)
+            action = "com.example.alarm"
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context.applicationContext,
+            alarmId,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        var alarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        pendingIntent.cancel()
+        alarmManager.cancel(pendingIntent)
+
+        Log.e(TAG,"지운 알람의 아이디 = ${alarmId}")
     }
 }
