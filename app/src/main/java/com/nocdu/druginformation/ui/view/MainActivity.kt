@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         val intent = intent
         val data = intent.getIntExtra("alarmClick", 0)
         if(data != null){
-            Log.e(TAG, "알람 취소")
+            Log.e(TAG, "알람 취소sss data = ${data}")
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(data)
@@ -119,6 +119,7 @@ class MainActivity : AppCompatActivity() {
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(data)
+
         }
     }
     override fun onStop() {
@@ -219,7 +220,7 @@ class MainActivity : AppCompatActivity() {
             val time = alarmTime
 
             // 현재 시간보다 이전인 경우 다음 주에 알람 설정
-            if (calendar.after(time)) {
+            if (Calendar.getInstance().after(time)) {
                 time.add(Calendar.DATE, 7)
             }
             Log.e(TAG,"알람 등록, ${time.timeInMillis}")

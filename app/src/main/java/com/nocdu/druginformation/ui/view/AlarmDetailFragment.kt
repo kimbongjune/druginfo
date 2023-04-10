@@ -548,8 +548,9 @@ class AlarmDetailFragment : Fragment() {
             alarmViewModel.deleteAllDoseTimeByAlarmId(alarmWithDosetime.alarm.id).apply {
                 alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmWithDosetime.alarm.id).apply {
                     //TODO 테스트 필요
-                    MainActivity.getInstance().removeAlarm(alarmWithDosetime.alarm.id)
-                    MainActivity.getInstance().setAlarm(alarmTimes, alarmWithDosetime.alarm.id)
+                    MainActivity.getInstance().removeAlarm(alarmWithDosetime.alarm.id).apply {
+                        MainActivity.getInstance().setAlarm(alarmTimes, alarmWithDosetime.alarm.id)
+                    }
                     requireActivity().supportFragmentManager.popBackStack()
                 })
             }
