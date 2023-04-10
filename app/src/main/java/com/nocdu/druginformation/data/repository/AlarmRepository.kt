@@ -40,4 +40,6 @@ interface AlarmRepository {
     suspend fun updateToken(token: FcmToken)
 
     suspend fun getTokenCount():Int
+
+    suspend fun sendFcm(token:String)
 }

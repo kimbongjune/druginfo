@@ -1,10 +1,13 @@
 package com.nocdu.druginformation.ui.view
 
+import android.app.AlarmManager
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +17,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.adapter.ViewPagerAdapter
+import com.nocdu.druginformation.broadcastreceiver.AlarmBroadcastReceiver
 import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.data.database.DrugSearchDatabase
 import com.nocdu.druginformation.data.model.FcmToken
@@ -25,8 +29,21 @@ import com.nocdu.druginformation.ui.viewmodel.AlarmViewModelProviderFactory
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private lateinit var instance: MainActivity
+
+        private lateinit var alarmIntent: Intent
+
+        private lateinit var alarmManager:AlarmManager
+
+        fun getInstance(): MainActivity {
+            return instance
+        }
+    }
 
     final val TAG:String = "MainActivity"
 
@@ -61,6 +78,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        instance = this
+        alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val viewPager = binding.viewPager
         val tabLayout = binding.tabLayout
@@ -166,5 +186,103 @@ class MainActivity : AppCompatActivity() {
                 Log.e(TAG,"token = ${task.result}")
             }
         }
+    }
+
+    fun setAlarm(alarmList:List<Triple<Int,Int,Int>>, alarmId:Int){
+        alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            putExtra("alarmRequestCode", alarmId)
+            action = "com.example.alarm"
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            alarmId,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        var alarmTimes = mutableListOf<Calendar>()
+        for(i in 0 until alarmList.size){
+            calendar.set(Calendar.DAY_OF_WEEK, alarmList[i].first)
+            calendar.set(Calendar.HOUR_OF_DAY, alarmList[i].second)
+            calendar.set(Calendar.MINUTE, alarmList[i].third)
+            alarmTimes.add(calendar.clone() as Calendar)
+        }
+
+        alarmTimes.forEach { alarmTime ->
+            val time = alarmTime
+
+            // 현재 시간보다 이전인 경우 다음 주에 알람 설정
+            if (calendar.after(time)) {
+                time.add(Calendar.DATE, 7)
+            }
+            Log.e(TAG,"알람 등록, ${time.timeInMillis}")
+
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                time.timeInMillis,
+                //AlarmManager.INTERVAL_DAY * 7,
+                pendingIntent
+            )
+        }
+
+        Log.e(TAG,"등록한 알람의 아이디 = ${alarmId}")
+    }
+
+    fun reRegistrationAlarm(alarmId:Int){
+        alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            putExtra("alarmRequestCode", alarmId)
+            action = "com.example.alarm"
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            alarmId,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.DAY_OF_WEEK)
+        calendar.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY)
+        calendar.set(Calendar.MINUTE, Calendar.MINUTE)
+        calendar.add(Calendar.DATE, 7)
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            //AlarmManager.INTERVAL_DAY * 7,
+            pendingIntent
+        )
+    }
+
+    fun removeAlarm(alarmId:Int){
+        alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            putExtra("alarmRequestCode", alarmId)
+            action = "com.example.alarm"
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            alarmId,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        pendingIntent.cancel()
+        alarmManager.cancel(pendingIntent)
+        
+        Log.e(TAG,"지운 알람의 아이디 = ${alarmId}")
     }
 }

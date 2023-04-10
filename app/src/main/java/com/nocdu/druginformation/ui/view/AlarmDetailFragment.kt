@@ -1,11 +1,15 @@
 package com.nocdu.druginformation.ui.view
 
 import android.animation.ValueAnimator
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
+import com.nocdu.druginformation.broadcastreceiver.AlarmBroadcastReceiver
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.databinding.FragmentAlarmDetailBinding
@@ -27,9 +32,11 @@ import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class AlarmDetailFragment : Fragment() {
 
@@ -440,6 +447,8 @@ class AlarmDetailFragment : Fragment() {
         builder.setMessage("삭제된 알람은 복구할 수 없습니다.")
         builder.setPositiveButton("확인") { dialog, which ->
             alarmViewModel.deleteAlarm(alarm).apply {
+                //deleteAlarmManager(MainActivity.getInstance(), alarm.id)
+                MainActivity.getInstance().removeAlarm(alarm.id)
                 requireActivity().supportFragmentManager.popBackStack()
             }
         }
@@ -525,8 +534,22 @@ class AlarmDetailFragment : Fragment() {
                 this.stockQuantity = stockQuantity
                 this.minStockQuantity = minStockQuantity
             })
+            var alarmTimes = mutableListOf<Triple<Int,Int,Int>>()
+            for (i in 0 until alarmDateInt.size){
+                for(j in 0 until  alarmAdapter.itemCount){
+                    //Log.e(TAG,"요일 과 시간= ${alarmDateInt[i]}, ${alarmAdapter.getItem(j).eatDrugTextView}")
+                    //TODO 테스트 필요
+                    val hour = convertTo24HoursFormat(alarmAdapter.getItem(j).eatDrugTextView).first
+                    val minute = convertTo24HoursFormat(alarmAdapter.getItem(j).eatDrugTextView).second
+                    Log.e(TAG,"요일 과 시간= ${alarmDateInt[i]}, ${hour}, ${minute}")
+                    alarmTimes.add(Triple(alarmDateInt[i], hour, minute))
+                }
+            }
             alarmViewModel.deleteAllDoseTimeByAlarmId(alarmWithDosetime.alarm.id).apply {
                 alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmWithDosetime.alarm.id).apply {
+                    //TODO 테스트 필요
+                    MainActivity.getInstance().removeAlarm(alarmWithDosetime.alarm.id)
+                    MainActivity.getInstance().setAlarm(alarmTimes, alarmWithDosetime.alarm.id)
                     requireActivity().supportFragmentManager.popBackStack()
                 })
             }
@@ -586,5 +609,39 @@ class AlarmDetailFragment : Fragment() {
             binding.edEatDrugSmallest.setText(alarmWithDosetime.alarm.minStockQuantity.toString())
         }
         binding.btnEatDrugCount.text = "${alarmAdapter.itemCount}회"
+    }
+
+    private fun deleteAlarmManager(context: Context, id:Int){
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val intent = Intent(context, AlarmBroadcastReceiver::class.java).apply {
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            putExtra("alarmRequestCode", id)
+            action = "com.example.alarm"
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            id,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.cancel(pendingIntent)
+    }
+
+    fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
+        val pattern = "hh:mm"
+        val format = SimpleDateFormat(pattern, Locale.getDefault())
+        val date = format.parse(timeString.substring(3))
+        val calendar = Calendar.getInstance().apply { time = date }
+
+        if (timeString.startsWith("오후")) {
+            calendar.add(Calendar.HOUR, 12)
+        }
+
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        return Pair(hour,minute)
     }
 }

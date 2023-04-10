@@ -1,5 +1,6 @@
 package com.nocdu.druginformation.broadcastreceiver
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,10 +11,13 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.*
+import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.nocdu.druginformation.R
+import com.nocdu.druginformation.ui.view.MainActivity
 import com.nocdu.druginformation.utill.Constants.ACTION_CANCEL_NOTIFICATION
+import java.util.*
 
 
 class AlarmBroadcastReceiver : BroadcastReceiver(){
@@ -24,6 +28,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
         // alarm to vibrator and soundcode here
         Log.e(TAG, "알람 리시버 동작")
         if(intent.extras?.get("alarmRequestCode") != null){
+            val id:Int = intent.extras?.get("alarmRequestCode").toString().toInt()
             val wakeLock = acquireWakeLock(context, PowerManager.PARTIAL_WAKE_LOCK)
             // 알람 울림에 필요한 리소스 로드
 //            val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -46,12 +51,14 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
 //                vibrator.vibrate(vibrationEffect)
 //            }
 
-            val newIntent = Intent(context, AlarmBroadcastReceiver::class.java)
-            newIntent.action = ACTION_CANCEL_NOTIFICATION
-            newIntent.putExtra("alarmClick", 2)
-            newIntent.putExtra("alarmRequestCode", 2)
+            MainActivity.getInstance().reRegistrationAlarm(id)
 
-            val pendingIntent = PendingIntent.getBroadcast(context, 2, newIntent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE)
+            val newIntent = Intent(context, NotificationReceiver::class.java)
+            newIntent.action = ACTION_CANCEL_NOTIFICATION
+            newIntent.putExtra("alarmClick", id)
+            newIntent.putExtra("alarmRequestCode", id)
+
+            val pendingIntent = PendingIntent.getBroadcast(context, id, newIntent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE)
 
             val notification = NotificationCompat.Builder(context, "default")
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -66,7 +73,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                 val channel = NotificationChannel("default", "Notice", NotificationManager.IMPORTANCE_HIGH)
                 notificationManager.createNotificationChannel(channel)
             }
-            notificationManager.notify(2, notification.build())
+            notificationManager.notify(id, notification.build())
             wakeLock?.release()
         }
 
@@ -80,5 +87,39 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                     acquire()
                 }
         }
+    }
+
+    private fun reRegistrationAlarm(context: Context, intents: Intent, id:Int){
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.DAY_OF_WEEK)
+        calendar.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY)
+        calendar.set(Calendar.MINUTE, Calendar.MINUTE)
+        calendar.add(Calendar.DATE, 7)
+
+        val intent = Intent(context, AlarmBroadcastReceiver::class.java).apply {
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            putExtra("alarmRequestCode", id)
+            action = "com.example.alarm"
+        }
+
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            id,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            //AlarmManager.INTERVAL_DAY * 7,
+            pendingIntent
+        )
+
+        Log.e(TAG,"리 세팅 알람")
     }
 }

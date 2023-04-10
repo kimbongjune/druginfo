@@ -3,6 +3,7 @@ package com.nocdu.druginformation.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.nocdu.druginformation.data.api.RetrofitInstance.api
 import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
@@ -82,5 +83,9 @@ class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
 
     override suspend fun getTokenCount():Int{
         return db.tokenDao().getTokenCount()
+    }
+
+    override suspend fun sendFcm(token: String) {
+        api.sendFcm(token)
     }
 }

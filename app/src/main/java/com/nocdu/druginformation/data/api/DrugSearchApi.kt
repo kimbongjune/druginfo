@@ -23,4 +23,9 @@ interface DrugSearchApi {
         @Query(value = "line") line:String,
         @Query(value = "page") page: Int
     ):Response<SearchResponse>
+
+    @GET(value = "/fcm/send")
+    suspend fun sendFcm(
+        @Query(value = "token") token:String
+    )
 }

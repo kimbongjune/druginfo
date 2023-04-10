@@ -500,14 +500,7 @@ class AlarmCreateFragment : Fragment() {
                 stockQuantity = stockQuantity,
                 minStockQuantity = minStockQuantity,
             )
-            var alarmId: Long = 0;
-            lifecycleScope.launch {
-                alarmId = alarmViewModel.addAlarm(newAlarm).await()
-                Log.e(TAG,"인서트 아이디 = ${alarmId}")
-                alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmId.toInt())).apply {
-                    requireActivity().supportFragmentManager.popBackStack()
-                }
-            }
+
             var alarmTimes = mutableListOf<Triple<Int,Int,Int>>()
             for (i in 0 until alarmDateInt.size){
                 for(j in 0 until  alarmAdapter.itemCount){
@@ -519,7 +512,16 @@ class AlarmCreateFragment : Fragment() {
                     alarmTimes.add(Triple(alarmDateInt[i], hour, minute))
                 }
             }
-            setAlarms(alarmTimes, alarmId)
+
+            var alarmId: Long = 0;
+            lifecycleScope.launch {
+                alarmId = alarmViewModel.addAlarm(newAlarm).await()
+                Log.e(TAG,"인서트 아이디 = ${alarmId}")
+                MainActivity.getInstance().setAlarm(alarmTimes, alarmId.toInt())
+                alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmId.toInt())).apply {
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
+            }
         }
         builder.setNegativeButton("취소"){ dialog, which ->
             dialog.dismiss()
@@ -629,7 +631,7 @@ class AlarmCreateFragment : Fragment() {
 
     private fun setAlarms(alarmList:List<Triple<Int,Int,Int>>, alarmId:Long) {
         Log.e(TAG,"알람 등록")
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmManager = MainActivity.getInstance().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val calendar = Calendar.getInstance().apply {
             set(Calendar.SECOND, 0)
@@ -669,7 +671,7 @@ class AlarmCreateFragment : Fragment() {
             if (calendar.after(time)) {
                 time.add(Calendar.DATE, 7)
             }
-            val intent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).apply {
+            val intent = Intent(MainActivity.getInstance(), AlarmBroadcastReceiver::class.java).apply {
                 ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
                 putExtra("alarmRequestCode", alarmId.toInt())
                 action = "com.example.alarm"
@@ -677,7 +679,7 @@ class AlarmCreateFragment : Fragment() {
 
             Log.e(TAG,"알람 등록, ${time.timeInMillis}")
 
-            val pendingIntent = getBroadcast(requireContext(), alarmId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            val pendingIntent = getBroadcast(MainActivity.getInstance(), alarmId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
