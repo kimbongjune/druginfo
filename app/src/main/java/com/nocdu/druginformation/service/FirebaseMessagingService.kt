@@ -16,11 +16,11 @@ import com.nocdu.druginformation.ui.view.MainActivity
 import com.nocdu.druginformation.utill.Constants
 
 class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagingService() {
-    val TAG = "FirebaseMessagingService"
+    private val TAG = "FirebaseMessagingService"
 
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.i(TAG, remoteMessage.toString());
+        Log.e(TAG, remoteMessage.toString());
 
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){

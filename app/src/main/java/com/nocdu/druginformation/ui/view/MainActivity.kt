@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.FirebaseApp
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var toast: Toast
 
+    lateinit var viewPager: ViewPager2
+
     private val binding:ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
@@ -86,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         instance = this
         alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val viewPager = binding.viewPager
+        viewPager = binding.viewPager
 
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
 
@@ -106,8 +109,8 @@ class MainActivity : AppCompatActivity() {
         val factory = DrugSearchViewModelProviderFactory(drugSearchRepository)
         drugSearchViewModel = ViewModelProvider(this, factory)[DrugSearchViewModel::class.java]
 
-        val alarmDatase = AlarmDatabase.getDatabase(this)
-        var alarmRepository = AlarmRepositoryImpl(alarmDatase)
+        val alarmDatabase = AlarmDatabase.getDatabase(this)
+        var alarmRepository = AlarmRepositoryImpl(alarmDatabase)
         var alarmFactory = AlarmViewModelProviderFactory(alarmRepository)
         alarmViewModel = ViewModelProvider(this, alarmFactory)[AlarmViewModel::class.java]
 

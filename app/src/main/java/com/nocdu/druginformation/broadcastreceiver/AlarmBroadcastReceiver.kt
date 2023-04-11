@@ -17,9 +17,12 @@ import androidx.core.app.NotificationCompat
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.api.RetrofitInstance
 import com.nocdu.druginformation.data.database.AlarmDatabase
+import com.nocdu.druginformation.service.AlarmService
 import com.nocdu.druginformation.ui.view.MainActivity
 import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ACTION_CANCEL_NOTIFICATION
+import com.nocdu.druginformation.utill.Constants.ACTION_START_SOUND_AND_VIBRATION
+import com.nocdu.druginformation.utill.Constants.ACTION_STOP_SOUND_AND_VIBRATION
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
@@ -28,6 +31,9 @@ import java.util.*
 class AlarmBroadcastReceiver : BroadcastReceiver(){
 
     final val TAG:String = "AlarmBroadcastReceiver"
+
+    private var title:String = "의약품 알람"
+    private var body:String = "약"
 
     override fun onReceive(context: Context, intent: Intent) {
         // alarm to vibrator and soundcode here
@@ -62,12 +68,14 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                 AlarmDatabase.getDatabase(context).alarmDao().getAlarm(id).apply {
                     if (this.lowStockAlert) {
                         this.stockQuantity = this.stockQuantity - this.dailyRepeatTime
-                        if (this.stockQuantity <= this.minStockQuantity) {
-                            //TODO FCM 보내기
-                            RetrofitInstance.api.sendFcm(AlarmDatabase.getDatabase(context).tokenDao().getAllToken()[0].token)
-                        }
-                        //TODO 테스트 필요
-                        AlarmDatabase.getDatabase(context).alarmDao().updateAlarm(this)
+//                        if (this.stockQuantity <= this.minStockQuantity) {
+//                            //TODO FCM 보내기
+//                            setTitle(this.title)
+//                            setBody(this.medicines)
+//                            RetrofitInstance.api.sendFcm(AlarmDatabase.getDatabase(context).tokenDao().getAllToken()[0].token)
+//                        }
+//                        //TODO 테스트 필요
+//                        AlarmDatabase.getDatabase(context).alarmDao().updateAlarm(this)
                     }
                 }
             }
@@ -75,18 +83,17 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
             val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
             val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
 
-            val newIntent = Intent(context.applicationContext, NotificationReceiver::class.java)
-            newIntent.action = ACTION_CANCEL_NOTIFICATION
-            newIntent.putExtra("alarmClick", id)
+            val newIntent = Intent(context.applicationContext, AlarmService::class.java)
+            newIntent.action = ACTION_STOP_SOUND_AND_VIBRATION
             newIntent.putExtra("alarmRequestCode", id)
 
-            val pendingIntent = PendingIntent.getBroadcast(context.applicationContext, id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+            val pendingIntent = PendingIntent.getService(context.applicationContext, id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
-            val notification = NotificationCompat.Builder(context.applicationContext, "default")
+            val notification = NotificationCompat.Builder(context.applicationContext, channelId)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
-                .setContentTitle("알람")
-                .setContentText("알람이 울렸습니다")
+                .setContentTitle(title)
+                .setContentText("의약품 (${body}) 복용시간 입니다.")
                 .setContentIntent(pendingIntent)
 
             val notificationManager = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -96,6 +103,16 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                 notificationManager.createNotificationChannel(channel)
             }
             notificationManager.notify(id, notification.build())
+
+            val serviceIntent = Intent(context, AlarmService::class.java)
+            serviceIntent.putExtra("alarmRequestCode", id)
+            serviceIntent.action =  ACTION_START_SOUND_AND_VIBRATION
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(serviceIntent);
+            } else {
+                context.startService(serviceIntent);
+            }
+
             wakeLock?.release()
         }
 
@@ -143,5 +160,13 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
             //AlarmManager.INTERVAL_DAY * 7,
             pendingIntent
         )
+    }
+
+    fun setTitle(title:String){
+        this.title = title
+    }
+
+    fun setBody(body:String){
+        this.body = body
     }
 }

@@ -24,14 +24,6 @@ fun <T> AlarmFragment.collectLatestStateFlow(flow:Flow<T>, collect:suspend (T) -
     }
 }
 
-fun <T> AlarmCreateFragment.collectLatestStateFlow(flow:Flow<T>, collect:suspend (T) -> Unit){
-    viewLifecycleOwner.lifecycleScope.launch {
-        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-            flow.collectLatest(collect)
-        }
-    }
-}
-
 fun <T> TextSearchFragment.collectLatestStateFlow(flow:Flow<T>, collect:suspend (T) -> Unit){
     viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
