@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:startIconDrawable="@drawable/ic_baseline_keyboard_arrow_left_24"
-            android:hint="Search...."
+            android:hint="검색"
             android:padding="4dp"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +24,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_search"
+                android:hint="약품명, 성분, 효능으로 검색해주세요"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textAutoComplete"/>

@@ -165,7 +165,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setUpTabLayoutWithViewpager(){
         TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, postion ->
             tab.text = tabTitleArray[postion]

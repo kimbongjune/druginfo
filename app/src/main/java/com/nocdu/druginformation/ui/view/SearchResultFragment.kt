@@ -44,7 +44,7 @@ class SearchResultFragment : Fragment() {
 
         binding.fabFavorite.setOnClickListener {
             drugSearchViewModel.saveDrugs(data)
-            Snackbar.make(view, "drug has saved", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(view, "의약품 즐겨찾기가 등록되었습니다.", Snackbar.LENGTH_SHORT).show()
         }
     }
 

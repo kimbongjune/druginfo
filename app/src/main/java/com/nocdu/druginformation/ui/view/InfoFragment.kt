@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.core.view.size
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -168,9 +169,10 @@ class InfoFragment : Fragment() {
                     drugSearchViewModel.deleteDrugs(drug)
                     Log.e(TAG,"즐겨찾기 개수" + drugSearchAdapter.itemCount)
                     Snackbar.make(view, "즐겨찾기에서 제거되었습니다.", Snackbar.LENGTH_LONG).apply {
-                        setAction("취소"){
+                        setAction("실행 취소"){
                             drugSearchViewModel.saveDrugs(drug)
                         }
+                        setActionTextColor(ContextCompat.getColor(context, R.color.soft_blue))
                     }.show()
                 }
             }

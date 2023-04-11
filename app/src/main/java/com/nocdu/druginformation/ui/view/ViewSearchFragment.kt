@@ -54,17 +54,11 @@ class ViewSearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         goBack()
         clearRadioButton()
-        setupRecyclerView()
         searchDrugs()
-        setupLoadState()
         drugDrawableValueChangedEvent()
         drugDosageFormValueChangedEvent()
         drugColorValueChangedEvent()
         drugChooseLineChangedEvent()
-
-        collectLatestStateFlow(drugSearchViewModel.searchPagingResult){
-            drugSearchAdapter.submitData(it)
-        }
     }
 
     override fun onStop() {
@@ -194,80 +188,27 @@ class ViewSearchFragment : Fragment() {
         binding.btnViewSearchSend.setOnClickListener {
             printFrontText = binding.etDrugFrontText.text.toString()
             printBackText = binding.etDrugBackText.text.toString()
-            Log.e(TAG, "전면 식별표시 = $printFrontText")
-            Log.e(TAG, "후면 식별표시 = $printBackText")
-            Log.e(TAG, "모양 선택 = $drugDrawable")
-            Log.e(TAG, "제형 선택 = $drugDosageForm")
-            Log.e(TAG, "색상 선택 = $drugColor")
-            Log.e(TAG, "분할선 선택 = $drugChooseLine")
-            drugSearchViewModel.searchViewDrugPaging(drugDrawable, drugDosageForm, printFrontText, printBackText, drugColor, drugChooseLine)
-            binding.rvSearchResult.isVisible = true
+
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.setCustomAnimations(
+                R.anim.slide_in_bottom,
+                R.anim.slide_out_bottom,
+                R.anim.slide_in_bottom,
+                R.anim.slide_out_bottom)
+            transaction?.replace(R.id.viewSearchFragment, ViewSearchResultFragment().apply {
+                arguments = Bundle().apply {
+                    putString("drugDrawable",drugDrawable)
+                    putString("drugDosageForm",drugDosageForm)
+                    putString("printFrontText",printFrontText)
+                    putString("printBackText",printBackText)
+                    putString("drugColor",drugColor)
+                    putString("drugChooseLine",drugChooseLine)
+                }
+                transaction?.addToBackStack("ViewSearchFragment")
+            })?.commit()
             //Toast.makeText(activity, "검색 버튼 클릭", Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun setupRecyclerView(){
-        //drugSearchAdapter = DrugSearchAdapter()
-        drugSearchAdapter = DrugSearchPagingAdapter()
-        binding.rvSearchResult.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL))
-            adapter = drugSearchAdapter.withLoadStateFooter(
-                footer = DrugSearchLoadStateAdapter(drugSearchAdapter::retry)
-            )
-        }
-        drugSearchAdapter.setOnItemClickListener {
-            Log.e(TAG,"data${it}")
-            viewDetailInfo(it)
-        }
-    }
-
-    fun viewDetailInfo(document: Document){
-        val searchResultFragment:Fragment = SearchResultFragment()
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(
-            R.anim.slide_in_bottom,
-            R.anim.slide_out_bottom,
-            R.anim.slide_in_bottom,
-            R.anim.slide_out_bottom)
-        transaction?.replace(R.id.viewSearchFragment, SearchResultFragment().apply {
-            arguments = Bundle().apply {
-                putSerializable("data",document)
-            }
-            transaction?.addToBackStack("ViewSearchFragment")
-        })?.commit()
-    }
-
-    private fun setupLoadState(){
-        drugSearchAdapter.addLoadStateListener { combinedLoadStates ->
-            val loadState = combinedLoadStates.source
-            val isListEmpty = drugSearchAdapter.itemCount < 1
-                    && loadState.refresh is LoadState.NotLoading
-                    && loadState.append.endOfPaginationReached
-
-            //binding.tvEmptyList.isVisible = isListEmpty
-            binding.rvSearchResult.isVisible = !isListEmpty
-
-            binding.progressBar.isVisible = loadState.refresh is LoadState.Loading
-
-//            binding.btnRetry.isVisible = loadState.refresh is LoadState.Error
-//                    || loadState.append is LoadState.Error
-//                    || loadState.prepend is LoadState.Error
-//
-//            val errorState:LoadState.Error? = loadState.append as? LoadState.Error
-//                ?: loadState.prepend as? LoadState.Error
-//                ?: loadState.refresh as? LoadState.Error
-//
-//            errorState?.let {
-//                Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_SHORT).show()
-//            }
-        }
-//        binding.btnRetry.setOnClickListener{
-//            drugSearchAdapter.retry()
-//        }
-    }
-
 }

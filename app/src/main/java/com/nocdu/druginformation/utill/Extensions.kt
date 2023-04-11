@@ -40,7 +40,7 @@ fun <T> TextSearchFragment.collectLatestStateFlow(flow:Flow<T>, collect:suspend 
     }
 }
 
-fun <T> ViewSearchFragment.collectLatestStateFlow(flow:Flow<T>, collect:suspend (T) -> Unit){
+fun <T> ViewSearchResultFragment.collectLatestStateFlow(flow:Flow<T>, collect:suspend (T) -> Unit){
     viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
             flow.collectLatest(collect)
