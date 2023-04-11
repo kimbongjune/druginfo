@@ -69,6 +69,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE) // 일회성
 
         val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
+        val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
@@ -86,7 +87,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
 
         // 오레오 버전 이후에는 채널이 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
+            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
             channel.apply {
                 setShowBadge(false)

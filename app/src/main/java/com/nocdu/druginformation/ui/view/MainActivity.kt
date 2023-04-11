@@ -1,17 +1,20 @@
 package com.nocdu.druginformation.ui.view
 
 import android.app.AlarmManager
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
@@ -28,6 +31,7 @@ import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModelProviderFactory
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
+import com.nocdu.druginformation.utill.Constants
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -83,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val viewPager = binding.viewPager
-        val tabLayout = binding.tabLayout
 
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
 
@@ -186,6 +189,28 @@ class MainActivity : AppCompatActivity() {
                 Log.e(TAG,"token = ${task.result}")
             }
         }
+
+        val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
+        val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
+        val channelDesc = Constants.DEFAULT_NOTIFICATION_CHANNEL_DESC
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(channelId,channelName,NotificationManager.IMPORTANCE_HIGH)
+            val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            // Configure the notification channel
+            notificationChannel.description = channelDesc
+            notificationChannel.enableLights(true)
+            notificationChannel.vibrationPattern = longArrayOf(200, 100, 200)
+            notificationChannel.enableVibration(true)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+        FirebaseMessaging.getInstance().subscribeToTopic("custom")
+            .addOnSuccessListener { //                    Toast.makeText(getApplicationContext(), "custom topic 구독", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "!!! - custom topic 구독")
+            }
+        FirebaseMessaging.getInstance().subscribeToTopic("notify")
+            .addOnSuccessListener { //                    Toast.makeText(getApplicationContext(), "notify topic 구독", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "!!! - notify topic 구독")
+            }
     }
 
     fun setAlarm(alarmList:List<Triple<Int,Int,Int>>, alarmId:Int){

@@ -10,5 +10,7 @@ object Constants {
     const val PAGING_SIZE = 15
 
     const val DEFAULT_NOTIFICATION_CHANNEL_ID = "DrugInfo"
+    const val DEFAULT_NOTIFICATION_CHANNEL_NAME = "DrugInfo"
+    const val DEFAULT_NOTIFICATION_CHANNEL_DESC = "DrugInfo"
     const val ACTION_CANCEL_NOTIFICATION = "ACTION_CANCEL_NOTIFICATION"
 }

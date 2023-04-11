@@ -18,6 +18,7 @@ import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.api.RetrofitInstance
 import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.ui.view.MainActivity
+import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ACTION_CANCEL_NOTIFICATION
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -71,6 +72,9 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                 }
             }
 
+            val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
+            val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
+
             val newIntent = Intent(context.applicationContext, NotificationReceiver::class.java)
             newIntent.action = ACTION_CANCEL_NOTIFICATION
             newIntent.putExtra("alarmClick", id)
@@ -88,7 +92,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
             val notificationManager = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                val channel = NotificationChannel("default", "Notice", NotificationManager.IMPORTANCE_HIGH)
+                val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
                 notificationManager.createNotificationChannel(channel)
             }
             notificationManager.notify(id, notification.build())
