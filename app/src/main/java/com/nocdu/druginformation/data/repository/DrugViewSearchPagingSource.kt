@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.nocdu.druginformation.data.api.RetrofitInstance
 import com.nocdu.druginformation.data.model.Document
+import com.nocdu.druginformation.utill.Constants.STARTING_PAGE_INDEX
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -38,9 +39,5 @@ class DrugViewSearchPagingSource(private val shape:String="", private val dosage
         } catch (exception: HttpException) {
             LoadResult.Error(exception)
         }
-    }
-
-    companion object {
-        const val STARTING_PAGE_INDEX = 1
     }
 }

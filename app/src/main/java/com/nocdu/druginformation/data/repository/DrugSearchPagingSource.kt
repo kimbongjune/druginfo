@@ -6,6 +6,7 @@ import com.nocdu.druginformation.data.api.RetrofitInstance.api
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.data.model.SearchResponse
 import com.nocdu.druginformation.utill.Constants.PAGING_SIZE
+import com.nocdu.druginformation.utill.Constants.STARTING_PAGE_INDEX
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
@@ -41,10 +42,6 @@ class DrugSearchPagingSource(private val query:String) :PagingSource<Int,Documen
         }catch (exception:HttpException){
             LoadResult.Error(exception)
         }
-    }
-
-    companion object{
-        const val STARTING_PAGE_INDEX = 1
     }
 
 }

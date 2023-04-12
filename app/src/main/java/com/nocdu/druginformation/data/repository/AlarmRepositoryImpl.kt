@@ -10,6 +10,8 @@ import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
 import com.nocdu.druginformation.data.model.FcmToken
 import com.nocdu.druginformation.utill.Constants
+import com.nocdu.druginformation.utill.Constants.PAGING_ADAPTER_MAX_SIZE
+import com.nocdu.druginformation.utill.Constants.PAGING_SIZE
 import kotlinx.coroutines.flow.Flow
 
 class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
@@ -33,9 +35,9 @@ class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
         val pagingSourceFactory = {db.alarmDao().getAlarms()}
         return Pager(
             config = PagingConfig(
-                pageSize = Constants.PAGING_SIZE,
+                pageSize = PAGING_SIZE,
                 enablePlaceholders = false,
-                maxSize = Constants.PAGING_SIZE * 3
+                maxSize = PAGING_SIZE * PAGING_ADAPTER_MAX_SIZE
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow

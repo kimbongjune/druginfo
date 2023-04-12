@@ -11,6 +11,7 @@ import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
 import com.nocdu.druginformation.data.model.FcmToken
 import com.nocdu.druginformation.data.repository.AlarmRepository
+import com.nocdu.druginformation.utill.Constants.COROUTINE_STAT_IN_STOP_TIME
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -27,7 +28,7 @@ class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel() 
 
     val getAlarms: StateFlow<PagingData<AlarmWithDosetime>> = alarmRepository.getAlarms()
         .cachedIn(viewModelScope)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), PagingData.empty())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(COROUTINE_STAT_IN_STOP_TIME), PagingData.empty())
 
     fun getAlarm(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         alarmRepository.getAlarm(id)

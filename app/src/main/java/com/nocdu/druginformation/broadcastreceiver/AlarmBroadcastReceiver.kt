@@ -104,7 +104,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
             val pendingIntent = PendingIntent.getService(context.applicationContext, id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
             val notification = NotificationCompat.Builder(context.applicationContext, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher_drugingo)
                 .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentText("의약품 (${body}) 복용시간 입니다.")

@@ -73,7 +73,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)     // 아이콘 설정
+            .setSmallIcon(R.mipmap.ic_launcher_drugingo)     // 아이콘 설정
             .setContentTitle(title)     // 제목
             .setContentText(body)     // 메시지 내용
             .setAutoCancel(true)
@@ -116,7 +116,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
 
         // 알림에 대한 UI 정보와 작업을 지정
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)     // 아이콘 설정
+            .setSmallIcon(R.mipmap.ic_launcher_drugingo)     // 아이콘 설정
             .setContentTitle(title)     // 제목
             .setContentText(body)     // 메시지 내용
             .setAutoCancel(true)

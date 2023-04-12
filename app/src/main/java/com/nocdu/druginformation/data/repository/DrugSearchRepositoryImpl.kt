@@ -8,6 +8,7 @@ import com.nocdu.druginformation.data.api.RetrofitInstance.api
 import com.nocdu.druginformation.data.database.DrugSearchDatabase
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.data.model.SearchResponse
+import com.nocdu.druginformation.utill.Constants.PAGING_ADAPTER_MAX_SIZE
 import com.nocdu.druginformation.utill.Constants.PAGING_SIZE
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -38,7 +39,7 @@ class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepo
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
                 enablePlaceholders = false,
-                maxSize = PAGING_SIZE * 3
+                maxSize = PAGING_SIZE * PAGING_ADAPTER_MAX_SIZE
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow
@@ -51,7 +52,7 @@ class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepo
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
                 enablePlaceholders = false,
-                maxSize = PAGING_SIZE * 3
+                maxSize = PAGING_SIZE * PAGING_ADAPTER_MAX_SIZE
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow
@@ -70,7 +71,7 @@ class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepo
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
                 enablePlaceholders = false,
-                maxSize = PAGING_SIZE * 3
+                maxSize = PAGING_SIZE * PAGING_ADAPTER_MAX_SIZE
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow

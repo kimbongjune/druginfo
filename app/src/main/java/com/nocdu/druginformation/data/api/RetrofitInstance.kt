@@ -1,6 +1,9 @@
 package com.nocdu.druginformation.data.api
 
 import com.nocdu.druginformation.utill.Constants.BASE_URL
+import com.nocdu.druginformation.utill.Constants.RETROFIT_NETWORK_CONNECTION_TIMEOUT
+import com.nocdu.druginformation.utill.Constants.RETROFIT_NETWORK_READ_TIMEOUT
+import com.nocdu.druginformation.utill.Constants.RETROFIT_NETWORK_WRITE_TIMEOUT
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,9 +15,9 @@ object RetrofitInstance {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .readTimeout(1, TimeUnit.MINUTES)
-            .writeTimeout(1, TimeUnit.MINUTES)
+            .connectTimeout(RETROFIT_NETWORK_CONNECTION_TIMEOUT, TimeUnit.MINUTES)
+            .readTimeout(RETROFIT_NETWORK_READ_TIMEOUT, TimeUnit.MINUTES)
+            .writeTimeout(RETROFIT_NETWORK_WRITE_TIMEOUT, TimeUnit.MINUTES)
             .addInterceptor(httpLoggingInterceptor)
             .build()
     }

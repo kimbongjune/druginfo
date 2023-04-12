@@ -12,6 +12,7 @@ import androidx.paging.cachedIn
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.data.model.SearchResponse
 import com.nocdu.druginformation.data.repository.DrugSearchRepository
+import com.nocdu.druginformation.utill.Constants.COROUTINE_STAT_IN_STOP_TIME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -28,12 +29,12 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
 
     //val favoriteDrugs:Flow<List<Document>> = bookSearchRepository.getFavoriteDrugs()
     val favoriteDrugs:StateFlow<List<Document>> = drugSearchRepository.getFavoriteDrugs()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(COROUTINE_STAT_IN_STOP_TIME), listOf())
 
     val favoritePaingDrugs : StateFlow<PagingData<Document>> =
         drugSearchRepository.getFavoritePagingDrugs()
             .cachedIn(viewModelScope)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), PagingData.empty())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(COROUTINE_STAT_IN_STOP_TIME), PagingData.empty())
 
     private val _searchPagingResult = MutableStateFlow<PagingData<Document>>(PagingData.empty())
     val searchPagingResult:StateFlow<PagingData<Document>> = _searchPagingResult.asStateFlow()

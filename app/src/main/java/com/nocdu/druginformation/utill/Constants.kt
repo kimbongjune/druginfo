@@ -8,6 +8,8 @@ object Constants {
     //const val BASE_URL = "http://192.168.0.178:8080/"
     const val SEARCH_DRUGS_TIME_DELAY = 100L
     const val PAGING_SIZE = 15
+    const val PAGING_ADAPTER_MAX_SIZE = 3
+    const val STARTING_PAGE_INDEX = 1
 
     const val DEFAULT_NOTIFICATION_CHANNEL_ID = "DrugInfo"
     const val DEFAULT_NOTIFICATION_CHANNEL_NAME = "DrugInfo"
@@ -39,4 +41,10 @@ object Constants {
     const val FCM_TABLE_NAME = "token"
 
     const val DRUG_SEARCH_RESULT_ERROR = "에러가 발생했습니다."
+
+    const val RETROFIT_NETWORK_CONNECTION_TIMEOUT = 1L
+    const val RETROFIT_NETWORK_READ_TIMEOUT = 1L
+    const val RETROFIT_NETWORK_WRITE_TIMEOUT = 1L
+
+    const val COROUTINE_STAT_IN_STOP_TIME = 5000L
 }
