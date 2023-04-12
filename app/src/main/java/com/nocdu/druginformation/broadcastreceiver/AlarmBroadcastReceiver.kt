@@ -72,12 +72,10 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
             wakeLock?.release()
         }
 
-
-
         if(intent.action == ALARM_REQUEST_TO_BROADCAST){
             val id:Int = if(intent.extras?.get(ALARM_REQUEST_CODE) != null) {intent.extras?.get(ALARM_REQUEST_CODE).toString().toInt()} else {0}
             val wakeLock = acquireWakeLock(context.applicationContext, PowerManager.PARTIAL_WAKE_LOCK)
-            
+
             reRegistrationAlarm(context,id)
 
             GlobalScope.launch {
@@ -111,6 +109,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                 .setContentTitle(title)
                 .setContentText("의약품 (${body}) 복용시간 입니다.")
                 .setContentIntent(pendingIntent)
+                .setDeleteIntent(pendingIntent)
 
             val notificationManager = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
