@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
+import com.nocdu.druginformation.utill.Constants.DOSE_TIME_TABLE_NAME
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -13,7 +14,7 @@ import java.io.Serializable
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-@Entity(tableName = "doses_time",
+@Entity(tableName = DOSE_TIME_TABLE_NAME,
     foreignKeys = [
         ForeignKey(
             entity = Alarm::class,

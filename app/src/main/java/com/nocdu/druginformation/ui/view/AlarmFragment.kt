@@ -21,6 +21,7 @@ import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.databinding.FragmentAlarmBinding
 import com.nocdu.druginformation.ui.adapter.AlarmPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
+import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.collectLatestStateFlow
 import java.text.SimpleDateFormat
 import java.util.*
@@ -177,7 +178,7 @@ class AlarmFragment : Fragment() {
         }
     }
 
-    fun viewDetailInfo(alarmWithDosetime: AlarmWithDosetime){
+    private fun viewDetailInfo(alarmWithDosetime: AlarmWithDosetime){
         val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(
             R.anim.slide_in_bottom,
@@ -190,75 +191,6 @@ class AlarmFragment : Fragment() {
             }
             transaction?.addToBackStack("AlarmDetailFragment")
         })?.commit()
-    }
-
-    private fun setAlarms() {
-        Log.e(TAG,"알람 등록")
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-            set(Calendar.MINUTE, 0)
-        }
-        // 알람 시간 리스트 생성
-        val alarmTimes = listOf(
-//            Pair(Calendar.TUESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 9) },
-//            Pair(Calendar.WEDNESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 9) },
-//            Pair(Calendar.THURSDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 9) },
-//            Pair(Calendar.TUESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 12) },
-//            Pair(Calendar.TUESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 18) },
-//            Pair(Calendar.WEDNESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 12) },
-//            Pair(Calendar.WEDNESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 18) },
-//            Pair(Calendar.THURSDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 12) },
-//            Pair(Calendar.THURSDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 18) }
-            Pair(Calendar.SUNDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 14) }
-        )
-
-//        val intent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).apply {
-//            putExtra("alarmRequestCode", 1)
-//        }
-
-        val pendingIntent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).let {
-            it.putExtra("alarmRequestCode", 1)
-            PendingIntent.getBroadcast(
-                requireContext(),
-                0,
-                it,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-            )
-        }
-
-        alarmManager.set(
-            AlarmManager.RTC_WAKEUP,
-            SystemClock.elapsedRealtime() + 1000 * 10,
-            //AlarmManager.INTERVAL_DAY * 7,
-            pendingIntent
-        )
-
-        // 알람 등록
-//        alarmTimes.forEach { alarmTime ->
-//            val dayOfWeek = alarmTime.first
-//            val time = alarmTime.second
-//
-//            // 현재 시간보다 이전인 경우 다음 주에 알람 설정
-//            if (calendar.after(time)) {
-//                time.add(Calendar.DATE, 7)
-//            }
-//
-//            val intent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).apply {
-//                putExtra("alarmRequestCode", 1)
-//            }
-//
-//            val pendingIntent = PendingIntent.getBroadcast(requireContext(), dayOfWeek, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-//
-//            alarmManager.setRepeating(
-//                AlarmManager.RTC_WAKEUP,
-//                time.timeInMillis,
-//                AlarmManager.INTERVAL_DAY * 7,
-//                pendingIntent
-//            )
-//        }
     }
 
     fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{

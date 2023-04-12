@@ -8,8 +8,7 @@ import com.nocdu.druginformation.ui.view.AlarmFragment
 import com.nocdu.druginformation.ui.view.HomeFragment
 import com.nocdu.druginformation.ui.view.InfoFragment
 import com.nocdu.druginformation.ui.view.SearchFragment
-
-private const val NUM_TABS = 4
+import com.nocdu.druginformation.utill.Constants.NUM_TABS
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {

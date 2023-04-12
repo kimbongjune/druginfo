@@ -333,7 +333,7 @@ class SearchResultFragment : Fragment() {
                 if (matchResult.range.first == 0) { // 텍스트가 첫 줄일 경우
                     "$matchValue" // 줄바꿈 없이 매치된 문자열만 추가
                 } else {
-                    "\n\t$matchValue" // 줄바꿈을 두 번 하고 매치된 문자열을 추가
+                    "\n\n$matchValue" // 줄바꿈을 두 번 하고 매치된 문자열을 추가
                 }
                 //"\n\t$matchValue" // 줄바꿈을 한 번 하고 탭을 추가하여 매치된 문자열을 추가
             }

@@ -109,6 +109,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
 
         // 알림 채널 이름
         val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
+        val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
 
         // 알림 소리
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -130,7 +131,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
 
         // 오레오 버전 이후에는 채널이 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
+            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
             channel.apply {
                 setShowBadge(false) // 뱃지 사용안함

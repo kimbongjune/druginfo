@@ -70,10 +70,6 @@ class TextSearchFragment : Fragment(){
         goBack()
         setupLoadState()
         showKeyBoard(binding.etSearch)
-//        drugSearchViewModel.searchResult.observe(viewLifecycleOwner){ response ->
-//            val drugs = response.documents
-//            drugSearchAdapter.submitList(drugs)
-//        }
 
         collectLatestStateFlow(drugSearchViewModel.searchPagingResult){
             drugSearchAdapter.submitData(it)
@@ -126,22 +122,6 @@ class TextSearchFragment : Fragment(){
     }
 
     private fun searchDrugs() {
-        var startTime = System.currentTimeMillis()
-        var endTime: Long
-
-//        binding.etSearch.addTextChangedListener { text:Editable? ->
-//            endTime = System.currentTimeMillis()
-//            if(endTime - startTime >= SEARCH_DRUGS_TIME_DELAY){
-//                text?.let {
-//                    val query = it.toString().trim()
-//                    if(query.isNotEmpty()){
-//                        drugSearchViewModel.searchDrugs(query)
-//                    }
-//                }
-//            }
-//            startTime = endTime
-//        }
-
         binding.etSearch.setOnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
                 Log.e(TAG,"enter pressed")
@@ -161,21 +141,6 @@ class TextSearchFragment : Fragment(){
         binding.tlSearch.setStartIconOnClickListener{
             //Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
-        }
-    }
-
-    open fun View.visibleChange(view:View){
-        var button = view as Button
-        this.visibility = if(!this.isVisible){
-            val anim = AnimationUtils.loadAnimation(context, R.anim.slide_in_top_layout)
-            this.startAnimation(anim)
-            button.text = "닫기"
-            View.VISIBLE
-        }else{
-            val anim = AnimationUtils.loadAnimation(context, R.anim.slide_out_top_layout)
-            this.startAnimation(anim)
-            button.text = "상세검색"
-            View.GONE
         }
     }
 

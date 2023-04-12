@@ -21,6 +21,10 @@ class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
         return db.alarmDao().getAlarm(id)
     }
 
+    override fun getAllAlarms(): List<AlarmWithDosetime> {
+        return db.alarmDao().getAllAlarms()
+    }
+
     override fun getAlarmCount(): Int {
         return db.alarmDao().getAlarmCount()
     }

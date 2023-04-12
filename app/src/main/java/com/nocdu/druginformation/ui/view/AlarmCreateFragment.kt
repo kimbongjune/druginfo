@@ -36,6 +36,7 @@ import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
+import com.nocdu.druginformation.utill.Constants
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -506,8 +507,9 @@ class AlarmCreateFragment : Fragment() {
                 for(j in 0 until  alarmAdapter.itemCount){
                     //Log.e(TAG,"요일 과 시간= ${alarmDateInt[i]}, ${alarmAdapter.getItem(j).eatDrugTextView}")
                     //TODO 여기서 알람 등록
-                    val hour = convertTo24HoursFormat(alarmAdapter.getItem(j).eatDrugTextView).first
-                    val minute = convertTo24HoursFormat(alarmAdapter.getItem(j).eatDrugTextView).second
+                    val hourAndMinute = convertTo24HoursFormat(alarmAdapter.getItem(j).eatDrugTextView)
+                    val hour = hourAndMinute.first
+                    val minute = hourAndMinute.second
                     Log.e(TAG,"요일 과 시간= ${alarmDateInt[i]}, ${hour}, ${minute}")
                     alarmTimes.add(Triple(alarmDateInt[i], hour, minute))
                 }
@@ -550,70 +552,7 @@ class AlarmCreateFragment : Fragment() {
         )
     }
 
-//    private fun setAlarms() {
-//        Log.e(TAG,"알람 등록")
-//        val alarmManager = context?.getSystemService(ALARM_SERVICE) as AlarmManager
-//
-//        val calendar = Calendar.getInstance().apply {
-//            set(Calendar.SECOND, 0)
-//            set(Calendar.MILLISECOND, 0)
-//            set(Calendar.MINUTE, 0)
-//        }
-//        // 알람 시간 리스트 생성
-//        val alarmTimes = listOf(
-////            Pair(Calendar.TUESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 9) },
-////            Pair(Calendar.WEDNESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 9) },
-////            Pair(Calendar.THURSDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 9) },
-////            Pair(Calendar.TUESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 12) },
-////            Pair(Calendar.TUESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 18) },
-////            Pair(Calendar.WEDNESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 12) },
-////            Pair(Calendar.WEDNESDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 18) },
-////            Pair(Calendar.THURSDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 12) },
-////            Pair(Calendar.THURSDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 18) }
-//            Pair(Calendar.SUNDAY, calendar.clone() as Calendar).apply { second.set(Calendar.HOUR_OF_DAY, 14) }
-//        )
-//
-////        val intent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).apply {
-////            putExtra("alarmRequestCode", 1)
-////        }
-//
-//        val pendingIntent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).let {
-//            it.putExtra("alarmRequestCode", 1)
-//            getBroadcast(requireContext(), 0, it, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-//        }
-//
-//        alarmManager.set(
-//            AlarmManager.RTC_WAKEUP,
-//            SystemClock.elapsedRealtime() + 1000 * 10,
-//            //AlarmManager.INTERVAL_DAY * 7,
-//            pendingIntent
-//        )
-//
-//        // 알람 등록
-////        alarmTimes.forEach { alarmTime ->
-////            val dayOfWeek = alarmTime.first
-////            val time = alarmTime.second
-////
-////            // 현재 시간보다 이전인 경우 다음 주에 알람 설정
-////            if (calendar.after(time)) {
-////                time.add(Calendar.DATE, 7)
-////            }
-////
-////            val intent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).apply {
-////                putExtra("alarmRequestCode", 1)
-////            }
-////
-////            val pendingIntent = PendingIntent.getBroadcast(requireContext(), dayOfWeek, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-////
-////            alarmManager.setRepeating(
-////                AlarmManager.RTC_WAKEUP,
-////                time.timeInMillis,
-////                AlarmManager.INTERVAL_DAY * 7,
-////                pendingIntent
-////            )
-////        }
-//    }
-    fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
+    private fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
         val pattern = "hh:mm"
         val format = SimpleDateFormat(pattern, Locale.getDefault())
         val date = format.parse(timeString.substring(3))
@@ -637,13 +576,7 @@ class AlarmCreateFragment : Fragment() {
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
-        // 알람 시간 리스트 생성
-//        var alarmTimes = listOf(
-//            Pair(date.first, calendar.clone() as Calendar).apply {
-//                second.set(Calendar.HOUR_OF_DAY, date.second)
-//                second.set(Calendar.MINUTE, date.third)
-//            }
-//        )
+
         var alarmTimes = mutableListOf<Calendar>()
         for(i in 0 until alarmList.size){
             calendar.set(Calendar.DAY_OF_WEEK, alarmList[i].first)
@@ -651,17 +584,6 @@ class AlarmCreateFragment : Fragment() {
             calendar.set(Calendar.MINUTE, alarmList[i].third)
             alarmTimes.add(calendar.clone() as Calendar)
         }
-
-//        val intent = Intent(requireContext(), AlarmBroadcastReceiver::class.java).apply {
-//            putExtra("alarmRequestCode", 1)
-//        }
-
-//        alarmManager.set(
-//            AlarmManager.RTC_WAKEUP,
-//            SystemClock.elapsedRealtime() + 1000 * 10,
-//            //AlarmManager.INTERVAL_DAY * 7,
-//            pendingIntent
-//        )
 
         // 알람 등록
         alarmTimes.forEach { alarmTime ->
@@ -673,8 +595,8 @@ class AlarmCreateFragment : Fragment() {
             }
             val intent = Intent(MainActivity.getInstance(), AlarmBroadcastReceiver::class.java).apply {
                 ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                putExtra("alarmRequestCode", alarmId.toInt())
-                action = "com.example.alarm"
+                putExtra(Constants.ALARM_REQUEST_CODE, alarmId.toInt())
+                action = Constants.ALARM_REQUEST_TO_BROADCAST
             }
 
             Log.e(TAG,"알람 등록, ${time.timeInMillis}")

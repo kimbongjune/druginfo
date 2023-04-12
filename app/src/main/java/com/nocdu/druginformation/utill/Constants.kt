@@ -12,8 +12,31 @@ object Constants {
     const val DEFAULT_NOTIFICATION_CHANNEL_ID = "DrugInfo"
     const val DEFAULT_NOTIFICATION_CHANNEL_NAME = "DrugInfo"
     const val DEFAULT_NOTIFICATION_CHANNEL_DESC = "DrugInfo"
-    const val ACTION_CANCEL_NOTIFICATION = "ACTION_CANCEL_NOTIFICATION"
+
+    const val ALARM_REQUEST_TO_BROADCAST = "ALARM_REQUEST_TO_BROADCAST"
 
     const val ACTION_START_SOUND_AND_VIBRATION = "ACTION_START_SOUND_AND_VIBRATION"
     const val ACTION_STOP_SOUND_AND_VIBRATION = "ACTION_STOP_SOUND_AND_VIBRATION"
+
+    const val NUM_TABS = 4
+
+    const val ALARM_TITLE = "의약품 알람"
+    const val ALARM_BODY = "약"
+
+    const val ALARM_REQUEST_CODE = "ALARM_REQUEST_CODE"
+
+    const val ACQUIRE_WAKE_LOCK = "AlarmReceiver:WakeLock"
+
+    const val DRUG_SEARCH_URI = "drugsearch/textsearch"
+    const val FCM_SEND_URL = "fcm/send"
+
+    const val ALARM_DATABASE_NAME = "alarm_database"
+    const val BOOKMARK_DATABASE_NAME = "favorite-drugs"
+
+    const val ALARM_TABLE_NAME = "alarm"
+    const val DRUG_TABLE_NAME = "drugs"
+    const val DOSE_TIME_TABLE_NAME = "doses_time"
+    const val FCM_TABLE_NAME = "token"
+
+    const val DRUG_SEARCH_RESULT_ERROR = "에러가 발생했습니다."
 }

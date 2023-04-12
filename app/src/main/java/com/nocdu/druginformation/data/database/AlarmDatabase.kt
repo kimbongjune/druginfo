@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.DoseTime
 import com.nocdu.druginformation.data.model.FcmToken
+import com.nocdu.druginformation.utill.Constants.ALARM_DATABASE_NAME
 
 @Database(entities = [Alarm::class, DoseTime::class, FcmToken::class], version = 1, exportSchema = false)
 @TypeConverters(OrmConverter::class)
@@ -26,7 +27,7 @@ abstract class AlarmDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AlarmDatabase::class.java,
-                    "alarm_database"
+                    ALARM_DATABASE_NAME
                 ).build()
                 INSTANCE = instance
                 instance

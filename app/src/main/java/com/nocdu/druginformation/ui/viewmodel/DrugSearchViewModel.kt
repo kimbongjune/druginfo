@@ -17,19 +17,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository):ViewModel() {
-    private val _searchResult = MutableLiveData<SearchResponse>()
-    val searchResult:LiveData<SearchResponse> get() = _searchResult
-
-//    fun searchDrugs(item_name:String, textView: TextView) = viewModelScope.launch(Dispatchers.IO){
-//        val response = drugSearchRepository.searchDrugs(item_name, 1)
-//        if(response.isSuccessful){
-//            response.body()?.let {
-//                Log.e("TAG","데이터 갯수 = ${it.meta?.totalCount}")
-//                textView.text = "검색결과 : ${it.meta?.totalCount.toString()} 건"
-//                _searchResult.postValue(it)
-//            }
-//        }
-//    }
 
     fun saveDrugs(document: Document) = viewModelScope.launch(Dispatchers.IO) {
         drugSearchRepository.insertDrugs(document)

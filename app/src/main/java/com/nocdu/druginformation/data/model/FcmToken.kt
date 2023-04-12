@@ -3,6 +3,7 @@ package com.nocdu.druginformation.data.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.nocdu.druginformation.utill.Constants.FCM_TABLE_NAME
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -12,7 +13,7 @@ import java.util.*
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-@Entity(tableName = "token")
+@Entity(tableName = FCM_TABLE_NAME)
 data class FcmToken(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @Json(name = "token") var token: String,

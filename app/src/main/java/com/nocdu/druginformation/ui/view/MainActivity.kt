@@ -1,6 +1,7 @@
 package com.nocdu.druginformation.ui.view
 
 import android.app.AlarmManager
+import android.app.AlarmManager.AlarmClockInfo
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -15,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
@@ -33,7 +33,10 @@ import com.nocdu.druginformation.ui.viewmodel.AlarmViewModelProviderFactory
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
 import com.nocdu.druginformation.utill.Constants
+import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
+import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -87,11 +90,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         instance = this
-        alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         viewPager = binding.viewPager
 
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+
+        val filename = "examples.txt"
+// 파일 저장 경로를 지정합니다.
+        val file = File(applicationContext.filesDir, filename)
+
+
+
+        if (file.exists()) {
+            val fileContent = file.readText()
+            Log.e("File Content", fileContent)
+        } else {
+            Log.e("File Not Found", "The file $filename does not exist.")
+        }
 
         val intent = intent
         val data = intent.getIntExtra("alarmClick", 0)
@@ -219,8 +235,8 @@ class MainActivity : AppCompatActivity() {
     fun setAlarm(alarmList:List<Triple<Int,Int,Int>>, alarmId:Int){
         alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            putExtra("alarmRequestCode", alarmId)
-            action = "com.example.alarm"
+            putExtra(ALARM_REQUEST_CODE, alarmId)
+            action = ALARM_REQUEST_TO_BROADCAST
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -263,43 +279,11 @@ class MainActivity : AppCompatActivity() {
         Log.e(TAG,"등록한 알람의 아이디 = ${alarmId}")
     }
 
-    fun reRegistrationAlarm(alarmId:Int){
-        alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
-            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            putExtra("alarmRequestCode", alarmId)
-            action = "com.example.alarm"
-        }
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            alarmId,
-            alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.DAY_OF_WEEK)
-        calendar.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY)
-        calendar.set(Calendar.MINUTE, Calendar.MINUTE)
-        calendar.add(Calendar.DATE, 7)
-
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            //AlarmManager.INTERVAL_DAY * 7,
-            pendingIntent
-        )
-    }
-
     fun removeAlarm(alarmId:Int){
         alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            putExtra("alarmRequestCode", alarmId)
-            action = "com.example.alarm"
+            putExtra(ALARM_REQUEST_CODE, alarmId)
+            action = ALARM_REQUEST_TO_BROADCAST
         }
 
         val pendingIntent = PendingIntent.getBroadcast(

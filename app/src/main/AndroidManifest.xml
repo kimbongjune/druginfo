@@ -38,15 +38,20 @@
             android:exported="true"
             android:stopWithTask="false">
             <intent-filter>
+                <!--<action android:name="ACTION_START_SOUND_AND_VIBRATION" />
+                <action android:name="ACTION_STOP_SOUND_AND_VIBRATION" />-->
                 <action android:name="com.nocdu.druginformation.service.AlarmService" />
             </intent-filter>
         </service>
 
         <receiver android:name=".broadcastreceiver.AlarmBroadcastReceiver"
             android:exported="true"
+            android:directBootAware="true"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="ALARM_REQUEST_TO_BROADCAST"></action>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
 

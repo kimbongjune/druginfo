@@ -15,6 +15,8 @@ interface AlarmRepository {
 
     fun getAlarms(): Flow<PagingData<AlarmWithDosetime>>
 
+    fun getAllAlarms(): List<AlarmWithDosetime>
+
     fun getAlarmCount(): Int
 
     fun updateAlarm(alarm: Alarm)

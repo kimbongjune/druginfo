@@ -31,8 +31,11 @@ interface AlarmDao {
 //            "substr(replace(doses_time.time, ':', ''), 1, 4) " +
 //            "END " +
 //            "ASC")
-    @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id")
+    @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
     fun getAlarms(): PagingSource<Int, AlarmWithDosetime>
+
+    @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
+    fun getAllAlarms(): List<AlarmWithDosetime>
 
     // 모든 알람 개수 가져오기
     @Query("SELECT COUNT(*) FROM alarm")

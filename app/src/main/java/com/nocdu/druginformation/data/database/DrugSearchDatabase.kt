@@ -3,6 +3,7 @@ package com.nocdu.druginformation.data.database
 import android.content.Context
 import androidx.room.*
 import com.nocdu.druginformation.data.model.Document
+import com.nocdu.druginformation.utill.Constants.BOOKMARK_DATABASE_NAME
 
 @Database(
     entities = [Document::class],
@@ -21,7 +22,7 @@ abstract class DrugSearchDatabase :RoomDatabase(){
             Room.databaseBuilder(
                 context.applicationContext,
                 DrugSearchDatabase::class.java,
-                "favorite-drugs"
+                BOOKMARK_DATABASE_NAME
             ).build()
 
         fun getInstance(context: Context):DrugSearchDatabase =

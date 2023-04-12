@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.nocdu.druginformation.utill.Constants.DRUG_TABLE_NAME
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -12,7 +13,7 @@ import java.io.Serializable
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-@Entity(tableName = "drugs")
+@Entity(tableName = DRUG_TABLE_NAME)
 data class Document(
     @Json(name = "after_consult_doctor")
     val afterConsultDoctor: String?,

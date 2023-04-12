@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.*
 import android.util.Log
 import com.nocdu.druginformation.ui.view.MainActivity
+import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ACTION_START_SOUND_AND_VIBRATION
 import com.nocdu.druginformation.utill.Constants.ACTION_STOP_SOUND_AND_VIBRATION
 
@@ -41,7 +42,7 @@ class AlarmService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.e(TAG,"onStartCommand")
 
-        val id:Int = intent.extras?.get("alarmRequestCode").toString().toInt()
+        val id:Int = intent.extras?.get(Constants.ALARM_REQUEST_CODE).toString().toInt()
         if(intent.action == ACTION_START_SOUND_AND_VIBRATION) {
             Log.e(TAG,"ACTION_START_SOUND_AND_VIBRATION")
             startSoundAndVibration()

@@ -32,6 +32,9 @@ import com.nocdu.druginformation.databinding.OnetimeEatPickerDialogBinding
 import com.nocdu.druginformation.ui.adapter.AlarmAdapter
 import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
+import com.nocdu.druginformation.utill.Constants
+import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
+import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -152,26 +155,6 @@ class AlarmDetailFragment : Fragment() {
     private fun setCleanButton(alarm:Alarm){
         binding.btnTermClear.setOnClickListener {
             createDeleteDialog(alarm)
-//            binding.etAlarmName.setText("")
-//            binding.etEatDrug.setText("")
-//            binding.cbAlarmMonday.isChecked = false
-//            binding.cbAlarmTuesday.isChecked = false
-//            binding.cbAlarmWednesday.isChecked = false
-//            binding.cbAlarmThursday.isChecked = false
-//            binding.cbAlarmFriday.isChecked = false
-//            binding.cbAlarmSaturday.isChecked = false
-//            binding.cbAlarmSunday.isChecked = false
-//            binding.btnEatDrugCount.text = "1회"
-//            alarmAdapter.removeItemAll()
-//            alarmAdapter.addItem(AlarmList(getNowTime()))
-//            binding.btnEatDrugOnetime.text = "1개"
-//            binding.swEatDrugBeforehandCycle.isChecked = false
-//            binding.edEatDrugRemaining.setText("")
-//            binding.edEatDrugSmallest.setText("")
-//            binding.tvEatDrugCycleName.text = "요일을 선택해주세요"
-////            collectLatestStateFlow(alarmViewModel.getAlarms()){
-////                Log.e(TAG,"??${it}")
-////            }
         }
     }
 
@@ -617,8 +600,8 @@ class AlarmDetailFragment : Fragment() {
 
         val intent = Intent(context, AlarmBroadcastReceiver::class.java).apply {
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            putExtra("alarmRequestCode", id)
-            action = "com.example.alarm"
+            putExtra(ALARM_REQUEST_CODE, id)
+            action = ALARM_REQUEST_TO_BROADCAST
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
