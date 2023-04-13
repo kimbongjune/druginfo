@@ -18,6 +18,8 @@ interface DrugSearchRepository {
 
     suspend fun deleteDrugs(document: Document)
 
+    fun getFavoriteDrugCountByPk(itemSeq: String):Int
+
     fun getFavoriteDrugs():Flow<List<Document>>
 
     fun getFavoritePagingDrugs():Flow<PagingData<Document>>

@@ -7,13 +7,16 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.FragmentSearchResultBinding
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
+import kotlinx.coroutines.launch
 
 class SearchResultFragment : Fragment() {
     final val TAG:String = "SearchResultFragment"
@@ -33,7 +36,7 @@ class SearchResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
-        Log.e(TAG,"Arg = ${arguments?.getSerializable("data")}")
+        //Log.e(TAG,"Arg = ${arguments?.getSerializable("data")}")
         var data: Document = (arguments?.getSerializable("data") as Document).apply {
             binding.tvToolbarText.text = this.itemName
             addObject(this)
@@ -42,10 +45,9 @@ class SearchResultFragment : Fragment() {
         drugSearchViewModel = (activity as MainActivity).drugSearchViewModel
         goBack()
 
-        binding.fabFavorite.setOnClickListener {
-            drugSearchViewModel.saveDrugs(data)
-            Snackbar.make(view, "의약품 즐겨찾기가 등록되었습니다.", Snackbar.LENGTH_SHORT).show()
-        }
+        initFabButton(data)
+        setFabOnclickListener(data,view)
+
     }
 
     override fun onStop() {
@@ -340,6 +342,47 @@ class SearchResultFragment : Fragment() {
         }
 
         return newText
+    }
+
+    private fun initFabButton(data:Document) {
+        lifecycleScope.launch {
+            if(drugSearchViewModel.getFavoriteDrugCountByPk(data.itemSeq).await() <= 0){
+                binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_outline_24))
+            }else{
+                binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_24))
+            }
+        }
+    }
+
+    private fun setFabOnclickListener(data:Document, view:View) {
+        binding.fabFavorite.setOnClickListener {
+            lifecycleScope.launch {
+                if(drugSearchViewModel.getFavoriteDrugCountByPk(data.itemSeq).await() <= 0){
+                    drugSearchViewModel.saveDrugs(data).apply {
+                        binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_24))
+                    }
+                    Snackbar.make(view, "의약품 즐겨찾기가 등록되었습니다.", Snackbar.LENGTH_SHORT).apply {
+                        setAction("확인"){
+                            this.dismiss()
+                        }
+                        setActionTextColor(ContextCompat.getColor(context, R.color.soft_blue))
+                    }.show()
+                }else{
+                    drugSearchViewModel.deleteDrugs(data).apply {
+                        binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_outline_24))
+                    }
+                    Snackbar.make(view, "의약품 즐겨찾기가 해제되었습니다.", Snackbar.LENGTH_SHORT).apply {
+                        setAction("실행 취소"){
+                            drugSearchViewModel.saveDrugs(data)
+                            binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_24))
+                            this.dismiss()
+                        }
+                        setActionTextColor(ContextCompat.getColor(context, R.color.soft_blue))
+                    }.show()
+                    return@launch
+                }
+            }
+        }
     }
 
 }

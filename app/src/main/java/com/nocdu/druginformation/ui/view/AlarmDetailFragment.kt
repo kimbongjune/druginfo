@@ -520,7 +520,6 @@ class AlarmDetailFragment : Fragment() {
             var alarmTimes = mutableListOf<Triple<Int,Int,Int>>()
             for (i in 0 until alarmDateInt.size){
                 for(j in 0 until  alarmAdapter.itemCount){
-                    //Log.e(TAG,"요일 과 시간= ${alarmDateInt[i]}, ${alarmAdapter.getItem(j).eatDrugTextView}")
                     //TODO 테스트 필요
                     val hour = convertTo24HoursFormat(alarmAdapter.getItem(j).eatDrugTextView).first
                     val minute = convertTo24HoursFormat(alarmAdapter.getItem(j).eatDrugTextView).second

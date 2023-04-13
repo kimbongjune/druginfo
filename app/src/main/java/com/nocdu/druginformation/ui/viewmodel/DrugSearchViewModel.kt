@@ -14,6 +14,7 @@ import com.nocdu.druginformation.data.model.SearchResponse
 import com.nocdu.druginformation.data.repository.DrugSearchRepository
 import com.nocdu.druginformation.utill.Constants.COROUTINE_STAT_IN_STOP_TIME
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -25,6 +26,10 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
 
     fun deleteDrugs(document: Document) = viewModelScope.launch(Dispatchers.IO){
         drugSearchRepository.deleteDrugs(document)
+    }
+
+    fun getFavoriteDrugCountByPk(itemSeq:String) = viewModelScope.async(Dispatchers.IO){
+        drugSearchRepository.getFavoriteDrugCountByPk(itemSeq)
     }
 
     //val favoriteDrugs:Flow<List<Document>> = bookSearchRepository.getFavoriteDrugs()

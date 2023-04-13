@@ -29,6 +29,10 @@ class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepo
         db.drugSearchDAO().deleteDrugs(document)
     }
 
+    override fun getFavoriteDrugCountByPk(itemSeq: String): Int {
+        return db.drugSearchDAO().getFavoriteDrugCountByPk(itemSeq)
+    }
+
     override fun getFavoriteDrugs(): Flow<List<Document>> {
         return db.drugSearchDAO().getFavoriteDrugs()
     }

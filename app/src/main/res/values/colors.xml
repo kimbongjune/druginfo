@@ -11,6 +11,8 @@
     <color name="red">#EF4747</color>
     <color name="soft_red">#EF1212</color>
     <color name="orange">#FAAD39</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="soft_orange">#ED6653</color>
     <color name="icon_selected">#1890FF</color>
     <color name="soft_blue">#1890FF</color>
     <color name="icon_unselected">#666666</color>

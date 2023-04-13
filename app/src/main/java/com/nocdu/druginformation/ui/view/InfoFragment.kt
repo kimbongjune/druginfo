@@ -168,9 +168,10 @@ class InfoFragment : Fragment() {
                 pageDrug?.let { drug ->
                     drugSearchViewModel.deleteDrugs(drug)
                     Log.e(TAG,"즐겨찾기 개수" + drugSearchAdapter.itemCount)
-                    Snackbar.make(view, "즐겨찾기에서 제거되었습니다.", Snackbar.LENGTH_LONG).apply {
+                    Snackbar.make(view, "의약품 즐겨찾기가 해제되었습니다.", Snackbar.LENGTH_LONG).apply {
                         setAction("실행 취소"){
                             drugSearchViewModel.saveDrugs(drug)
+                            this.dismiss()
                         }
                         setActionTextColor(ContextCompat.getColor(context, R.color.soft_blue))
                     }.show()

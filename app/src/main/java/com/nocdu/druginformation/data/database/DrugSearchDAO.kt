@@ -14,6 +14,9 @@ interface DrugSearchDAO {
     @Delete
     suspend fun deleteDrugs(document: Document)
 
+    @Query("SELECT COUNT(*) FROM drugs WHERE itemSeq = :itemSeq")
+    fun getFavoriteDrugCountByPk(itemSeq: String):Int
+
     @Query("SELECT * FROM drugs")
     fun getFavoriteDrugs():Flow<List<Document>>
 
