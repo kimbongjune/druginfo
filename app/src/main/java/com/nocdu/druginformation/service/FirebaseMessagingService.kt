@@ -15,6 +15,13 @@ import com.nocdu.druginformation.R
 import com.nocdu.druginformation.ui.view.MainActivity
 import com.nocdu.druginformation.utill.Constants
 
+/**
+ *  Firebase Cloud Messaging Server 에서 메세지를 받아서 처리하는 클래스
+ *  메세지를 받으면 알람을 울리고 노티피케이션을 띄운다.
+ *  다른 기기에서 서버로 보낸 메세지를 받으면 노티피케이션을 띄운다.
+ *  서버에서 직접 보낸 메세지를 받으면 노티피케이션을 띄운다.
+ *
+ */
 class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagingService() {
     private val TAG = "FirebaseMessagingService"
 
@@ -61,6 +68,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
     }
 
 
+    //전달받은 데이터 중 노티피케이션 안에 담긴 데이터를 노티피케이션으로 발생시킨다
     fun sendNotification(title: String?, body: String) {
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         val intent = Intent(this, MainActivity::class.java)
@@ -96,6 +104,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
         notificationManager.notify(uniId, notificationBuilder.build())
     }
 
+    // 전달받은 데이터 중 노티피케이션 안에 담긴 데이터메시지를 노티피케이션으로 발생시킨다
     private fun sendMessageNotification( Message : Map<String, String>){
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         val title = Message["title"]!!
@@ -124,8 +133,6 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
             .setContentIntent(pendingIntent)       // 알림 실행 시 Intent
             .setDefaults(Notification.DEFAULT_SOUND)
 
-
-
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -138,6 +145,5 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
             }
         }
         notificationManager.notify(uniId, notificationBuilder.build()) // 여기서 uniID을 0으로 설정하면 상태바에 최신의 하나의 알림만 보이게 된다.
-
     }
 }

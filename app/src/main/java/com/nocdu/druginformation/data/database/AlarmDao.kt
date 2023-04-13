@@ -8,9 +8,19 @@ import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.Document
 import kotlinx.coroutines.flow.Flow
 
+/**
+ *  알람 테이블 DAO
+ *  Room 라이브러리를 이용해 구현하였다.
+ *  alarm 테이블에 접근하는 인터페이스이다.
+ *  @Insert : 데이터베이스에 새로운 데이터를 추가한다.
+ *  @Update : 데이터베이스의 데이터를 수정한다.
+ *  @Delete : 데이터베이스의 데이터를 삭제한다.
+ *  @Query : 데이터베이스의 데이터를 가져온다.
+ */
 @Dao
 interface AlarmDao {
-    // 알람 추가
+
+    // 알람을 추가한다.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAlarm(alarm: Alarm) :Long
 
@@ -31,25 +41,28 @@ interface AlarmDao {
 //            "substr(replace(doses_time.time, ':', ''), 1, 4) " +
 //            "END " +
 //            "ASC")
+
+    // 모든 알람 가져온다 PagingSource를 이용해 페이징 처리를 한다.
     @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
     fun getAlarms(): PagingSource<Int, AlarmWithDosetime>
 
+    // 알람 등록을 위해 모든 알람 가져온다.
     @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
     fun getAllAlarms(): List<AlarmWithDosetime>
 
-    // 모든 알람 개수 가져오기
+    //등록된 알람의 개수를 가져온다.
     @Query("SELECT COUNT(*) FROM alarm")
     fun getAlarmCount(): Int
 
-    // 특정 알람 가져오기
+    //특정 알람을 가져온다.
     @Query("SELECT * FROM alarm WHERE id = :id")
     suspend fun getAlarm(id: Int): Alarm
 
-    //알람 업데이트
+    //특정 알람을 업데이트한다.
     @Update
     fun updateAlarm(alarm: Alarm)
 
-    // 알람 삭제
+    //특정 알람을 삭제한다.
     @Delete
     suspend fun deleteAlarm(alarm: Alarm)
 
