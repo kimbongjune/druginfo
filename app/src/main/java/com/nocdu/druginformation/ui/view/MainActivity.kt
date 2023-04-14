@@ -12,12 +12,15 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -93,6 +96,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             splashScreen.setOnExitAnimationListener { splashScreenView  ->
                 val slideUp = ObjectAnimator.ofFloat(
@@ -166,6 +171,23 @@ class MainActivity : AppCompatActivity() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(data)
 
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                // 설정 아이콘 클릭 시 수행할 작업 작성
+                //Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
+                openSettingFragment()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
     override fun onStop() {
@@ -318,7 +340,20 @@ class MainActivity : AppCompatActivity() {
         )
         pendingIntent.cancel()
         alarmManager.cancel(pendingIntent)
-        
+
         Log.e(TAG,"지운 알람의 아이디 = ${alarmId}")
+    }
+
+    private fun openSettingFragment(){
+        val settingFragment: Fragment = SettingFragment()
+        val transaction = supportFragmentManager?.beginTransaction()
+        transaction?.setCustomAnimations(
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_bottom,
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_bottom)
+        transaction?.replace(R.id.mainActivity, settingFragment)
+        transaction?.addToBackStack("SettingFragment")
+        transaction?.commit()
     }
 }

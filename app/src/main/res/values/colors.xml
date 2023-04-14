@@ -17,4 +17,6 @@
     <color name="soft_blue">#1890FF</color>
     <color name="icon_unselected">#666666</color>
     <color name="disabled_color">#CCCCCC</color>
+    <color name="right_gray">#EFEFEF</color>
+    <color name="soft_gray">#F7F7F7</color>
 </resources>
