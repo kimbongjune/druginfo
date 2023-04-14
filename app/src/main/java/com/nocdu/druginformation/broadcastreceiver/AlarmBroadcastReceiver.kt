@@ -29,6 +29,7 @@ import com.nocdu.druginformation.utill.Constants.ALARM_BODY
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
 import com.nocdu.druginformation.utill.Constants.ALARM_TITLE
+import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
@@ -328,23 +329,6 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
         alarmManager.cancel(pendingIntent)
 
         Log.e(TAG,"지운 알람의 아이디 = ${alarmId}")
-    }
-
-    //문자열로 전달받은 시간을 Pair 객체로 시간, 분으로 나누어 반환하는 메소드
-    fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
-        val pattern = "hh:mm"
-        val format = SimpleDateFormat(pattern, Locale.getDefault())
-        val date = format.parse(timeString.substring(3))
-        val calendar = Calendar.getInstance().apply { time = date }
-
-        if (timeString.startsWith("오후")) {
-            calendar.add(Calendar.HOUR, 12)
-        }
-
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        return Pair(hour,minute)
     }
 
     //코루틴 스코프 내에서 변수의 재할당이 불가능하여 선언한 notification title setter 메소드

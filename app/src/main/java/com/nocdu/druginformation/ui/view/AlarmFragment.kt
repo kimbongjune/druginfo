@@ -22,6 +22,7 @@ import com.nocdu.druginformation.databinding.FragmentAlarmBinding
 import com.nocdu.druginformation.ui.adapter.AlarmPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.utill.Constants
+import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
 import com.nocdu.druginformation.utill.collectLatestStateFlow
 import java.text.SimpleDateFormat
 import java.util.*
@@ -192,21 +193,4 @@ class AlarmFragment : Fragment() {
             transaction?.addToBackStack("AlarmDetailFragment")
         })?.commit()
     }
-
-    fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
-        val pattern = "hh:mm"
-        val format = SimpleDateFormat(pattern, Locale.getDefault())
-        val date = format.parse(timeString.substring(3))
-        val calendar = Calendar.getInstance().apply { time = date }
-
-        if (timeString.startsWith("오후")) {
-            calendar.add(Calendar.HOUR, 12)
-        }
-
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        return Pair(hour,minute)
-    }
-
 }

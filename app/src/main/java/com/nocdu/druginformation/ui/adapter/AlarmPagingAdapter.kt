@@ -54,7 +54,7 @@ class AlarmPagingAdapter: PagingDataAdapter<AlarmWithDosetime, AlarmViewHolder>(
     }
 
 
-    //DiffUtil을 사용하여 데이터 변경 사항을 자동으로 감지하고 업데이트하기 위한 콜백 클래스이다.
+    //DiffUtil을 사용하여 데이터 변경 사항을 자동으로 감지하고 업데이트하기 위한 콜백 객체
     companion object {
         private val DrugDiffCallback = object : DiffUtil.ItemCallback<AlarmWithDosetime>(){
             //areItemsTheSame() 함수와 areContentsTheSame() 함수를 구현하여 두 객체가 같은 항목인지, 그리고 내용이 같은지 비교한다.

@@ -1,6 +1,8 @@
 package com.nocdu.druginformation.utill
 
 import com.nocdu.druginformation.BuildConfig
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Constants {
     const val BASE_URL = "http://44.202.206.211/DrugInfo/"
@@ -47,4 +49,21 @@ object Constants {
     const val RETROFIT_NETWORK_WRITE_TIMEOUT = 1L
 
     const val COROUTINE_STAT_IN_STOP_TIME = 5000L
+
+    //문자열로 전달받은 시간을 Pair 객체로 시간, 분으로 나누어 반환하는 메소드
+    fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
+        val pattern = "hh:mm"
+        val format = SimpleDateFormat(pattern, Locale.getDefault())
+        val date = format.parse(timeString.substring(3))
+        val calendar = Calendar.getInstance().apply { time = date }
+
+        if (timeString.startsWith("오후")) {
+            calendar.add(Calendar.HOUR, 12)
+        }
+
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        return Pair(hour,minute)
+    }
 }

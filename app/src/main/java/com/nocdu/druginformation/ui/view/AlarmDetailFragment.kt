@@ -35,12 +35,18 @@ import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
+import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+/**
+ *  특정 아이디의 알람 정보를 상세보기 하는 Fragment
+ *  알람을 삭제하거나 수정할 수 있다.
+ *  MainActivity에 선언한 알람 삭제, 수정 함수를 호출하여 사용한다.
+ */
 class AlarmDetailFragment : Fragment() {
 
     val TAG:String = "AlarmCreateFragment"
@@ -610,21 +616,5 @@ class AlarmDetailFragment : Fragment() {
         )
 
         alarmManager.cancel(pendingIntent)
-    }
-
-    fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
-        val pattern = "hh:mm"
-        val format = SimpleDateFormat(pattern, Locale.getDefault())
-        val date = format.parse(timeString.substring(3))
-        val calendar = Calendar.getInstance().apply { time = date }
-
-        if (timeString.startsWith("오후")) {
-            calendar.add(Calendar.HOUR, 12)
-        }
-
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        return Pair(hour,minute)
     }
 }
