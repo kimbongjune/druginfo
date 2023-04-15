@@ -118,7 +118,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
 //                        if (this.stockQuantity <= this.minStockQuantity) {
 //                            //TODO FCM 보내기
                             //FCM을 보낸다.
-//                            RetrofitInstance.api.sendFcm(AlarmDatabase.getDatabase(context).tokenDao().getAllToken()[0].token)
+//                            RetrofitInstance.api.sendFcm(AlarmDatabase.getDatabase(context).tokenDao().getAllToken()[0].token, "의약품 재고량이 부족합니다.", "${this.title}알람 의 ${this.medicines} 의약품 재고량이 부족합니다.\n 잔여재고량 : ${this.stockQuantity}개")
 //                        }
 //                        //TODO 테스트 필요
                         //재고량을 갱신한다.

@@ -64,5 +64,5 @@ interface AlarmRepository {
     suspend fun getTokenCount():Int
 
     //FcmToken 데이터를 서버에 전송한다.
-    suspend fun sendFcm(token:String)
+    suspend fun sendFcm(token:String, title:String, message:String)
 }

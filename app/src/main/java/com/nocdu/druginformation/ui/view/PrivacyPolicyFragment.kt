@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.databinding.FragmentPrivacyPolicyBinding
 import com.nocdu.druginformation.databinding.FragmentSettingBinding
+import com.nocdu.druginformation.utill.Constants.AGREEMENTS_URL
+import com.nocdu.druginformation.utill.Constants.BASE_URL
 import com.nocdu.druginformation.utill.CustomWebViewClient
 
 /**
@@ -91,7 +93,7 @@ class PrivacyPolicyFragment : Fragment() {
 
     //개인정보처리방침 웹페이지를 띄우는 함수
     private fun openPrivacyPolicyWebPage(){
-        binding.wvPrivacyPolicy.loadUrl("https://naver.com")
+        binding.wvPrivacyPolicy.loadUrl("${BASE_URL}${AGREEMENTS_URL}")
     }
 
 }

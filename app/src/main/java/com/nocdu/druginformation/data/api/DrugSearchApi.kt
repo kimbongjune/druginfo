@@ -36,6 +36,8 @@ interface DrugSearchApi {
     //FCM 메시지 전송 API
     @GET(value = FCM_SEND_URL)
     suspend fun sendFcm(
-        @Query(value = "token") token:String
+        @Query(value = "token") token:String,
+        @Query(value = "title") title:String,
+        @Query(value = "message") message:String
     )
 }

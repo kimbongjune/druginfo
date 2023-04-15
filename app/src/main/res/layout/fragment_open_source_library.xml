@@ -212,6 +212,28 @@
                 android:text="Copyright 2018 Google LLC\nApache License 2.0"
                 android:textSize="12sp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/kakao_black"
+                android:text="font : 꼬마나비"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="https://noonnu.cc/font_page/263"
+                android:textColor="@color/soft_red"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="폰트 저작권자 유토이미지 (UTOIMAGE.COM)"
+                android:textSize="12sp" />
+
+
             <View
                 android:id="@+id/horizontal_line"
                 android:layout_width="match_parent"
@@ -267,7 +289,38 @@ To apply the Apache License to your work, attach the following boilerplate notic
 Copyright [yyyy] [name of copyright owner]\n\n
 Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at\n\n
 http://www.apache.org/licenses/LICENSE-2.0\n\n
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.\n\n"
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License."
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/kakao_black"
+                android:text="폰트 저작권자 유토이미지 (UTOIMAGE.COM)"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. 사용범위\n\n
+본 이벤트를 통해 제공되는 모든 무료 폰트(서체)는 제공을 받은 자가 모든 온ㆍ오프라인 매체에서 상업적 또는 비상업적으로 이용 가능합니다.\n
+단, 어떠한 경우에도 아래 내용에 해당하는 사항에 대해서는 철저히 사용을 금지하고 있으므로 반드시 숙지하여 주시기 바랍니다.\n
+서체의 원본 또는 수정(개조) 본을 불특정 다수에게 유료 또는 무료로 판매하거나 배포하는 행위\n
+서체의 원본 또는 수정(개조) 본, 2차 제작물을 상표 및 서비스표 등의 지적 재산권으로 등록하는 행위\n
+서체의 원본 또는 수정(개조) 본, 2차 제작물을 외설적, 중상모략적, 음성적, 타인을 비방하는 용도 또는 기타 비합법적인 용도로 사용하는 행위\n\n
+2. 서체 저작권자의 표기\n
+본 이벤트를 통해 제공되는 무료 폰트(서체)를 보도 및 출판 용도로 사용할 경우에는 반드시 저작권자를 표기하여야 합니다.\n
+* 저작권자 표기 방법 : 폰트 저작권자 유토이미지 (UTOIMAGE.COM)\n\n
+3. 번들 및 임베딩\n
+본 이벤트를 통해 제공되는 모든 무료 폰트(서체)를 각종 시스템 또는 소프트웨어에 번들 또는 임베딩하여 사용할 경우에는 반드시 저작권자인 &quot;비비트리 주식회사&quot;로부터 별도의 사전 서면 허가를 받아야만 합니다.\n\n
+4. 광고, 홍보로의 활용\n\n
+본 이벤트를 통해 제공되는 모든 무료 폰트(서체)로 제작한 2차 제작물은 &quot;비비트리 주식회사&quot;의 광고, 홍보 및 프로모션 활동을 위해 활용될 수도 있습니다.\n\n
+5. 약관의 변경 및 사용 중단\n
+&quot;비비트리 주식회사&quot;는 언제든지 본 약관을 변경 또는 수정할 수 있으며, 사용을 중단 시킬 수 있습니다.\n\n
+6. 면책\n
+&quot;비비트리 주식회사&quot;는 어떠한 경우도 본 무료 폰트의 사용 또는 이의 사용 불가, 그 밖의 취급과 관련하여 발생하는 모든 계약, 불법행위 혹은 일반적, 특수적, 간접적, 부차적 혹은 필연적 손해를 포함하는 소송, 손해, 기타 책임에 대한 의무를 지지 않습니다.\n\n
+* 본 약관은 사용자의 국적, 거주 지역을 불문하고 대한민국 법에 의하여 규율하고 이에 근거하여 해석되며, 이를 위배하거나 회사와 사전 협의 없이 이루어지는 모든 행위는 저작권법 및 관련 법률에 의거, 권리침해로 간주합니다.\n\n"
                 android:textSize="13sp" />
 
         </LinearLayout>

@@ -86,7 +86,7 @@ class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel() 
         alarmRepository.getTokenCount()
     }
 
-    fun sendFcm(token:String) = viewModelScope.launch(Dispatchers.IO) {
-        alarmRepository.sendFcm(token)
+    fun sendFcm(token:String, title:String, message:String) = viewModelScope.launch(Dispatchers.IO) {
+        alarmRepository.sendFcm(token, title, message)
     }
 }

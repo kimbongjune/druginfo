@@ -114,7 +114,7 @@ class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
     }
 
     //FcmToken 데이터를 서버에 전송한다.
-    override suspend fun sendFcm(token: String) {
-        api.sendFcm(token)
+    override suspend fun sendFcm(token: String, title: String, message: String) {
+        api.sendFcm(token, title, message)
     }
 }
