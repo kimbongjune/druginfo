@@ -25,6 +25,7 @@ import com.nocdu.druginformation.utill.Constants
 class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagingService() {
     private val TAG = "FirebaseMessagingService"
 
+    //TODO 의약품 재고량 알림 노티피케이션을 클릭하면 알림 프래그먼트로 이동하게끔
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.e(TAG, remoteMessage.toString());
@@ -80,6 +81,7 @@ class FirebaseMessagingService  : com.google.firebase.messaging.FirebaseMessagin
         val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
 
+        //TODO setCotentTitle과 setContentText로 확장 가능한 fcm으로 테스트 필요함
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher_drugingo)     // 아이콘 설정
             .setContentTitle(title)     // 제목

@@ -106,6 +106,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
             GlobalScope.launch {
                 //울린 알람의 id를 이용해 database에서 알람을 조회한다.
                 AlarmDatabase.getDatabase(context).alarmDao().getAlarm(id).apply {
+                    Log.e(TAG,"fcm send?")
                     //코루틴 스코프 내에서 변수의 재할당이 불가능해 setter 메서드로 database에 등록한 알람 제목을 할당한다.
                     setTitle(this.title)
                     //코루틴 스코프 내에서 변수의 재할당이 불가능해 setter 메서드로 database에 등록한 알람 내용(약 이름)을 할당한다.
@@ -115,14 +116,14 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                         //재고량을 일회 섭취량 만큼 감소시킨다.
                         this.stockQuantity = this.stockQuantity - this.dailyRepeatTime
                         //재고량이 최소 재고량 이하일 때
-//                        if (this.stockQuantity <= this.minStockQuantity) {
-//                            //TODO FCM 보내기
+                        if (this.stockQuantity <= this.minStockQuantity) {
+                            //TODO FCM 보내기
                             //FCM을 보낸다.
-//                            RetrofitInstance.api.sendFcm(AlarmDatabase.getDatabase(context).tokenDao().getAllToken()[0].token, "의약품 재고량이 부족합니다.", "${this.title}알람 의 ${this.medicines} 의약품 재고량이 부족합니다.\n 잔여재고량 : ${this.stockQuantity}개")
-//                        }
+                          RetrofitInstance.api.sendFcm(AlarmDatabase.getDatabase(context).tokenDao().getAllToken()[0].token, "의약품 재고량이 부족합니다.", "${this.title}알람 의 ${this.medicines} 의약품 재고량이 부족합니다.\n 잔여재고량 : ${this.stockQuantity}개")
+                        }
 //                        //TODO 테스트 필요
                         //재고량을 갱신한다.
-//                        AlarmDatabase.getDatabase(context).alarmDao().updateAlarm(this)
+                        AlarmDatabase.getDatabase(context).alarmDao().updateAlarm(this)
                     }
                 }
             }
