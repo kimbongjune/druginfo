@@ -11,6 +11,7 @@ import com.nocdu.druginformation.databinding.FragmentPrivacyPolicyBinding
 import com.nocdu.druginformation.databinding.FragmentSettingBinding
 import com.nocdu.druginformation.utill.Constants.AGREEMENTS_URL
 import com.nocdu.druginformation.utill.Constants.BASE_URL
+import com.nocdu.druginformation.utill.CustomWebViewChromeClient
 import com.nocdu.druginformation.utill.CustomWebViewClient
 
 /**
@@ -85,7 +86,8 @@ class PrivacyPolicyFragment : Fragment() {
     //웹뷰를 초기화하고 세팅하는 함수
     private fun setUpWebView(){
         binding.wvPrivacyPolicy.apply {
-            webViewClient = CustomWebViewClient()
+            webViewClient = CustomWebViewClient(binding)
+            webChromeClient = CustomWebViewChromeClient(binding)
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
         }

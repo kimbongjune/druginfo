@@ -98,24 +98,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            splashScreen.setOnExitAnimationListener { splashScreenView  ->
-                val slideUp = ObjectAnimator.ofFloat(
-                    splashScreenView,
-                    View.TRANSLATION_Y,
-                    0f,
-                    -splashScreenView.height.toFloat()
-                )
-                slideUp.interpolator = AnticipateInterpolator()
-                slideUp.duration = 300L
-
-                // Call SplashScreenView.remove at the end of your custom animation.
-                slideUp.doOnEnd { splashScreenView.remove() }
-
-                // Run your animation.
-                slideUp.start()
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            splashScreen.setOnExitAnimationListener { splashScreenView  ->
+//                val slideUp = ObjectAnimator.ofFloat(
+//                    splashScreenView,
+//                    View.TRANSLATION_Y,
+//                    0f,
+//                    -splashScreenView.height.toFloat()
+//                )
+//                slideUp.interpolator = AnticipateInterpolator()
+//                slideUp.duration = 300L
+//
+//                // Call SplashScreenView.remove at the end of your custom animation.
+//                slideUp.doOnEnd { splashScreenView.remove() }
+//
+//                // Run your animation.
+//                slideUp.start()
+//            }
+//        }
         setContentView(binding.root)
 
         instance = this

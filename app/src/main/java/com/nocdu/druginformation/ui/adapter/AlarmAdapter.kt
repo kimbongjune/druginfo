@@ -28,6 +28,26 @@ class AlarmAdapter(private val context: Context, private var dataList:ArrayList<
         return dataList[position]
     }
 
+    //중복된 시간이 있는지 찾는 함수
+    fun checkSameTime(time:String):Boolean{
+        return dataList.any { it.eatDrugTextView == time }
+    }
+
+    //배열을 전체 순회하며 중복값이 있는지 찾는 함수
+    fun hasDuplicate(): Boolean {
+        val uniqueStrings = mutableSetOf<String>()
+
+        for (str in dataList) {
+            if (uniqueStrings.contains(str.eatDrugTextView)) {
+                return true
+            } else {
+                uniqueStrings.add(str.eatDrugTextView)
+            }
+        }
+
+        return false
+    }
+
     //의약품 복용시간 인서트를 위해 인서트 한 알람의 아이디를 파라미터로 받아 DoseTime 리스트 데이터를 가공하여 반환한다.
     fun getAllItemToDoseTime(alarmId:Int):List<DoseTime> {
         return dataList.map { DoseTime(time = it.eatDrugTextView, alarmId = alarmId) }

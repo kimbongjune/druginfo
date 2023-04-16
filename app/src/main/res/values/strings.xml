@@ -13,4 +13,5 @@
     <string name="fail_add_alarm_result_no_select_date">하나 이상의 요일을 선택해주세요</string>
     <string name="fail_add_alarm_result_no_add_drug_remaining">잔여 의약품 보유량을 작성해주세요</string>
     <string name="fail_add_alarm_result_no_add_drug_smallest">의약품 재고 알림을 받을 최소 보유량을 작성해주세요</string>
+    <string name="fail_add_alarm_result_same_time">중복된 시간으로는 알람을 등록할 수 없습니다.</string>
 </resources>

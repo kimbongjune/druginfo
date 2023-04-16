@@ -36,6 +36,7 @@ import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
 import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
+import com.nocdu.druginformation.utill.Constants.getNowTime
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -207,14 +208,19 @@ class AlarmDetailFragment : Fragment() {
                 var AM_PM:String = if(p1 < 12) "오전" else "오후"
                 val hour = if (p1 % 12 == 0) 12 else p1 % 12
                 val time = "${AM_PM} ${String.format("%02d:%02d", hour, p2)}"
-                if(position != 0){
-                    val beforeTime:String = alarmAdapter.getItem(position - 1).eatDrugTextView
-                    if(compareTimes(time, beforeTime)){
-                        Log.e(TAG,"이전 아이템의 시간이 더 큼")
-                    }else if(beforeTime.equals(time)){
-                        Log.e(TAG,"이전 아이템과의 시간이 동일함")
-                    }
+                Log.e(TAG,"시간이 동일한것이 있는지 확인하는 플래그 =${alarmAdapter.checkSameTime(time)}")
+                if(alarmAdapter.checkSameTime(time)){
+                    createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_same_time))
+                    return
                 }
+//                if(position != 0){
+//                    val beforeTime:String = alarmAdapter.getItem(position - 1).eatDrugTextView
+//                    if(compareTimes(time, beforeTime)){
+//                        Log.e(TAG,"이전 아이템의 시간이 더 큼")
+//                    }else if(beforeTime.equals(time)){
+//                        Log.e(TAG,"이전 아이템과의 시간이 동일함")
+//                    }
+//                }
                 alarmAdapter.modifyItem(position, time)
             }
         },dialogHour,dialogMinute,false)
@@ -256,7 +262,7 @@ class AlarmDetailFragment : Fragment() {
                     }
                 }else if(number > alarmAdapter.itemCount){
                     for(i in alarmAdapter.itemCount until number){
-                        alarmAdapter.addItem(AlarmList(getNowTime()))
+                        alarmAdapter.addItem(AlarmList(getNowTime(i)))
                     }
                 }
                 //alarmAdapter.removeItemAll()
@@ -383,12 +389,6 @@ class AlarmDetailFragment : Fragment() {
         return localBeforeTime.isBefore(localAfterTime)
     }
 
-    private fun getNowTime():String{
-        val now = LocalDateTime.now().plusMinutes(1)
-        val formatter = DateTimeFormatter.ofPattern("a hh:mm")
-        val formatted = now.format(formatter)
-        return formatted
-    }
 
     private fun setSwitchChangeListener(){
         binding.swEatDrugBeforehandCycle.setOnCheckedChangeListener { buttonView, isChecked  ->
@@ -457,6 +457,9 @@ class AlarmDetailFragment : Fragment() {
         dialog.show()
     }
     private fun createSuccessDialog(body: String, alarmWithDosetime: AlarmWithDosetime){
+        if(alarmAdapter.hasDuplicate()){
+            return createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_same_time))
+        }
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("선택하신 내용으로 알람을 수정하시겠습니까??")
         builder.setMessage(body)

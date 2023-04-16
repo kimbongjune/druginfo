@@ -2,6 +2,8 @@ package com.nocdu.druginformation.utill
 
 import com.nocdu.druginformation.BuildConfig
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 object Constants {
@@ -66,5 +68,13 @@ object Constants {
         val minute = calendar.get(Calendar.MINUTE)
 
         return Pair(hour,minute)
+    }
+
+    //현재 시간을 요일 시간:분 으로 반환하는 함수
+    fun getNowTime(plusMinute:Int):String{
+        val now = LocalDateTime.now().plusMinutes((1+plusMinute).toLong())
+        val formatter = DateTimeFormatter.ofPattern("a hh:mm")
+        val formatted = now.format(formatter)
+        return formatted
     }
 }

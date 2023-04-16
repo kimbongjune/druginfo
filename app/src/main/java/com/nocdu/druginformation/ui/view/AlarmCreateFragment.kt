@@ -38,6 +38,7 @@ import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
+import com.nocdu.druginformation.utill.Constants.getNowTime
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -74,7 +75,7 @@ class AlarmCreateFragment : Fragment() {
     }
 
     //최초 프래그먼트에 들어왔을 때 복용시간 초기 값을 할당하기 위해 현재 시간을 가져오기 위한 변수 선언
-    var alarmList = arrayListOf<AlarmList>(AlarmList(getNowTime()))
+    var alarmList = arrayListOf<AlarmList>(AlarmList(getNowTime(0)))
 
     //View Lifecycle에 진입 했을 때 최초 실행되는 함수 바인딩 객체에 레이아웃을 연결한다.
     override fun onCreateView(
@@ -103,7 +104,7 @@ class AlarmCreateFragment : Fragment() {
         showNumberPickerDialog()
         //약 복용 시간 리스트 내의 아이템을 클릭했을 때 발생하는 이벤트를 처리하는 함수 DatePickerDialog 를 띄운다.
         showDatePickerDialog()
-        //일회 약 복용 새수를 선택하는 NumberPickerDialog를 띄우는 함수 xml로 커스텀하여 사용한다
+        //일회 약 복용 개수를 선택하는 NumberPickerDialog를 띄우는 함수 xml로 커스텀하여 사용한다
         showOneTimeEatPickerDialog()
         //알람 발생 요일 체크박스를 클릭했을 때 발생하는 이벤트를 처리하는 함수
         changeAlarmDate()
@@ -210,7 +211,7 @@ class AlarmCreateFragment : Fragment() {
             binding.cbAlarmSunday.isChecked = false
             binding.btnEatDrugCount.text = "1회"
             alarmAdapter.removeItemAll()
-            alarmAdapter.addItem(AlarmList(getNowTime()))
+            alarmAdapter.addItem(AlarmList(getNowTime(0)))
             binding.btnEatDrugOnetime.text = "1개"
             binding.swEatDrugBeforehandCycle.isChecked = false
             binding.edEatDrugRemaining.setText("")
@@ -286,6 +287,13 @@ class AlarmCreateFragment : Fragment() {
                 val hour = if (p1 % 12 == 0) 12 else p1 % 12
                 //오전 오후를 표시하고 시간과 분을 2자리로 표시한다.
                 val time = "${AM_PM} ${String.format("%02d:%02d", hour, p2)}"
+                //Log.e(TAG,"시간이 동일한것이 있는지 확인하는 플래그 =${alarmAdapter.checkSameTime(time)}")
+                if(alarmAdapter.checkSameTime(time)){
+                    createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_same_time))
+                    return
+                }else{
+                    alarmAdapter.modifyItem(position, time)
+                }
                 //TODO 시간이 동일 할 경우 동일한 시간으로 알람이 등록 안되게, 모든 리스트를 순회해서 비교해야함
 //                if(position != 0){
 //                    val beforeTime:String = alarmAdapter.getItem(position - 1).eatDrugTextView
@@ -296,7 +304,7 @@ class AlarmCreateFragment : Fragment() {
 //                    }
 //                }
                 //알람 리스트의 아이템을 갱신한다.
-                alarmAdapter.modifyItem(position, time)
+
             }
             //DatePickerDialog에서 표기 할 값
         },dialogHour,dialogMinute,false)
@@ -359,7 +367,7 @@ class AlarmCreateFragment : Fragment() {
                     //새로 선택한 개수가 더 많으면 선택한 개수를 만큼 반복문을 돌며
                     for(i in alarmAdapter.itemCount until number){
                         //알람 시간 리스트뷰를 추가한다.
-                        alarmAdapter.addItem(AlarmList(getNowTime()))
+                        alarmAdapter.addItem(AlarmList(getNowTime(i)))
                     }
                 }
                 //alarmAdapter.removeItemAll()
@@ -535,14 +543,6 @@ class AlarmCreateFragment : Fragment() {
         }
     }
 
-    //현재 시간을 요일 시간:분 으로 반환하는 함수
-    private fun getNowTime():String{
-        val now = LocalDateTime.now().plusMinutes(1)
-        val formatter = DateTimeFormatter.ofPattern("a hh:mm")
-        val formatted = now.format(formatter)
-        return formatted
-    }
-
     //의약품 미리알림 스위치 이벤트리스너를 등록하는 함수
     private fun setSwitchChangeListener(){
         binding.swEatDrugBeforehandCycle.setOnCheckedChangeListener { buttonView, isChecked  ->
@@ -595,6 +595,9 @@ class AlarmCreateFragment : Fragment() {
 
     //사용자가 입력한 데이터를 파라미터로 다이얼로그를 띄워주고 확인 버튼을 클릭하면 알람이 등록되고 데이터베이스에 입력된다.
     private fun createSuccessDialog(body: String){
+        if(alarmAdapter.hasDuplicate()){
+            return createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_same_time))
+        }
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("선택하신 내용으로 알람을 등록하시겠습니까?")
         builder.setMessage(body)
