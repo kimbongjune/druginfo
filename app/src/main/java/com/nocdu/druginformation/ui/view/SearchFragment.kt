@@ -71,18 +71,20 @@ class SearchFragment : Fragment(), View.OnClickListener {
                     transaction?.commit();
                 }
                 btnImageSearch -> {
-                    Log.e(TAG, "btnImageSearch Clicked")
-                    //Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
-                    val imageSearchFragment:Fragment = ImageSearchFragment()
-                    val transaction = activity?.supportFragmentManager?.beginTransaction()
-                    transaction?.setCustomAnimations(
-                        R.anim.slide_in_bottom,
-                        R.anim.slide_out_bottom,
-                        R.anim.slide_in_bottom,
-                        R.anim.slide_out_bottom)
-                    transaction?.replace(R.id.mainActivity, imageSearchFragment)
-                    transaction?.addToBackStack("ImageSearchFragment")
-                    transaction?.commit()
+                    //TODO 이미지 검색이 준비되면 오픈
+//                    Log.e(TAG, "btnImageSearch Clicked")
+//                    //Toast.makeText(activity, "testButton2 button Clicked", Toast.LENGTH_SHORT).show()
+//                    val imageSearchFragment:Fragment = ImageSearchFragment()
+//                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+//                    transaction?.setCustomAnimations(
+//                        R.anim.slide_in_bottom,
+//                        R.anim.slide_out_bottom,
+//                        R.anim.slide_in_bottom,
+//                        R.anim.slide_out_bottom)
+//                    transaction?.replace(R.id.mainActivity, imageSearchFragment)
+//                    transaction?.addToBackStack("ImageSearchFragment")
+//                    transaction?.commit()
+                    Toast.makeText(requireContext(),"이미지 검색은 현재 컨텐츠 준비중 입니다.",Toast.LENGTH_SHORT).show()
                 }
                 btnViewSearch -> {
                     Log.e(TAG, "btnViewSearch Clicked")

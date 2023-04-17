@@ -52,7 +52,7 @@
                 android:layout_marginEnd="20dp"
                 android:paddingLeft="10dp"
                 android:paddingBottom="5dp"
-                android:hint="알람 명(기본값은 오늘 날짜-시간 입니다.)"
+                android:hint="알람 명(기본값은 &quot;의약품 알람&quot; 입니다.)"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:background="@drawable/border_bottom"

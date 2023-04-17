@@ -25,6 +25,8 @@ import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
 import com.nocdu.druginformation.utill.collectLatestStateFlow
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -62,6 +64,10 @@ class AlarmFragment : Fragment() {
 //        binding.rvAlarmList.addItemDecoration(dividerItemDecoration)
 
         setupLoadState()
+
+        val currentDateTime = LocalDateTime.now()
+        val dayOfWeek = currentDateTime.dayOfWeek.value // 1 (월요일) ~ 7 (일요일)
+        val timeOfDay = currentDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 
         collectLatestStateFlow(alarmViewModel.getAlarms){
             alarmPagingAdapter.submitData(it)

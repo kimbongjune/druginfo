@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.size
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -181,5 +183,22 @@ class InfoFragment : Fragment() {
         ItemTouchHelper(itemTouchHelperCallback).apply {
             attachToRecyclerView(binding.rvFavoriteDrugs)
         }
+    }
+
+    //TODO 북마크 없을 때 기본 화면이 필요함
+    private fun setupLoadState(){
+        drugSearchAdapter.addLoadStateListener { combinedLoadStates ->
+            val loadState = combinedLoadStates.source
+            val isListEmpty = drugSearchAdapter.itemCount < 1
+                    && loadState.refresh is LoadState.NotLoading
+                    && loadState.append.endOfPaginationReached
+
+//            showHideScreen(isListEmpty, binding.ivAlarmCalendar, binding.tvAlarmInfo, binding.btnCreateAlarm)
+//            showHideScreen(!isListEmpty, binding.btnCreateAlarmSecond, binding.rvAlarmList)
+        }
+    }
+
+    private fun showHideScreen(visibility:Boolean, vararg view:View){
+        view.forEach { it.isVisible = visibility }
     }
 }

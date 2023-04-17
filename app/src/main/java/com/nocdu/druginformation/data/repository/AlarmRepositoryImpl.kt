@@ -3,6 +3,7 @@ package com.nocdu.druginformation.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.nocdu.druginformation.data.api.RetrofitInstance.api
 import com.nocdu.druginformation.data.database.AlarmDatabase
 import com.nocdu.druginformation.data.model.Alarm
@@ -43,6 +44,21 @@ class AlarmRepositoryImpl(private val db: AlarmDatabase):AlarmRepository {
     //모든 알람 데이터를 조회한다 페이징처리를 한다.
     override fun getAlarms(): Flow<PagingData<AlarmWithDosetime>> {
         val pagingSourceFactory = {db.alarmDao().getAlarms()}
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGING_SIZE,
+                enablePlaceholders = false,
+                maxSize = PAGING_SIZE * PAGING_ADAPTER_MAX_SIZE
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
+
+    override fun getAlarmsTest(
+        dayOfWeek: Int,
+        timeOfDay: String
+    ): Flow<PagingData<AlarmWithDosetime>> {
+        val pagingSourceFactory = {db.alarmDao().getAlarmsTest(dayOfWeek, timeOfDay)}
         return Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,

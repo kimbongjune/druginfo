@@ -30,6 +30,10 @@ class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel() 
         .cachedIn(viewModelScope)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(COROUTINE_STAT_IN_STOP_TIME), PagingData.empty())
 
+    fun getAlarmsTest(dayOfWeek: Int, timeOfDay: String):StateFlow<PagingData<AlarmWithDosetime>> = alarmRepository.getAlarmsTest(dayOfWeek, timeOfDay)
+        .cachedIn(viewModelScope)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(COROUTINE_STAT_IN_STOP_TIME), PagingData.empty())
+
     fun getAlarm(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         alarmRepository.getAlarm(id)
     }

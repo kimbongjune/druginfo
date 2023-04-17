@@ -25,6 +25,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.nocdu.druginformation.R
@@ -77,6 +79,9 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var alarmViewModel: AlarmViewModel
 
+    lateinit var appUpdateManager: AppUpdateManager
+
+
     private val tabTitleArray = arrayOf(
         "홈",
         "검색",
@@ -124,6 +129,8 @@ class MainActivity : AppCompatActivity() {
         viewPager = binding.viewPager
 
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+
+        appUpdateManager = AppUpdateManagerFactory.create(this)
 
         val filename = "examples.txt"
 // 파일 저장 경로를 지정합니다.

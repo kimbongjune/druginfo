@@ -46,6 +46,18 @@ interface AlarmDao {
     @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
     fun getAlarms(): PagingSource<Int, AlarmWithDosetime>
 
+    @Query("""
+SELECT alarm.*, doses_time.*
+FROM alarm
+INNER JOIN doses_time ON alarm.id = doses_time.alarm_id
+WHERE
+      (CASE WHEN alarmDateInt >= :dayOfWeek THEN alarmDateInt - :dayOfWeek ELSE 7 - (:dayOfWeek - alarmDateInt) END) * 24 * 60 + strftime('%s', time) - strftime('%s', :timeOfDay) >= 0
+ORDER BY
+  (CASE WHEN alarmDateInt >= :dayOfWeek THEN alarmDateInt - :dayOfWeek ELSE 7 - (:dayOfWeek - alarmDateInt) END) * 24 * 60 + strftime('%s', time) - strftime('%s', :timeOfDay),
+  time
+""")
+    fun getAlarmsTest(dayOfWeek: Int, timeOfDay: String): PagingSource<Int, AlarmWithDosetime>
+
     // 알람 등록을 위해 모든 알람 가져온다.
     @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
     fun getAllAlarms(): List<AlarmWithDosetime>

@@ -1,6 +1,7 @@
 package com.nocdu.druginformation.data.repository
 
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.nocdu.druginformation.data.model.Alarm
 import com.nocdu.druginformation.data.model.AlarmWithDosetime
 import com.nocdu.druginformation.data.model.DoseTime
@@ -17,6 +18,8 @@ interface AlarmRepository {
 
     //특정 알람 데이터를 조회한다.
     suspend fun getAlarm(id: Int): Alarm
+
+    fun getAlarmsTest(dayOfWeek: Int, timeOfDay: String): Flow<PagingData<AlarmWithDosetime>>
 
     //모든 알람 데이터를 조회한다 페이징처리를 위해 사용한다.
     fun getAlarms(): Flow<PagingData<AlarmWithDosetime>>

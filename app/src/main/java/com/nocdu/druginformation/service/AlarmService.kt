@@ -104,11 +104,11 @@ class AlarmService : Service() {
         //알람의 진동 패턴을 설정한다.
         val pattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
         //알람의 진동 패턴을 이용해 반복 패턴을 생성한다.
-        val vibrationEffect = VibrationEffect.createWaveform(pattern, 0)
+        val vibrationEffect = VibrationEffect.createWaveform(pattern, VibrationEffect.EFFECT_CLICK)
         //알람의 진동을 실행한다.
         //안드로이드 12버전부터는 VibratorManager를 사용해야한다.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createWaveform(pattern, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createWaveform(pattern, VibrationEffect.EFFECT_CLICK))
         } else {
             vibrator.vibrate(vibrationEffect)
         }

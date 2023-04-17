@@ -44,27 +44,39 @@
 
     <TextView
         android:id="@+id/tv_app_version"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/kakao_black"
-        android:text="현재 버전 1.0v\n 최신 버전 입니다."
+        android:text="현재 버전 1.0v"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_app_icon"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
+        android:id="@+id/tv_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/roundbutton"
+        android:gravity="center"
         android:textColor="@color/kakao_black"
+        android:text="최신버전입니다."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_app_version"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_install_new_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_round_button"
+        android:textColor="@color/white"
         android:backgroundTint="@color/soft_blue"
         android:visibility="gone"
         android:text="최신버전 설치하기"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_app_version"
+        app:layout_constraintTop_toBottomOf="@+id/tv_update"
         app:layout_constraintEnd_toEndOf="parent"/>
 
 

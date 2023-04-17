@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.nocdu.druginformation.BuildConfig
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.databinding.FragmentHomeBinding
 import com.nocdu.druginformation.databinding.FragmentSettingBinding
@@ -38,6 +39,7 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         goBack()
+        setVersion()
         openVersionInfoFragment()
         openPrivacyPolicyFragment()
         openOpenSourceLibraryFragment()
@@ -121,5 +123,9 @@ class SettingFragment : Fragment() {
             transaction?.addToBackStack("OpenSourceLibraryFragment")
             transaction.commit()
         }
+    }
+
+    private fun setVersion(){
+        binding.tvVersionInfo.text = BuildConfig.VERSION_NAME
     }
 }
