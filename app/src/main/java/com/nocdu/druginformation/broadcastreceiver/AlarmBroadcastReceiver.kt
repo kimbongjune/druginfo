@@ -128,52 +128,58 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                 }
             }
 
-            //notification의 channelId를 가져온다.
-            val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
-            //notification의 channelName을 가져온다.
-            val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
-
-            //notification에 이벤트를 담을 서비스 클래스를 인텐트로 선언한다.
-            val newIntent = Intent(context.applicationContext, AlarmService::class.java)
-            //notification에 이벤트를 담을 서비스 클래스의 액션을 지정한다.
-            newIntent.action = ACTION_STOP_SOUND_AND_VIBRATION
-            //notification에 이벤트를 담을 서비스 클래스의 알람 아이디를 지정한다. 해당 아이디를 이용해 notification을 삭제한다.
-            newIntent.putExtra(ALARM_REQUEST_CODE, id)
-
-            //알람 발생시 실행 시킬 서비스 클래스를 실행시킬 pendingIntent를 선언한다. notification을 슬라이드하거나 클릭시 실행된다.
-            val pendingIntent = PendingIntent.getService(context.applicationContext, id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-
-            //notification builder를 선언한다.
-            val notification = NotificationCompat.Builder(context.applicationContext, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher_drugingo)
-                .setAutoCancel(true)
-                .setContentTitle(title)
-                .setContentText("의약품 (${body}) 복용시간 입니다.")
-                .setContentIntent(pendingIntent)
-                .setDeleteIntent(pendingIntent)
-            //notification을 클릭하거나 슬라이드 하여 삭제시 발생했던 소리와 진동을 멈춘다.
-
             //notification manager를 선언한다.
             val notificationManager = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            //오레오 버전 이상일 경우 notification channel을 생성한다.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-                notificationManager.createNotificationChannel(channel)
-            }
-            //notification을 띄운다.
-            notificationManager.notify(id, notification.build())
+            //만약 알람 권한이 허용 되어있다면
+            if (notificationManager?.areNotificationsEnabled() == true) {
+                //notification의 channelId를 가져온다.
+                val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
+                //notification의 channelName을 가져온다.
+                val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
 
-            //알람을 울리기 위한 서비스 클래스를 실행한다.
-            val serviceIntent = Intent(context, AlarmService::class.java)
-            serviceIntent.putExtra(ALARM_REQUEST_CODE, id)
-            serviceIntent.action =  ACTION_START_SOUND_AND_VIBRATION
+                //notification에 이벤트를 담을 서비스 클래스를 인텐트로 선언한다.
+                val newIntent = Intent(context.applicationContext, AlarmService::class.java)
+                //notification에 이벤트를 담을 서비스 클래스의 액션을 지정한다.
+                newIntent.action = ACTION_STOP_SOUND_AND_VIBRATION
+                //notification에 이벤트를 담을 서비스 클래스의 알람 아이디를 지정한다. 해당 아이디를 이용해 notification을 삭제한다.
+                newIntent.putExtra(ALARM_REQUEST_CODE, id)
 
-            //오레오 버전 이상일 경우 서비스클래스를 startForegroundService를 이용해서 실행해야 한다.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(serviceIntent);
+                //알람 발생시 실행 시킬 서비스 클래스를 실행시킬 pendingIntent를 선언한다. notification을 슬라이드하거나 클릭시 실행된다.
+                val pendingIntent = PendingIntent.getService(context.applicationContext, id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+                //notification builder를 선언한다.
+                val notification = NotificationCompat.Builder(context.applicationContext, channelId)
+                    .setSmallIcon(R.mipmap.ic_launcher_drugingo)
+                    .setAutoCancel(true)
+                    .setContentTitle(title)
+                    .setContentText("의약품 (${body}) 복용시간 입니다.")
+                    .setContentIntent(pendingIntent)
+                    .setDeleteIntent(pendingIntent)
+                //notification을 클릭하거나 슬라이드 하여 삭제시 발생했던 소리와 진동을 멈춘다.
+
+                //오레오 버전 이상일 경우 notification channel을 생성한다.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                    val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+                    notificationManager.createNotificationChannel(channel)
+                }
+                //notification을 띄운다.
+                notificationManager.notify(id, notification.build())
+
+                //알람을 울리기 위한 서비스 클래스를 실행한다.
+                val serviceIntent = Intent(context, AlarmService::class.java)
+                serviceIntent.putExtra(ALARM_REQUEST_CODE, id)
+                serviceIntent.action =  ACTION_START_SOUND_AND_VIBRATION
+
+                //오레오 버전 이상일 경우 서비스클래스를 startForegroundService를 이용해서 실행해야 한다.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(serviceIntent);
+                } else {
+                    context.startService(serviceIntent);
+                }
             } else {
-                context.startService(serviceIntent);
+                //알람 권한이 허용되지 않았을 경우 토스트 메시지를 띄운다.
+                Toast.makeText(context.applicationContext, "알림 권한이 허용되지 않아 알람을 울릴 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
 
             //알람을 울리기 위해 실행한 wakeLock 객체의 자원을 해제한다.

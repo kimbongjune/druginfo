@@ -1,12 +1,10 @@
 package com.nocdu.druginformation.ui.view
 
 import android.animation.ObjectAnimator
-import android.app.AlarmManager
+import android.app.*
 import android.app.AlarmManager.AlarmClockInfo
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +17,7 @@ import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -132,27 +131,6 @@ class MainActivity : AppCompatActivity() {
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
 
-        val filename = "examples.txt"
-// 파일 저장 경로를 지정합니다.
-        val file = File(applicationContext.filesDir, filename)
-
-
-
-        if (file.exists()) {
-            val fileContent = file.readText()
-            Log.e("File Content", fileContent)
-        } else {
-            Log.e("File Not Found", "The file $filename does not exist.")
-        }
-
-        val intent = intent
-        val data = intent.getIntExtra("alarmClick", 0)
-        if(data != null){
-            Log.e(TAG, "알람 취소sss data = ${data}")
-            val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.cancel(data)
-        }
 
         initFirebase()
 
@@ -248,41 +226,78 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFirebase() {
-        FirebaseApp.initializeApp(this)
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                lifecycleScope.launch {
-                    if(alarmViewModel.getAllToken.await().isNotEmpty()){
-                        alarmViewModel.updateToken(alarmViewModel.getAllToken.await()[0].apply { token = task.result.toString() })
-                    }else{
-                        alarmViewModel.addToken(FcmToken(token = task.result))
-                    }
-                }
-                Log.e(TAG,"token = ${task.result}")
-            }
-        }
+        val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
-        val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
-        val channelDesc = Constants.DEFAULT_NOTIFICATION_CHANNEL_DESC
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(channelId,channelName,NotificationManager.IMPORTANCE_HIGH)
-            val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            // Configure the notification channel
-            notificationChannel.description = channelDesc
-            notificationChannel.enableLights(true)
-            notificationChannel.vibrationPattern = longArrayOf(200, 100, 200)
-            notificationChannel.enableVibration(true)
-            notificationManager.createNotificationChannel(notificationChannel)
+        if (notificationManager?.areNotificationsEnabled() == false) {
+            Log.e(TAG, "!!! - 노티피케이션 설정 안되어있음")
+            val builder = AlertDialog.Builder(this)
+            builder
+                .setTitle(R.string.notification_permission_message_title)
+                .setMessage(R.string.notification_permission_message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.go_to_notification_settings) { dialog, which ->
+                    // 노티피케이션 설정 화면으로 이동
+                    val intent = Intent()
+                    intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                    intent.putExtra("android.provider.extra.APP_PACKAGE", this.packageName)
+                    this.startActivity(intent)
+                }
+                .setNegativeButton("취소") { dialog, which -> dialog.cancel() }
+            val alert = builder.create()
+
+            alert.setOnShowListener {
+                val positiveButton = alert.getButton(DialogInterface.BUTTON_POSITIVE)
+                //positive 버튼의 텍스트 색상을 파란색으로 변경한다.
+                positiveButton.setTextColor(ContextCompat.getColor(this, R.color.soft_blue))
+
+                //DatePickerDialog의 negative 버튼을 가져온다.
+                val negativeButton = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+                //negative 버튼의 텍스트 색상을 빨간색으로 변경한다.
+                negativeButton.setTextColor(ContextCompat.getColor(this, R.color.soft_red))
+            }
+            alert.show()
+        }else {
+            Log.e(TAG, "!!! - 노티피케이션 설정 되어있음")
+
+            FirebaseApp.initializeApp(this)
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    lifecycleScope.launch {
+                        if (alarmViewModel.getAllToken.await().isNotEmpty()) {
+                            alarmViewModel.updateToken(alarmViewModel.getAllToken.await()[0].apply {
+                                token = task.result.toString()
+                            })
+                        } else {
+                            alarmViewModel.addToken(FcmToken(token = task.result))
+                        }
+                    }
+                    Log.e(TAG, "token = ${task.result}")
+                }
+            }
+
+            val channelId = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID
+            val channelName = Constants.DEFAULT_NOTIFICATION_CHANNEL_NAME
+            val channelDesc = Constants.DEFAULT_NOTIFICATION_CHANNEL_DESC
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val notificationChannel =
+                    NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+
+                // Configure the notification channel
+                notificationChannel.description = channelDesc
+                notificationChannel.enableLights(true)
+                notificationChannel.vibrationPattern = longArrayOf(200, 100, 200)
+                notificationChannel.enableVibration(true)
+                notificationManager.createNotificationChannel(notificationChannel)
+            }
+            FirebaseMessaging.getInstance().subscribeToTopic("custom")
+                .addOnSuccessListener { //                    Toast.makeText(getApplicationContext(), "custom topic 구독", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "!!! - custom topic 구독")
+                }
+            FirebaseMessaging.getInstance().subscribeToTopic("notify")
+                .addOnSuccessListener { //                    Toast.makeText(getApplicationContext(), "notify topic 구독", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "!!! - notify topic 구독")
+                }
         }
-        FirebaseMessaging.getInstance().subscribeToTopic("custom")
-            .addOnSuccessListener { //                    Toast.makeText(getApplicationContext(), "custom topic 구독", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "!!! - custom topic 구독")
-            }
-        FirebaseMessaging.getInstance().subscribeToTopic("notify")
-            .addOnSuccessListener { //                    Toast.makeText(getApplicationContext(), "notify topic 구독", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "!!! - notify topic 구독")
-            }
     }
 
     fun setAlarm(alarmList:List<Triple<Int,Int,Int>>, alarmId:Int){

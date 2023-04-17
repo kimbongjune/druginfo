@@ -14,4 +14,7 @@
     <string name="fail_add_alarm_result_no_add_drug_remaining">잔여 의약품 보유량을 작성해주세요</string>
     <string name="fail_add_alarm_result_no_add_drug_smallest">의약품 재고 알림을 받을 최소 보유량을 작성해주세요</string>
     <string name="fail_add_alarm_result_same_time">중복된 시간으로는 알람을 등록할 수 없습니다.</string>
+    <string name="notification_permission_message_title">알림 권한이 허용되어있지 않습니다.</string>
+    <string name="notification_permission_message">알림 권한이 허용되어있지 않을경우 알람이 및 의약품 미리알림 기능이 동작하지 않습니다.</string>
+    <string name="go_to_notification_settings">알림 권한 설정.</string>
 </resources>
