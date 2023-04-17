@@ -10,10 +10,16 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.*
 import android.util.Log
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.nocdu.druginformation.ui.view.MainActivity
 import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ACTION_START_SOUND_AND_VIBRATION
 import com.nocdu.druginformation.utill.Constants.ACTION_STOP_SOUND_AND_VIBRATION
+import com.nocdu.druginformation.workermanager.AlarmWorker
+import java.util.concurrent.TimeUnit
 
 /**
  *  알람이 울릴 때 동작하는 서비스
@@ -60,6 +66,19 @@ class AlarmService : Service() {
         //액션에 따른 이벤트처리 알람의 소리와 진동을 실행한다.
         if(intent.action == ACTION_START_SOUND_AND_VIBRATION) {
             Log.e(TAG,"ACTION_START_SOUND_AND_VIBRATION")
+            val workManager = WorkManager.getInstance(this)
+            val inputData = Data.Builder()
+                .putInt("id", id)
+                .build()
+            val constraints = Constraints.Builder()
+                .setRequiresBatteryNotLow(true)
+                .build()
+            val soundCancelWork = OneTimeWorkRequestBuilder<AlarmWorker>()
+                .setConstraints(constraints)
+                .setInputData(inputData)
+                .setInitialDelay(1, TimeUnit.MINUTES) // 1분 후에 예약
+                .build()
+            workManager.enqueue(soundCancelWork)
             startSoundAndVibration()
             //발생시킨 알람의 소리와 진동을 취소한다.
         }else if (intent.action == ACTION_STOP_SOUND_AND_VIBRATION) {
@@ -86,9 +105,9 @@ class AlarmService : Service() {
     //알람의 소리와 진동, 노티피케이션 을 취소하는 함수 아이디를 이용해 노티피케이션을 취소한다.
     private fun stopSoundAndVibration(notificationId:Int) {
         //소리를 중지한다.
-        ringtonePlayer.stop()
+        ringtonePlayer?.stop()
         //진동을 중지한다.
-        vibrator.cancel()
+        vibrator?.cancel()
 
         //노티피케이션객체를 가져온다.
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
