@@ -190,7 +190,9 @@ class AlarmCreateFragment : Fragment() {
             //리사이클러뷰 아이템의 구분선을 추가한다.
             addItemDecoration(
                 DividerItemDecoration(requireContext(),
-                    DividerItemDecoration.VERTICAL)
+                    DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(resources.getDrawable(R.drawable.divider))
+                }
             )
             //리사이클러뷰에 어댑터를 연결한다.
             adapter = alarmAdapter

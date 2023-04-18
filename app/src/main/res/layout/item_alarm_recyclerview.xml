@@ -33,7 +33,7 @@
                 android:textColor="@color/kakao_black"
                 android:paddingLeft="2dp"
                 android:textStyle="bold"
-                app:layout_constraintWidth_percent=".7"
+                app:layout_constraintWidth_percent=".6"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tv_drug_residual_count"
                 app:layout_constraintStart_toStartOf="parent"/>
@@ -64,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_drug_name"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent=".3" />
+                app:layout_constraintWidth_percent=".4" />
 
             <TextView
                 android:id="@+id/tv_drug_date"

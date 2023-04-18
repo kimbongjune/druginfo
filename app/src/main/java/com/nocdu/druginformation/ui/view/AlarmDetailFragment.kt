@@ -153,7 +153,9 @@ class AlarmDetailFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(
                 DividerItemDecoration(requireContext(),
-                    DividerItemDecoration.VERTICAL)
+                    DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(resources.getDrawable(R.drawable.divider))
+                }
             )
             adapter = alarmAdapter
         }

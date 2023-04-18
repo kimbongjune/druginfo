@@ -19,6 +19,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -44,6 +47,7 @@ import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
 import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
@@ -61,6 +65,9 @@ class MainActivity : AppCompatActivity() {
             return instance
         }
     }
+
+    private val Context.dataStore by preferencesDataStore(name = "app_settings")
+    private val FIRST_LAUNCH = booleanPreferencesKey("first_launch")
 
     final val TAG:String = "MainActivity"
 
@@ -132,7 +139,11 @@ class MainActivity : AppCompatActivity() {
         appUpdateManager = AppUpdateManagerFactory.create(this)
 
 
-        initFirebase()
+        lifecycleScope.launch {
+            initFirebase(checkFirstLaunch())
+        }
+
+
 
         val database = DrugSearchDatabase.getInstance(this)
         val drugSearchRepository = DrugSearchRepositoryImpl(database)
@@ -225,10 +236,10 @@ class MainActivity : AppCompatActivity() {
         }.attach()
     }
 
-    private fun initFirebase() {
+    private suspend fun initFirebase(checkFirstLaunch:Boolean) {
         val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        if (notificationManager?.areNotificationsEnabled() == false) {
+        if (notificationManager?.areNotificationsEnabled() == false && !checkFirstLaunch) {
             Log.e(TAG, "!!! - 노티피케이션 설정 안되어있음")
             val builder = AlertDialog.Builder(this)
             builder
@@ -377,5 +388,21 @@ class MainActivity : AppCompatActivity() {
         transaction?.replace(R.id.mainActivity, settingFragment)
         transaction?.addToBackStack("SettingFragment")
         transaction?.commit()
+    }
+
+    //앱이 처음 실행 되었는지 체크하는 메서드
+    private suspend fun checkFirstLaunch() : Boolean {
+        val isFirstLaunch = dataStore.data.first()[FIRST_LAUNCH] ?: true
+
+        if (isFirstLaunch) {
+            Log.e(TAG,"앱이 처음 실행되었음")
+            dataStore.edit { settings ->
+                settings[FIRST_LAUNCH] = false
+            }
+        } else {
+            Log.e(TAG,"앱이 이전에 실행된 적 있음")
+            // 앱이 이전에 실행된 적이 있습니다. 원하는 작업을 수행하세요.
+        }
+        return isFirstLaunch
     }
 }

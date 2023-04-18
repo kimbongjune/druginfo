@@ -76,7 +76,7 @@ class AlarmService : Service() {
             val soundCancelWork = OneTimeWorkRequestBuilder<AlarmWorker>()
                 .setConstraints(constraints)
                 .setInputData(inputData)
-                .setInitialDelay(1, TimeUnit.MINUTES) // 1분 후에 예약
+                .setInitialDelay(30, TimeUnit.SECONDS) // 30초 후에 예약
                 .build()
             workManager.enqueue(soundCancelWork)
             startSoundAndVibration()
