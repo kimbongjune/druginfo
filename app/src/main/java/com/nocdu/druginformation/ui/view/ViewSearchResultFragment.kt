@@ -138,7 +138,7 @@ class ViewSearchResultFragment : Fragment() {
                     && loadState.refresh is LoadState.NotLoading
                     && loadState.append.endOfPaginationReached
 
-            //binding.tvEmptyList.isVisible = isListEmpty
+            binding.tvEmptyList.isVisible = isListEmpty
             binding.rvSearchResult.isVisible = !isListEmpty
 
             binding.progressBar.isVisible = loadState.refresh is LoadState.Loading

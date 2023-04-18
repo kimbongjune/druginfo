@@ -287,8 +287,8 @@ class AlarmCreateFragment : Fragment() {
                 val hour = if (p1 % 12 == 0) 12 else p1 % 12
                 //오전 오후를 표시하고 시간과 분을 2자리로 표시한다.
                 val time = "${AM_PM} ${String.format("%02d:%02d", hour, p2)}"
-                //Log.e(TAG,"시간이 동일한것이 있는지 확인하는 플래그 =${alarmAdapter.checkSameTime(time)}")
-                if(alarmAdapter.checkSameTime(time)){
+                //아이템이 두개 이상일 때 모든 아이템을 순회하며 시간이 동일한 아이템이 있는지 확인한다.
+                if(alarmAdapter.itemCount >= 2 && alarmAdapter.checkSameTime(time)){
                     createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_same_time))
                     return
                 }else{

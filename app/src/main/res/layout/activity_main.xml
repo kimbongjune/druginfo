@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:text="이약모야"
                 android:layout_gravity="center"
-                android:textSize="30dp"
+                android:textSize="35dp"
                 android:textColor="#1890FF"
                 android:textStyle="bold"
                 android:fontFamily="@font/kid_butterfly"
