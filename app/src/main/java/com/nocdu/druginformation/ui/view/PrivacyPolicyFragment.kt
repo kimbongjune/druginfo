@@ -20,14 +20,13 @@ import com.nocdu.druginformation.utill.CustomWebViewClient
  */
 class PrivacyPolicyFragment : Fragment() {
     final val TAG:String = "PrivacyPolicyFragment"
-
+    //뷰 바인딩 객체
     private var _binding: FragmentPrivacyPolicyBinding? = null
+    //뷰 바인딩 객체 getter 메서드
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
+    //View Lifecycle에 진입 했을 때 최초 실행되는 함수 바인딩 객체에 레이아웃을 연결한다.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,12 +36,16 @@ class PrivacyPolicyFragment : Fragment() {
         return binding.root
     }
 
+    //onCreateView가 실행 된 후 호출되는 함수 클래스 변수로 선언한 객체들의 인스턴스를 생성하고 초기화한다.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
 
+        //툴바의 뒤로가기 이벤트를처리하는 함수
         goBack()
+        //웹뷰를 초기화하고 세팅하는 함수
         setUpWebView()
+        //개인정보처리방침 웹페이지를 띄우는 함수
         openPrivacyPolicyWebPage()
     }
 
@@ -66,6 +69,7 @@ class PrivacyPolicyFragment : Fragment() {
         Log.e(TAG, "${TAG} is onDestroyed")
     }
 
+    //프래그먼트가 제거될 때 불필요한 네트워크 데이터를 사용하지 않기위해 웹뷰를 초기화한다.
     override fun onDestroyView() {
         binding.wvPrivacyPolicy.apply {
             clearHistory()

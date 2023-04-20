@@ -29,16 +29,25 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-
+/**
+ *  알람 전체 목록을 조회하는 프래그먼트
+ *  스위치를 이용해 목록에서 알람을 활성화, 비활성화 할 수 있다.
+ *  리사이클러뷰를 클릭하면 특정 아이디의 알람 데이터를 알람 상세정보 프래그먼트로 전달 및 이동한다.
+ */
 class AlarmFragment : Fragment() {
     final val TAG:String = "AlarmFragment"
+
+    //뷰 바인딩 객체
     private var _binding:FragmentAlarmBinding? = null
+    //뷰 바인딩 객체 getter 메서드
     private val binding get() = _binding!!
 
+    //약 복용 시간 목록의 데이터를 연동하기 위한 어댑터 변수 선언
     private lateinit var alarmViewModel: AlarmViewModel
-    //private lateinit var drugSearchAdapter:DrugSearchAdapter
+    //알람 목록을 데이터베이스에서 조회할 때 페이징처리를 하기위한 커스텀 어댑터
     private lateinit var alarmPagingAdapter: AlarmPagingAdapter
 
+    //View Lifecycle에 진입 했을 때 최초 실행되는 함수 바인딩 객체에 레이아웃을 연결한다.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,10 +57,15 @@ class AlarmFragment : Fragment() {
         return binding.root
     }
 
+    //onCreateView가 실행 된 후 호출되는 함수 클래스 변수로 선언한 객체들의 인스턴스를 생성하고 초기화한다.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //메인액티비티에서 선언한 뷰모델 객체를 변수에 할당한다
         alarmViewModel = (activity as MainActivity).alarmViewModel
+        //알람 목록의 리사이클러 뷰와 어댑터를 연동하는 함수
         setupRecyclerView()
+        //알람 생성 버튼을 클릭했을 때 알람 생성 화면으로 이동하는 함수
         createAlarm()
 
         //setAlarms()
@@ -63,12 +77,9 @@ class AlarmFragment : Fragment() {
 //        }!!
 //        binding.rvAlarmList.addItemDecoration(dividerItemDecoration)
 
+        //이전페이지 및 다음페이지가 로드되는 상태를 관찰하는 함수, 어댑터에 데이터가 없으면 초기 화면을 표출한다.
         setupLoadState()
-
-        val currentDateTime = LocalDateTime.now()
-        val dayOfWeek = currentDateTime.dayOfWeek.value // 1 (월요일) ~ 7 (일요일)
-        val timeOfDay = currentDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-
+        //알람 목록을 데이터베이스에서 조회하여 리사이클러 뷰에 표출하는 함수
         collectLatestStateFlow(alarmViewModel.getAlarms){
             alarmPagingAdapter.submitData(it)
         }
@@ -100,6 +111,7 @@ class AlarmFragment : Fragment() {
         super.onDestroyView()
     }
 
+    //알람 생성 버튼을 클릭했을 때 알람 생성 화면으로 이동하는 함수
     private fun createAlarm(){
         binding.btnCreateAlarmSecond
             .setOnClickListener{
@@ -131,6 +143,7 @@ class AlarmFragment : Fragment() {
         }
     }
 
+    //알람 목록의 리사이클러 뷰와 어댑터를 연동하는 함수
     private fun setupRecyclerView(){
         alarmPagingAdapter = AlarmPagingAdapter()
         binding.rvAlarmList.apply {
@@ -148,10 +161,14 @@ class AlarmFragment : Fragment() {
             Log.e(TAG,"data${it}")
             viewDetailInfo(it)
         }
+
+        //알람 목록의 스위치 버튼을 클릭했을 때 발생하는 이벤트 리스너
         alarmPagingAdapter.setOnCheckedChangeListener { alarm, isChecked ->
+            //알람의 활성화 상태를 변경하고 데이터베이스에 업데이트 한다.
             alarmViewModel.updateAlarm(alarm.alarm.apply { isActive = isChecked})
             var alarmTimes = mutableListOf<Triple<Int,Int,Int>>()
             //TODO 테스트 필요
+            //알람의 활성화 상태가 true일 경우 알람을 등록하고 false일 경우 알람을 해제한다.
             if(isChecked){
                 for(i in 0 until alarm.alarm.alarmDateInt.size){
                     for(j in 0 until alarm.doseTime.size){
@@ -169,10 +186,12 @@ class AlarmFragment : Fragment() {
         }
     }
 
+    //true false에 따라 레이아웃을 숨기거나 표출하는 함수, 동적 파라미터를 사용하여 여러 뷰를 한번에 처리한다.
     private fun showHideScreen(visibility:Boolean, vararg view:View){
         view.forEach { it.isVisible = visibility }
     }
 
+    //이전페이지 및 다음페이지가 로드되는 상태를 관찰하는 함수, 어댑터에 데이터가 없으면 초기 화면을 표출한다.
     private fun setupLoadState(){
         alarmPagingAdapter.addLoadStateListener { combinedLoadStates ->
             val loadState = combinedLoadStates.source
@@ -185,6 +204,7 @@ class AlarmFragment : Fragment() {
         }
     }
 
+    //알람 상세 정보를 보여주는 화면으로 이동하는 함수
     private fun viewDetailInfo(alarmWithDosetime: AlarmWithDosetime){
         val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(

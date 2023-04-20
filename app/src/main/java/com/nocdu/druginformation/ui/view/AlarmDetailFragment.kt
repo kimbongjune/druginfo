@@ -52,20 +52,28 @@ class AlarmDetailFragment : Fragment() {
 
     val TAG:String = "AlarmCreateFragment"
 
+    //뷰 바인딩 객체
     private var _binding: FragmentAlarmDetailBinding? = null
+    //뷰 바인딩 객체 getter 메서드
     private val binding get() = _binding!!
 
+    //약 복용 시간 목록의 데이터를 연동하기 위한 어댑터 변수 선언
     private lateinit var alarmAdapter: AlarmAdapter
+    //선택한 요일을 저장하기 위한 리스트 변수 선언
     private var checkedDays:MutableList<String>? = null
 
+    //함수가 정의되어있는 뷰모델 변수를 선언
     private lateinit var alarmViewModel: AlarmViewModel
 
+    //키보드를 제어하기 위한 변수 선언
     private val keyboard: InputMethodManager by lazy {
         activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
+    //최초 프래그먼트에 들어왔을 때 복용시간 초기 값을 할당하기 위한 변수 선언
     var alarmList = arrayListOf<AlarmList>()
 
+    //View Lifecycle에 진입 했을 때 최초 실행되는 함수 바인딩 객체에 레이아웃을 연결한다.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,25 +83,39 @@ class AlarmDetailFragment : Fragment() {
         return binding.root
     }
 
+    //onCreateView가 실행 된 후 호출되는 함수 클래스 변수로 선언한 객체들의 인스턴스를 생성하고 초기화한다.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //툴바의 뒤로가기 버튼을 활성화한다.
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
 
+        //알람 프래그먼트에서 전달받은 데이터를 변수에 할당한다.
         var data: AlarmWithDosetime = (arguments?.getSerializable("data") as AlarmWithDosetime).apply {
             Log.e(TAG,"데이터 전달${this}")
         }
-
         super.onViewCreated(view, savedInstanceState)
+
+        //메인액티비티에서 선언한 뷰모델 객체를 변수에 할당한다
         alarmViewModel = (activity as MainActivity).alarmViewModel
 
+        //약 복용 시간 목록의 리사이클러 뷰와 어댑터를 연동하는 함수
         setAdapter()
+        //툴바의 뒤로가기 이벤트를처리하는 함수
         goBack()
+        //일일 약 복용 회수를 선택하는 NumberPickerDialog를 띄우는 함수 xml로 커스텀하여 사용한다
         showNumberPickerDialog()
+        //약 복용 시간 리스트 내의 아이템을 클릭했을 때 발생하는 이벤트를 처리하는 함수 DatePickerDialog 를 띄운다.
         showDatePickerDialog()
+        //일회 약 복용 개수를 선택하는 NumberPickerDialog를 띄우는 함수 xml로 커스텀하여 사용한다
         showOneTimeEatPickerDialog()
+        //알람 발생 요일 체크박스를 클릭했을 때 발생하는 이벤트를 처리하는 함수
         changeAlarmDate()
-        setCleanButton(data.alarm)
-        setSendButton(data)
+        //삭제 버튼을 클릭했을 때 이벤트를 처리하는 함수 해당 알람을 데이터베이스에서 삭제하고 프래그먼트 스택을 삭제한다
+        setDeleteButton(data.alarm)
+        //수정 버튼을 클릭했을 때 이벤트를 처리하는 함수 해당 알람을 데이터베이스에 갱신하고 프래그먼트 스택을 삭제한다
+        setModifyButton(data)
+        //의약품 미리알림 스위치 변경 이벤트를 처리하는 함수
         setSwitchChangeListener()
+        //알람 프래그먼트에서 전달받은 데이터를 뷰에 적용하는 함수
         addObject(data)
     }
 
@@ -123,18 +145,21 @@ class AlarmDetailFragment : Fragment() {
         super.onDestroyView()
     }
 
+    //일일 약 복용 회수를 선택하는 NumberPickerDialog를 띄우는 함수
     private fun showNumberPickerDialog(){
         binding.btnEatDrugCount.setOnClickListener {
             callNumberPickerDialog()
         }
     }
 
+    //일회 약 복용 새수를 선택하는 NumberPickerDialog를 띄우는 함수 xml로 커스텀하여 사용한다
     private fun showOneTimeEatPickerDialog(){
         binding.btnEatDrugOnetime.setOnClickListener {
             callOneTimeEatPickerDialog()
         }
     }
 
+    //약 복용 시간 리스트 내의 아이템을 클릭했을 때 발생하는 이벤트를 처리하는 함수 DatePickerDialog 를 띄운다.
     private fun showDatePickerDialog(){
         alarmAdapter?.setItemClickListener(object : AlarmAdapter.ItemClickListener {
             override fun onItemClick(position: Int) {
@@ -145,6 +170,7 @@ class AlarmDetailFragment : Fragment() {
         })
     }
 
+    //약 복용 시간 목록의 리사이클러 뷰와 어댑터를 연동하는 함수
     private fun setAdapter(){
         alarmAdapter = AlarmAdapter(requireContext(), alarmList)
 
@@ -161,13 +187,15 @@ class AlarmDetailFragment : Fragment() {
         }
     }
 
-    private fun setCleanButton(alarm:Alarm){
+    //알람 삭제 버튼 이벤트 리스너를 등록하는 함수
+    private fun setDeleteButton(alarm:Alarm){
         binding.btnTermClear.setOnClickListener {
             createDeleteDialog(alarm)
         }
     }
 
-    private fun setSendButton(alarmWithDosetime: AlarmWithDosetime){
+    //알람 수정 버튼을 클릭했을 때 이벤트를 처리하는 함수 데이터베이스에 알람 데이터를 수정한다.
+    private fun setModifyButton(alarmWithDosetime: AlarmWithDosetime){
         binding.btnViewSearchSend.setOnClickListener {
             if(checkedDays!!.isEmpty()){
                 createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_no_select_date))
@@ -193,6 +221,7 @@ class AlarmDetailFragment : Fragment() {
         }
     }
 
+    //약 복용시간 리스트 에서 클릭 이벤트 발생 시 아이템의 포지션으로 DatePickerDialog 의 텍스트 데이터를 생성 및 갱신한다.
     private fun callDatePickerDialog(position:Int){
         alarmAdapter.getItem(position).eatDrugTextView
         val textViewAmPm = alarmAdapter.getItem(position).eatDrugTextView.substring(0, 2).trim()
@@ -239,6 +268,8 @@ class AlarmDetailFragment : Fragment() {
         timePicker.show()
     }
 
+
+    //일일 약 복용 회수를 선택하는 NumberPickerDialog를 띄워준다.
     private fun callNumberPickerDialog(){
         val dialogBinding: NumberPickerDialogBinding = NumberPickerDialogBinding.inflate(layoutInflater)
 
@@ -287,6 +318,7 @@ class AlarmDetailFragment : Fragment() {
         alertNumberPickerDialog.show()
     }
 
+    //일회 약 복용 새수를 선택하는 NumberPickerDialog를 띄우는 함수
     private fun callOneTimeEatPickerDialog(){
         val dialogBinding: OnetimeEatPickerDialogBinding = OnetimeEatPickerDialogBinding.inflate(layoutInflater)
 
@@ -322,6 +354,7 @@ class AlarmDetailFragment : Fragment() {
         alertNumberPickerDialog.show()
     }
 
+    //알람 발생 요일 체크박스를 클릭했을 때 발생하는 이벤트를 처리하는 함수 모든 요일의 체크박스에 리스너를 등록한다.
     private fun changeAlarmDate(){
         binding.cbAlarmMonday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
         binding.cbAlarmTuesday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
@@ -332,6 +365,7 @@ class AlarmDetailFragment : Fragment() {
         binding.cbAlarmSunday.setOnCheckedChangeListener { _, _ -> handleCheckboxClick() }
     }
 
+    //체크박스가 클릭되면 발생하는 이벤트를 처리하는 함수
     private fun handleCheckboxClick(){
         checkedDays = mutableListOf<String>()
         if(binding.cbAlarmMonday.isChecked) checkedDays!!.add("월")
@@ -372,6 +406,7 @@ class AlarmDetailFragment : Fragment() {
         }
     }
 
+    //요일을 숫자로 변환하는 함수
     private fun getDayOfWeekNumber(dayOfWeek: String): Int {
         return when (dayOfWeek) {
             "일" -> 7
@@ -385,15 +420,7 @@ class AlarmDetailFragment : Fragment() {
         }
     }
 
-    private fun compareTimes(beforeTime: String, afterTime: String): Boolean {
-        val formatter = DateTimeFormatter.ofPattern("a hh:mm") // "오전/오후 hh:mm" 형식에 맞게 포맷터 생성
-        val localBeforeTime = LocalTime.parse(beforeTime, formatter) // 문자열을 LocalTime 객체로 파싱
-        val localAfterTime = LocalTime.parse(afterTime, formatter)
-
-        return localBeforeTime.isBefore(localAfterTime)
-    }
-
-
+    //의약품 미리알림 스위치 이벤트리스너를 등록하는 함수
     private fun setSwitchChangeListener(){
         binding.swEatDrugBeforehandCycle.setOnCheckedChangeListener { buttonView, isChecked  ->
             val layout = binding.clEatDrugRemainingLayout
@@ -420,6 +447,7 @@ class AlarmDetailFragment : Fragment() {
         }
     }
 
+    //특정 조건이 부합하지 않아 로직을 진행할 수 없을 때 표시하는 다이얼로그
     private fun createDialog(title:String, body:String){
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(title)
@@ -434,6 +462,8 @@ class AlarmDetailFragment : Fragment() {
         }
         dialog.show()
     }
+
+    //알람삭제 다이얼로그를 띄워주는 함수 확인시 알람삭제 후 현재 프래그먼트를 스택에서 삭제한다.
     private fun createDeleteDialog(alarm:Alarm){
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("알람을 삭제하시겠습니까?")
@@ -460,6 +490,8 @@ class AlarmDetailFragment : Fragment() {
         }
         dialog.show()
     }
+
+    //사용자가 입력한 데이터를 파라미터로 다이얼로그를 띄워주고 확인 버튼을 클릭하면 알람이 수정되고 데이터베이스에 입력된다.
     private fun createSuccessDialog(body: String, alarmWithDosetime: AlarmWithDosetime){
         if(alarmAdapter.hasDuplicate()){
             return createDialog(resources.getString(R.string.fail_add_alarm_title), resources.getString(R.string.fail_add_alarm_result_same_time))
@@ -565,17 +597,20 @@ class AlarmDetailFragment : Fragment() {
         dialog.show()
     }
 
+    //툴바의 뒤로가기 이벤트를처리하는 함수 프래그먼트에서 현재 스택을 제거한다.
     private fun goBack(){
         binding.tbSearchResultFragment.setNavigationOnClickListener{
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
+    //특정 EditText에 포커스를 주고, 키보드를 보여주는 메서드
     fun showKeyBoard(editText: EditText){
         editText.requestFocus()
         keyboard.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
     }
 
+    //키보드를 숨기는 메서드 간혹 키보드가 숨겨지지 않는 경우가 있어서 키보드를 숨기는 메서드를 따로 작성하였다 프래그먼트가 destroy 될 때 호출한다.
     fun hideKeyBoard(){
         keyboard.hideSoftInputFromWindow(
             activity?.currentFocus?.windowToken,
@@ -583,6 +618,7 @@ class AlarmDetailFragment : Fragment() {
         )
     }
 
+    //알람 프래그먼트에서 전달받은 데이터를 뷰에 적용하는 함수
     private fun addObject(alarmWithDosetime: AlarmWithDosetime) {
         binding.etAlarmName.setText(alarmWithDosetime.alarm.title)
         binding.etEatDrug.setText(alarmWithDosetime.alarm.medicines)
@@ -605,23 +641,5 @@ class AlarmDetailFragment : Fragment() {
             binding.edEatDrugSmallest.setText(alarmWithDosetime.alarm.minStockQuantity.toString())
         }
         binding.btnEatDrugCount.text = "${alarmAdapter.itemCount}회"
-    }
-
-    private fun deleteAlarmManager(context: Context, id:Int){
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val intent = Intent(context, AlarmBroadcastReceiver::class.java).apply {
-            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            putExtra(ALARM_REQUEST_CODE, id)
-            action = ALARM_REQUEST_TO_BROADCAST
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            id,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        alarmManager.cancel(pendingIntent)
     }
 }
