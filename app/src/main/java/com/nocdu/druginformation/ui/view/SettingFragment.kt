@@ -19,13 +19,16 @@ class SettingFragment : Fragment() {
 
     final val TAG:String = "SettingFragment"
 
+    //뷰 바인딩 객체
     private var _binding: FragmentSettingBinding? = null
+    //뷰 바인딩 객체 getter 메서드
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
+    //View Lifecycle에 진입 했을 때 최초 실행되는 함수 바인딩 객체에 레이아웃을 연결한다.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,14 +37,21 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
+    //onCreateView가 실행 된 후 호출되는 함수 클래스 변수로 선언한 객체들의 인스턴스를 생성하고 초기화한다.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //툴바의 뒤로가기 버튼을 활성화한다.
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
 
+        //툴바의 뒤로가기 이벤트를처리하는 함수
         goBack()
+        //앱 버전정보를 텍스트뷰에 표시하는 함수
         setVersion()
+        //버전정보 프래그먼트를 띄우는 함수
         openVersionInfoFragment()
+        //개인정보 처리방침 프래그먼트를 띄우는 함수
         openPrivacyPolicyFragment()
+        //오픈소스 라이브러리 프래그먼트를 띄우는 함수
         openOpenSourceLibraryFragment()
     }
 
@@ -125,6 +135,7 @@ class SettingFragment : Fragment() {
         }
     }
 
+    //앱 버전정보를 텍스트뷰에 표시하는 함수
     private fun setVersion(){
         binding.tvVersionInfo.text = BuildConfig.VERSION_NAME
     }

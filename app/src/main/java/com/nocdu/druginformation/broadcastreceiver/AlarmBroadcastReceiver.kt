@@ -315,8 +315,11 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
     fun removeAlarm(context: Context, alarmId:Int){
         //알람을 삭제하기위한 브로드캐스트 리시버를 인텐트에 담는다.
         var alarmIntent:Intent = Intent(context.applicationContext, AlarmBroadcastReceiver::class.java).apply {
+            //앱 배터리 최적화를 무시하기 위해 선언하였다.
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            //알람을 삭제하기 위해 알람 아이디를 인텐트에 담는다.
             putExtra(ALARM_REQUEST_CODE, alarmId)
+            //알람을 등록하기 위해 액션을 인텐트에 담는다.
             action = ALARM_REQUEST_TO_BROADCAST
         }
 

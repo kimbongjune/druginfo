@@ -18,6 +18,10 @@ import com.nocdu.druginformation.databinding.FragmentSearchResultBinding
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import kotlinx.coroutines.launch
 
+/**
+ *  의약품 검색 결과 목록을 보여주는 프래그먼트
+ *  텍스트검색, 모양검색 등에서 공통으로 사용한다.
+ */
 class SearchResultFragment : Fragment() {
     final val TAG:String = "SearchResultFragment"
     private var _binding: FragmentSearchResultBinding? = null

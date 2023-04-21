@@ -25,15 +25,14 @@ import com.nocdu.druginformation.databinding.FragmentVersionInfoBinding
 class VersionInfoFragment : Fragment() {
     final val TAG:String = "VersionInfoFragment"
 
+    //뷰 바인딩 객체
     private var _binding: FragmentVersionInfoBinding? = null
+    //뷰 바인딩 객체 getter 메서드
     private val binding get() = _binding!!
 
     lateinit var appUpdateManager: AppUpdateManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+    //View Lifecycle에 진입 했을 때 최초 실행되는 함수 바인딩 객체에 레이아웃을 연결한다.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,13 +41,20 @@ class VersionInfoFragment : Fragment() {
         return binding.root
     }
 
+    //onCreateView가 실행 된 후 호출되는 함수 클래스 변수로 선언한 객체들의 인스턴스를 생성하고 초기화한다.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //툴바의 뒤로가기 버튼을 활성화한다.
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         super.onViewCreated(view, savedInstanceState)
+        //appUpdateManager 객체를 MainActivity에서 받아온다.
         appUpdateManager = (activity as MainActivity).appUpdateManager
+        //툴바의 뒤로가기 이벤트를처리하는 함수
         goBack()
+        //현재 앱 버전을 표시하는 함수
         setVersion()
+        //현재 앱 버전과 서버에서 받아온 버전을 비교하여 업데이트가 필요한지를 판단하는 함수
         versionCheck()
+        //앱스토어 업데이트 링크로 연결하는 함수
         runUpdate()
     }
 
