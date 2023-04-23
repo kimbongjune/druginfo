@@ -18,24 +18,28 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+/**
+ *  의약품 뷰모델 클래스
+ *  UI와 데이터를 연결하는 클래스
+ */
 class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository):ViewModel() {
 
+    //의약품 즐겨찾기 데이터베이스에 의약품을 추가하는 함수
     fun saveDrugs(document: Document) = viewModelScope.launch(Dispatchers.IO) {
         drugSearchRepository.insertDrugs(document)
     }
 
+    //의약품 즐겨찾기 데이터베이스에 저장된 특정 의약품을 삭제하는 함수
     fun deleteDrugs(document: Document) = viewModelScope.launch(Dispatchers.IO){
         drugSearchRepository.deleteDrugs(document)
     }
 
+    //의약품 즐겨찾기 데이터베이스에 저장된 특정 의약품을 PK를 이용해 조회하는 함수
     fun getFavoriteDrugCountByPk(itemSeq:String) = viewModelScope.async(Dispatchers.IO){
         drugSearchRepository.getFavoriteDrugCountByPk(itemSeq)
     }
 
-    //val favoriteDrugs:Flow<List<Document>> = bookSearchRepository.getFavoriteDrugs()
-    val favoriteDrugs:StateFlow<List<Document>> = drugSearchRepository.getFavoriteDrugs()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(COROUTINE_STAT_IN_STOP_TIME), listOf())
-
+    //의약품 즐겨찾기 데이터베이스에 저장된 모든 의약품을 조회하는 함수. 페이징 처리를 한다.
     val favoritePaingDrugs : StateFlow<PagingData<Document>> =
         drugSearchRepository.getFavoritePagingDrugs()
             .cachedIn(viewModelScope)
@@ -44,6 +48,7 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
     private val _searchPagingResult = MutableStateFlow<PagingData<Document>>(PagingData.empty())
     val searchPagingResult:StateFlow<PagingData<Document>> = _searchPagingResult.asStateFlow()
 
+    //텍스트 검색 의약품 API를 호출하고 데이터를 조회하는 함수. 페이징 처리를 한다.
     fun searchDrugsPaging(query:String){
         viewModelScope.launch {
             drugSearchRepository.searchDrugsPaging(query)
@@ -54,6 +59,7 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
         }
     }
 
+    //모양검색 의약품 API를 호출하고 데이터를 조회하는 함수. 페이징 처리를 한다.
     fun searchViewDrugPaging(shape: String, dosageForm:String, printFront: String, printBack: String, colorClass: String, line:String){
         viewModelScope.launch {
             drugSearchRepository.viewSearchDrugsPaging(shape, dosageForm, printFront, printBack, colorClass, line)
@@ -64,6 +70,7 @@ class DrugSearchViewModel(private val drugSearchRepository: DrugSearchRepository
         }
     }
 
+    //의약품 검색 결과 프래그먼트가 종료될 때 리사이클러 뷰의 데이터를 비워주는 함수
     fun removeDrugsPaging(){
         viewModelScope.launch {
             _searchPagingResult.value = PagingData.empty();

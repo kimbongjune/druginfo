@@ -140,6 +140,7 @@ class InfoFragment : Fragment() {
         }
         drugSearchAdapter.setOnItemClickListener {
             Log.e(TAG,"data${it}")
+            //의약품 상세 정보를 보여주는 화면으로 이동하는 함수
             viewDetailInfo(it)
         }
         Log.e(TAG,"즐겨찾기 개수" + drugSearchAdapter.itemCount)

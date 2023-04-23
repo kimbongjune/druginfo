@@ -24,11 +24,14 @@ import kotlinx.coroutines.launch
  */
 class SearchResultFragment : Fragment() {
     final val TAG:String = "SearchResultFragment"
+    //뷰 바인딩 객체
     private var _binding: FragmentSearchResultBinding? = null
+    //뷰 바인딩 객체 getter 메서드
     private val binding get() = _binding!!
-
+    //함수가 정의되어있는 뷰모델 변수를 선언
     private lateinit var drugSearchViewModel: DrugSearchViewModel
 
+    //View Lifecycle에 진입 했을 때 최초 실행되는 함수 바인딩 객체에 레이아웃을 연결한다.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,18 +41,25 @@ class SearchResultFragment : Fragment() {
         return binding?.root
     }
 
+    //onCreateView가 실행 된 후 호출되는 함수 클래스 변수로 선언한 객체들의 인스턴스를 생성하고 초기화한다.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //툴바의 뒤로가기 버튼을 활성화한다.
         binding.tbSearchResultFragment.setNavigationIcon(R.drawable.ic_baseline_keyboard_arrow_left_24)
         //Log.e(TAG,"Arg = ${arguments?.getSerializable("data")}")
+        //텍스트검색, 모양검색 프래그먼트에서 전달받은 데이터를 화면에 출력한다.
         var data: Document = (arguments?.getSerializable("data") as Document).apply {
             binding.tvToolbarText.text = this.itemName
+            //텍스트검색, 모양검색 프래그먼트에서 전달받은 데이터를 뷰에 적용하는 함수
             addObject(this)
         }
         super.onViewCreated(view, savedInstanceState)
+        //메인액티비티에서 선언한 뷰모델 객체를 변수에 할당한다
         drugSearchViewModel = (activity as MainActivity).drugSearchViewModel
+        //툴바의 뒤로가기 이벤트를처리하는 함수
         goBack()
-
+        //즐겨찾기 여부에 따라 즐겨찾기 플로팅버튼의 이미지를 변경한다.
         initFabButton(data)
+        //즐겨찾기 플로팅버튼이 클릭되었을 때 이벤트를 처리하는 함수
         setFabOnclickListener(data,view)
 
     }
@@ -79,6 +89,7 @@ class SearchResultFragment : Fragment() {
         super.onDestroyView()
     }
 
+    //텍스트검색, 모양검색 프래그먼트에서 전달받은 데이터를 뷰에 적용하는 함수
     private fun addObject(data:Document){
         if(!data.itemName.isNullOrEmpty()){
             binding.tvItemName.visibility  = View.VISIBLE
@@ -317,6 +328,7 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    //툴바의 뒤로가기 이벤트를처리하는 함수
     private fun goBack(){
         binding.tbSearchResultFragment.setNavigationOnClickListener{
             //Toast.makeText(activity, "tlSearch button Clicked", Toast.LENGTH_SHORT).show()
@@ -324,6 +336,7 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    //특정 문자열을 기준으로 줄바꿈 처리를 하여 반환하는 함수
     private fun splitStringByKeyword(str: String): String {
         val regex = Regex("(\\d+\\))|(\\(\\d+\\))") // 숫자 뒤 괄호 또는 괄호 안의 숫자를 찾는 정규식
         val newText = regex.replace(str) { matchResult ->
@@ -348,6 +361,7 @@ class SearchResultFragment : Fragment() {
         return newText
     }
 
+    //즐겨찾기 여부에 따라 즐겨찾기 플로팅버튼의 이미지를 변경한다.
     private fun initFabButton(data:Document) {
         lifecycleScope.launch {
             if(drugSearchViewModel.getFavoriteDrugCountByPk(data.itemSeq).await() <= 0){
@@ -358,29 +372,40 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    //즐겨찾기 플로팅버튼이 클릭되었을 때 이벤트를 처리하는 함수
     private fun setFabOnclickListener(data:Document, view:View) {
         binding.fabFavorite.setOnClickListener {
             lifecycleScope.launch {
+                //현재 아이템이 즐겨찾기에 등록되지 않은 경우
                 if(drugSearchViewModel.getFavoriteDrugCountByPk(data.itemSeq).await() <= 0){
+                    //현재 아이템을 즐겨찾기 데이터베이스에 저장하며 플로팅버튼의 아이콘을 변경한다.
                     drugSearchViewModel.saveDrugs(data).apply {
                         binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_24))
                     }
+                    //데이터베이스에 저장 후 스낵바를 표시한다.
                     Snackbar.make(view, "의약품 즐겨찾기가 등록되었습니다.", Snackbar.LENGTH_SHORT).apply {
                         setAction("확인"){
                             this.dismiss()
                         }
+                        //스낵바 액션의 텍스트 색을 변경한다.
                         setActionTextColor(ContextCompat.getColor(context, R.color.soft_blue))
                     }.show()
+                    //현재 아이템이 즐겨찾기에 이미 등록되어 있는 경우
                 }else{
+                    //현재 아이템을 데이터베이스에서 삭제하며 플로팅버튼의 아이콘을 변경한다.
                     drugSearchViewModel.deleteDrugs(data).apply {
                         binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_outline_24))
                     }
+                    //데이터베이스에서 삭제 후 스낵바를 표시한다.
                     Snackbar.make(view, "의약품 즐겨찾기가 해제되었습니다.", Snackbar.LENGTH_SHORT).apply {
+                        //잘못 삭제했을 경우를 대비해 실행 취소 기능을 추가한다.
                         setAction("실행 취소"){
+                            //데이터베이스에 다시 저장하며 플로팅버튼의 아이콘을 변경한다.
                             drugSearchViewModel.saveDrugs(data)
                             binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_star_24))
                             this.dismiss()
                         }
+                        //스낵바 액션의 텍스트 색을 변경한다.
                         setActionTextColor(ContextCompat.getColor(context, R.color.soft_blue))
                     }.show()
                     return@launch
