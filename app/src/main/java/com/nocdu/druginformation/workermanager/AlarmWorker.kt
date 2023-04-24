@@ -13,7 +13,7 @@ import com.nocdu.druginformation.utill.Constants
  *  알람 워커매니저 클래스
  *  알람이 울려 서비스가 동작하면 예약작업을 수행하는 클래스
  *  사용자의 노티피케이션 권한이 없거나 기타 사유로 인해 소리와 진동이 취소되지 않을 경우를 대비하여 작성
- *  알람이 발생하고 1분 뒤에 알람의 소리와 진동을 취소한다.
+ *  알람이 발생하고 30초 뒤에 알람의 소리와 진동을 취소한다.
  */
 class AlarmWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
     final val TAG:String = "AlarmWorker"
