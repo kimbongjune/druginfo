@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel()  {
 
 //    fun transformAlarmWithDosetime(data: AlarmWithDosetime): AlarmWithDosetime {
-//        // 여기에서 데이터를 변환하고 CustomAlarmWithDosetime 객체를 반환합니다.
+//        //TODO 여기에서 데이터를 변환하고 CustomAlarmWithDosetime 객체를 반환합니다.
 //    }
 
     //알람 데이터베이스에 알람을 추가하는 함수
@@ -36,7 +36,7 @@ class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel() 
     }
 
     //알람 데이터베이스에 저장된 모든 알람을 조회하는 함수
-    //이곳에서 map 함수를 이용해서 데이터를 변환한다.
+    //TODO 이곳에서 map 함수를 이용해서 데이터를 변환한다.
     val getAlarms: StateFlow<PagingData<AlarmWithDosetime>> = alarmRepository.getAlarms()
         .cachedIn(viewModelScope)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(COROUTINE_STAT_IN_STOP_TIME), PagingData.empty())
