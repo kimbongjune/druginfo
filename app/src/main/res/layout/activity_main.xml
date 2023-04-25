@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:tabSelectedTextColor="#1890FF"
+            app:tabGravity="fill"
             app:tabMode="fixed"
             app:tabInlineLabel="true"
             app:tabTextAppearance="@style/tab_text"

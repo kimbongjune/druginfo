@@ -28,6 +28,7 @@
         <activity
             android:theme="@style/AppTheme.Starting"
             android:name=".ui.view.MainActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>
