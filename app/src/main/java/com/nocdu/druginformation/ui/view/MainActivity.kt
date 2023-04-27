@@ -369,7 +369,7 @@ class MainActivity : AppCompatActivity() {
             applicationContext,
             alarmId,
             alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
 
         //알람 날짜 및 시간을 담기위한 Calendar 객체를 선언한다.
@@ -428,7 +428,7 @@ class MainActivity : AppCompatActivity() {
             applicationContext,
             alarmId,
             alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
         //pendingIntent 객체의 이벤트 수행을 취소한다.
         pendingIntent.cancel()
