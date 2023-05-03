@@ -2,6 +2,7 @@ package com.nocdu.druginformation.ui.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.bumptech.glide.Glide
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Document
 import com.nocdu.druginformation.databinding.ItemRecyclerviewBinding
@@ -21,10 +22,16 @@ class DrugSearchViewHolder(private val binding:ItemRecyclerviewBinding):Recycler
             //데이터 내에 이미지 데이터가 null이 아니면
             if(document.itemImage != null){
                 //이미지뷰에 데이터로 받아온 이미지를 표출
-                binding.ivArticleImage.load(document.itemImage)
+                //binding.ivArticleImage.load(document.itemImage)
+                Glide.with(context).load(document.itemImage)
+                    .override(150, 150)
+                    .into(binding.ivArticleImage)
             }else{
                 //이미지뷰에 디폴트 이미지를 표출
-                binding.ivArticleImage.load(R.drawable.ic_baseline_image_search_24)
+                //binding.ivArticleImage.load(R.drawable.ic_baseline_image_search_24)
+                Glide.with(context).load(R.drawable.ic_baseline_image_search_24)
+                    .override(150, 150)
+                    .into(binding.ivArticleImage)
             }
             binding.tvName.text = name
             binding.tvMaker.text = maker
