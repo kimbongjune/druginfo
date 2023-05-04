@@ -24,13 +24,13 @@ class DrugSearchViewHolder(private val binding:ItemRecyclerviewBinding):Recycler
                 //이미지뷰에 데이터로 받아온 이미지를 표출
                 //binding.ivArticleImage.load(document.itemImage)
                 Glide.with(context).load(document.itemImage)
-                    .override(150, 150)
+                    .override(width, height)
                     .into(binding.ivArticleImage)
             }else{
                 //이미지뷰에 디폴트 이미지를 표출
                 //binding.ivArticleImage.load(R.drawable.ic_baseline_image_search_24)
                 Glide.with(context).load(R.drawable.ic_baseline_image_search_24)
-                    .override(150, 150)
+                    .override(width, height)
                     .into(binding.ivArticleImage)
             }
             binding.tvName.text = name

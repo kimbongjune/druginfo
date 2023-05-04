@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import coil.load
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.nocdu.druginformation.R
 import com.nocdu.druginformation.data.model.Document
@@ -99,9 +100,19 @@ class SearchResultFragment : Fragment() {
         }
 
         if(!data.itemImage.isNullOrEmpty()){
-            binding.ivItemImage.load(data.itemImage)
+            //binding.ivItemImage.load(data.itemImage)
+            binding.ivItemImage.apply {
+                Glide.with(requireContext()).load(data.itemImage)
+                    .override(width, height)
+                    .into(this)
+            }
         }else{
-            binding.ivItemImage.load(R.drawable.ic_baseline_image_search_24)
+            //binding.ivItemImage.load(R.drawable.ic_baseline_image_search_24)
+            binding.ivItemImage.apply {
+                Glide.with(requireContext()).load(R.drawable.ic_baseline_image_search_24)
+                    .override(width, height)
+                    .into(this)
+            }
         }
 
         if(!data.className.isNullOrEmpty()){
