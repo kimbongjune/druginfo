@@ -84,6 +84,13 @@ object Constants {
     //코틀린 Flow 구독 중단시 대기 시간
     const val COROUTINE_STAT_IN_STOP_TIME = 5000L
 
+    //의약품 이미지 레아이웃의 가로 길이
+    const val DRUG_IMAGE_LAYOUT_WIDTH = 60
+    //의약품 이미지 레아이웃의 세로 길이
+    const val DRUG_IMAGE_LAYOUT_HEIGHT = 87
+    //의약품 이미지 preload 개수
+    const val DRUG_IMAGE_PRELOAD_COUNT = 6
+
     //문자열로 전달받은 시간을 Pair 객체로 시간, 분으로 나누어 반환하는 메소드
     fun convertTo24HoursFormat(timeString: String):Pair<Int,Int>{
         val pattern = "hh:mm"
