@@ -57,6 +57,9 @@ import java.util.*
  *  스플래시 스크린을 표시해준다.
  *  ViewModel과 Alarm 관련 인스턴스를 생성한다.
  */
+//DataStore 객체를 선언한다. There are multiple DataStores active for the same file 에러 발생 으로 인해 클래스보다 상단에 선언하였음
+private val Context.dataStore by preferencesDataStore(name = "app_settings")
+
 class MainActivity : AppCompatActivity() {
 
     //fragment에서 Alarm을 등록하거나 삭제할 때 사용하기 위한 companion object
@@ -76,8 +79,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //DataStore 객체를 선언한다.
-    private val Context.dataStore by preferencesDataStore(name = "app_settings")
     //앱이 최초로 실행되는지 확인하기 위한 변수
     private val FIRST_LAUNCH = booleanPreferencesKey("first_launch")
     //구글 playconsole과 연동하기 위한 AppUpdateManager 객체를 선언한다.
