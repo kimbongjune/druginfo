@@ -48,6 +48,12 @@ object Constants {
     //알람 요청, 삭제 시 사용하는 키
     const val ALARM_REQUEST_CODE = "ALARM_REQUEST_CODE"
 
+    //알람 데이터베이스 조회시 사용 할 고유 키
+    const val ALARM_DATABASE_KEY = "ALARM_DATABASE_KEY"
+
+    //알람 고유 아이디를 조합을 위한 고정 정수
+    const val ALARM_ID_COMBINE_NUMBER = 10_000;
+
     //기기가 꺼진 상태에서 알람이 발생했을 때 깨우기 위한 WakeLock 태그
     const val ACQUIRE_WAKE_LOCK = "AlarmReceiver:WakeLock"
 
@@ -114,5 +120,15 @@ object Constants {
         val formatter = DateTimeFormatter.ofPattern("a hh:mm")
         val formatted = now.format(formatter)
         return formatted
+    }
+
+    fun dateToMillisecondTime(date:String):Int{
+        val sdf = SimpleDateFormat("yyyy년MM월dd-HH시mm분ss초", Locale.KOREA)
+        val date = sdf.parse(date)
+        return (date.time / 1000).toInt()
+    }
+
+    fun createAlarmId(alarmId: Int, index:Int, alarmUpdateTime: Int): Int {
+        return alarmId + index + ALARM_ID_COMBINE_NUMBER + alarmUpdateTime;
     }
 }

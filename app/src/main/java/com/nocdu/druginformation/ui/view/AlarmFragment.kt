@@ -23,6 +23,7 @@ import com.nocdu.druginformation.ui.adapter.AlarmPagingAdapter
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
+import com.nocdu.druginformation.utill.Constants.dateToMillisecondTime
 import com.nocdu.druginformation.utill.collectLatestStateFlow
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -178,7 +179,7 @@ class AlarmFragment : Fragment() {
                         alarmTimes.add(Triple(alarm.alarm.alarmDateInt[i], hour, minute))
                     }
                 }
-                MainActivity.getInstance().setAlarm(alarmTimes, alarm.alarm.id)
+                MainActivity.getInstance().setAlarm(alarmTimes, alarm.alarm.id, dateToMillisecondTime(alarm.alarm.updateTime))
             }else{
                 MainActivity.getInstance().removeAlarm(alarm.alarm.id)
             }

@@ -59,7 +59,7 @@ ORDER BY
     fun getAlarmsTest(dayOfWeek: Int, timeOfDay: String): PagingSource<Int, AlarmWithDosetime>
 
     // 알람 등록을 위해 모든 알람 가져온다.
-    @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
+    @Query("SELECT a.*, b.alarm_id, b.time FROM alarm AS a INNER JOIN doses_time AS b ON a.id = b.alarm_id GROUP BY a.id ORDER BY b.id")
     fun getAllAlarms(): List<AlarmWithDosetime>
 
     //등록된 알람의 개수를 가져온다.

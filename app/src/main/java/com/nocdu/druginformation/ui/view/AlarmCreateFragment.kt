@@ -38,6 +38,7 @@ import com.nocdu.druginformation.ui.adapter.AlarmList
 import com.nocdu.druginformation.ui.viewmodel.AlarmViewModel
 import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
+import com.nocdu.druginformation.utill.Constants.dateToMillisecondTime
 import com.nocdu.druginformation.utill.Constants.getNowTime
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -676,8 +677,10 @@ class AlarmCreateFragment : Fragment() {
                 //알람 데이터베이스에 인서트 한다. 반환 된 id의 값으로 알람을 등록하고, 복용시간을 데이터베이스에 인서트한다.
                 alarmId = alarmViewModel.addAlarm(newAlarm).await()
                 Log.e(TAG,"인서트 아이디 = ${alarmId}")
+                Log.e(TAG,"시간${newAlarm.updateTime}")
+                Log.e(TAG,"시간2${dateToMillisecondTime(newAlarm.updateTime)}")
                 //알람을 등록한다.
-                MainActivity.getInstance().setAlarm(alarmTimes, alarmId.toInt())
+                MainActivity.getInstance().setAlarm(alarmTimes, alarmId.toInt(), dateToMillisecondTime(newAlarm.updateTime))
                 //복용시간을 데이터베이스에 인서트한다 성능 향상을 위해 리스트 타입으로 반환 받아 벌크 인서트 한다.
                 alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmId.toInt())).apply {
                     //벌크 인서트가 완료 되면 알람 등록 프래그먼트의 스택을 지운다.

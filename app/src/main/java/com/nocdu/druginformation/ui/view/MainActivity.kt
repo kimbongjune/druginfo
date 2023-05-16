@@ -45,8 +45,14 @@ import com.nocdu.druginformation.ui.viewmodel.AlarmViewModelProviderFactory
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModel
 import com.nocdu.druginformation.ui.viewmodel.DrugSearchViewModelProviderFactory
 import com.nocdu.druginformation.utill.Constants
+import com.nocdu.druginformation.utill.Constants.ALARM_DATABASE_KEY
+import com.nocdu.druginformation.utill.Constants.ALARM_ID_COMBINE_NUMBER
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
+import com.nocdu.druginformation.utill.Constants.createAlarmId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
@@ -66,9 +72,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         //MainActivity의 인스턴스를 저장하기 위한 변수
         private lateinit var instance: MainActivity
-
-        //Alarm을 등록할 때 사용하기 위한 PendingIntent
-        private lateinit var alarmIntent: Intent
 
         //Alarm을 등록할 때 사용하기 위한 AlarmManager
         private lateinit var alarmManager:AlarmManager
@@ -354,25 +357,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     //알람을 설정하는 함수
-    fun setAlarm(alarmList:List<Triple<Int,Int,Int>>, alarmId:Int){
-        //알람을 등록하기위한 브로드캐스트 리시버를 인텐트에 담는다.
-        alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
-            //앱 배터리 최적화를 무시하기 위해 선언하였다.
-            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            //알람을 등록하기 위해 알람 아이디를 인텐트에 담는다.
-            putExtra(ALARM_REQUEST_CODE, alarmId)
-            //알람을 등록하기 위해 액션을 인텐트에 담는다.
-            action = ALARM_REQUEST_TO_BROADCAST
-        }
+    fun setAlarm(alarmList:List<Triple<Int,Int,Int>>, alarmId:Int, alarmUpdateTime:Int){
 
-        //알람을 등록하기 위한 pendingIntent를 선언한다.
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            alarmId,
-            alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
-
+        Log.e(TAG,"setAlarm alarmId = $alarmId")
         //알람 날짜 및 시간을 담기위한 Calendar 객체를 선언한다.
         val calendar = Calendar.getInstance().apply {
             set(Calendar.SECOND, 0)
@@ -391,7 +378,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         //배열로 선언한 Calendar 객체를 반복문을 통해 알람을 등록한다.
-        alarmTimes.forEach { alarmTime ->
+        alarmTimes.forEachIndexed { index,  alarmTime ->
+
+            //알람을 등록하기위한 브로드캐스트 리시버를 인텐트에 담는다.
+            val alarmIntent:Intent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
+                //앱 배터리 최적화를 무시하기 위해 선언하였다.
+                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                //알람을 등록하기 위해 알람 아이디를 인텐트에 담는다.
+                putExtra(ALARM_DATABASE_KEY, alarmId)
+                putExtra(ALARM_REQUEST_CODE, createAlarmId(alarmId, index, alarmUpdateTime))
+                //알람을 등록하기 위해 액션을 인텐트에 담는다.
+                action = ALARM_REQUEST_TO_BROADCAST
+            }
+
+            //알람을 등록하기 위한 pendingIntent를 선언한다.
+            val pendingIntent = PendingIntent.getBroadcast(
+                applicationContext,
+                createAlarmId(alarmId, index, alarmUpdateTime),
+                alarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+
             val time = alarmTime
 
             // 현재 시간보다 이전인 경우 다음 주에 알람 설정
@@ -407,36 +414,48 @@ class MainActivity : AppCompatActivity() {
                 //AlarmManager.INTERVAL_DAY * 7,
                 pendingIntent
             )
+            Log.e(TAG,"등록한 알람의 아이디 = ${createAlarmId(alarmId, index, alarmUpdateTime)}")
         }
-
-        Log.e(TAG,"등록한 알람의 아이디 = ${alarmId}")
     }
 
     //알람을 제거하는 함수
     fun removeAlarm(alarmId:Int){
-        //알람을 삭제하기위한 브로드캐스트 리시버를 인텐트에 담는다.
-        alarmIntent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
-            //앱 배터리 최적화를 무시하기 위해 선언하였다.
-            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            //알람을 삭제하기 위해 알람 아이디를 인텐트에 담는다.
-            putExtra(ALARM_REQUEST_CODE, alarmId)
-            //알람을 등록하기 위해 액션을 인텐트에 담는다.
-            action = ALARM_REQUEST_TO_BROADCAST
+        Log.e(TAG,"removeAlarm alarmId = $alarmId")
+        GlobalScope.launch {
+            //알람의 id를 이용해 database에서 알람을 조회한다.
+            AlarmDatabase.getDatabase(applicationContext).alarmDao().getAlarm(alarmId).apply {
+                //알람의 개수만큼 반복문을 돌기위한 변수
+                val alarmSize:Int = this.alarmDate.size * this.dailyDosage
+                val alarmUpdateTime:Int = Constants.dateToMillisecondTime(this.updateTime)
+
+                for (i in 0 until alarmSize) {
+                    //알람을 삭제하기위한 브로드캐스트 리시버를 인텐트에 담는다.
+                    val alarmIntent:Intent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
+                        //앱 배터리 최적화를 무시하기 위해 선언하였다.
+                        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                        //알람을 삭제하기 위해 알람 아이디를 인텐트에 담는다.
+                        putExtra(ALARM_DATABASE_KEY, alarmId)
+                        putExtra(ALARM_REQUEST_CODE, createAlarmId(alarmId, i, alarmUpdateTime))
+                        //알람을 등록하기 위해 액션을 인텐트에 담는다.
+                        action = ALARM_REQUEST_TO_BROADCAST
+                    }
+
+                    //알람을 삭제하기 위한 pendingIntent를 선언한다.
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        applicationContext,
+                        createAlarmId(alarmId, i, alarmUpdateTime),
+                        alarmIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                    )
+                    //pendingIntent 객체의 이벤트 수행을 취소한다.
+                    pendingIntent.cancel()
+                    //알람을 취소한다.
+                    alarmManager.cancel(pendingIntent)
+
+                    Log.e(TAG,"지운 알람의 아이디 = ${createAlarmId(alarmId, i, alarmUpdateTime)}")
+                }
+            }
         }
-
-        //알람을 삭제하기 위한 pendingIntent를 선언한다.
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            alarmId,
-            alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
-        //pendingIntent 객체의 이벤트 수행을 취소한다.
-        pendingIntent.cancel()
-        //알람을 취소한다.
-        alarmManager.cancel(pendingIntent)
-
-        Log.e(TAG,"지운 알람의 아이디 = ${alarmId}")
     }
 
     //설정 프래그먼트를 실행하는 메서드
@@ -467,5 +486,101 @@ class MainActivity : AppCompatActivity() {
             // 앱이 이전에 실행된 적이 있습니다. 원하는 작업을 수행하세요.
         }
         return isFirstLaunch
+    }
+
+    //알람을 재등록하는 메서드
+    fun reRegistrationAlarm(alarmList:List<Triple<Int,Int,Int>>, alarmId:Int, alarmUpdateTime:Int){
+        Log.e(TAG,"reRegistrationAlarm alarmId = $alarmId")
+        //database에 있는 알람을 조회하여 for문을 돌린다.
+        CoroutineScope(Dispatchers.Default).launch {
+            AlarmDatabase.getDatabase(applicationContext).alarmDao().getAlarm(alarmId).apply {
+                //알람의 개수만큼 반복문을 돌기위한 변수
+                val alarmSize:Int = this.alarmDate.size * this.dailyDosage
+                val alarmUpdateTime:Int = Constants.dateToMillisecondTime(this.updateTime)
+
+                for (i in 0 until alarmSize) {
+                    //알람을 삭제하기위한 브로드캐스트 리시버를 인텐트에 담는다.
+                    val alarmIntent:Intent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
+                        //앱 배터리 최적화를 무시하기 위해 선언하였다.
+                        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                        //알람을 삭제하기 위해 알람 아이디를 인텐트에 담는다.
+                        putExtra(ALARM_DATABASE_KEY, alarmId)
+                        putExtra(ALARM_REQUEST_CODE, createAlarmId(alarmId, i, alarmUpdateTime))
+                        //알람을 등록하기 위해 액션을 인텐트에 담는다.
+                        action = ALARM_REQUEST_TO_BROADCAST
+                    }
+
+                    //알람을 삭제하기 위한 pendingIntent를 선언한다.
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        applicationContext,
+                        createAlarmId(alarmId, i, alarmUpdateTime),
+                        alarmIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                    )
+                    //pendingIntent 객체의 이벤트 수행을 취소한다.
+                    pendingIntent.cancel()
+                    //알람을 취소한다.
+                    alarmManager.cancel(pendingIntent)
+
+                    Log.e(TAG,"지운 알람의 아이디 = ${createAlarmId(alarmId, i, alarmUpdateTime)}")
+                }
+                //알람 날짜 및 시간을 담기위한 Calendar 객체를 선언한다.
+                val calendar = Calendar.getInstance().apply {
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+
+                //Calendar 객체를 알람을 여러개 등록하기 위해 배열로 선언하였다.
+                var alarmTimes = mutableListOf<Calendar>()
+
+                //파라미터로 전달받은 Tiple List 알람 리스트를 반복문을 통해 Calendar 객체에 담는다.
+                for(i in 0 until alarmList.size){
+                    calendar.set(Calendar.DAY_OF_WEEK, alarmList[i].first)
+                    calendar.set(Calendar.HOUR_OF_DAY, alarmList[i].second)
+                    calendar.set(Calendar.MINUTE, alarmList[i].third)
+                    alarmTimes.add(calendar.clone() as Calendar)
+                }
+
+                //배열로 선언한 Calendar 객체를 반복문을 통해 알람을 등록한다.
+                alarmTimes.forEachIndexed { index,  alarmTime ->
+
+                    //알람을 등록하기위한 브로드캐스트 리시버를 인텐트에 담는다.
+                    val alarmIntent:Intent = Intent(applicationContext, AlarmBroadcastReceiver::class.java).apply {
+                        //앱 배터리 최적화를 무시하기 위해 선언하였다.
+                        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                        //알람을 등록하기 위해 알람 아이디를 인텐트에 담는다.
+                        putExtra(ALARM_DATABASE_KEY, alarmId)
+                        putExtra(ALARM_REQUEST_CODE, createAlarmId(alarmId, index, alarmUpdateTime))
+                        //알람을 등록하기 위해 액션을 인텐트에 담는다.
+                        action = ALARM_REQUEST_TO_BROADCAST
+                    }
+
+                    //알람을 등록하기 위한 pendingIntent를 선언한다.
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        applicationContext,
+                        createAlarmId(alarmId, index, alarmUpdateTime),
+                        alarmIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                    )
+
+                    val time = alarmTime
+
+                    // 현재 시간보다 이전인 경우 다음 주에 알람 설정
+                    if (Calendar.getInstance().after(time)) {
+                        time.add(Calendar.DATE, 7)
+                    }
+                    Log.e(TAG,"알람 등록, ${time.timeInMillis}")
+
+                    //알람을 등록한다. 정확한 시간에 울리기 위해 setExactAndAllowWhileIdle를 사용하였다.
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        time.timeInMillis,
+                        //AlarmManager.INTERVAL_DAY * 7,
+                        pendingIntent
+                    )
+                    Log.e(TAG,"등록한 알람의 아이디 = ${createAlarmId(alarmId, index, alarmUpdateTime)}")
+                }
+            }
+        }
     }
 }

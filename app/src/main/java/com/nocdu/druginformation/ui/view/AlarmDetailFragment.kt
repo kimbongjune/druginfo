@@ -36,6 +36,7 @@ import com.nocdu.druginformation.utill.Constants
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_CODE
 import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
 import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
+import com.nocdu.druginformation.utill.Constants.dateToMillisecondTime
 import com.nocdu.druginformation.utill.Constants.getNowTime
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -50,7 +51,7 @@ import java.util.*
  */
 class AlarmDetailFragment : Fragment() {
 
-    val TAG:String = "AlarmCreateFragment"
+    val TAG:String = "AlarmDetailFragment"
 
     //뷰 바인딩 객체
     private var _binding: FragmentAlarmDetailBinding? = null
@@ -575,9 +576,7 @@ class AlarmDetailFragment : Fragment() {
             alarmViewModel.deleteAllDoseTimeByAlarmId(alarmWithDosetime.alarm.id).apply {
                 alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmWithDosetime.alarm.id).apply {
                     //TODO 테스트 필요
-                    MainActivity.getInstance().removeAlarm(alarmWithDosetime.alarm.id).apply {
-                        MainActivity.getInstance().setAlarm(alarmTimes, alarmWithDosetime.alarm.id)
-                    }
+                    MainActivity.getInstance().reRegistrationAlarm(alarmTimes, alarmWithDosetime.alarm.id, dateToMillisecondTime(alarmWithDosetime.alarm.updateTime))
                     requireActivity().supportFragmentManager.popBackStack()
                 })
             }

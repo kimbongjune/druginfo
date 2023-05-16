@@ -22,7 +22,7 @@
             android:id="@+id/tv_toolbar_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="알람 등록"
+            android:text="알람 수정"
             android:layout_gravity="center"
             android:gravity="center_vertical|center"
             android:textColor="@color/black"
