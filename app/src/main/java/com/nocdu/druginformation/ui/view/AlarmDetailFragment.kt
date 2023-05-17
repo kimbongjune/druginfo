@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nocdu.druginformation.R
@@ -38,6 +39,7 @@ import com.nocdu.druginformation.utill.Constants.ALARM_REQUEST_TO_BROADCAST
 import com.nocdu.druginformation.utill.Constants.convertTo24HoursFormat
 import com.nocdu.druginformation.utill.Constants.dateToMillisecondTime
 import com.nocdu.druginformation.utill.Constants.getNowTime
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -573,12 +575,16 @@ class AlarmDetailFragment : Fragment() {
                     alarmTimes.add(Triple(alarmDateInt[i], hour, minute))
                 }
             }
-            alarmViewModel.deleteAllDoseTimeByAlarmId(alarmWithDosetime.alarm.id).apply {
-                alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmWithDosetime.alarm.id).apply {
-                    //TODO 테스트 필요
-                    MainActivity.getInstance().reRegistrationAlarm(alarmTimes, alarmWithDosetime.alarm.id, dateToMillisecondTime(alarmWithDosetime.alarm.updateTime))
-                    requireActivity().supportFragmentManager.popBackStack()
-                })
+            lifecycleScope.launch {
+                alarmViewModel.deleteAllDoseTimeByAlarmId(alarmWithDosetime.alarm.id).await().apply {
+                    alarmViewModel.addDoseTimes(alarmAdapter.getAllItemToDoseTime(alarmWithDosetime.alarm.id).apply {
+                        //TODO 테스트 필요
+                        if(alarmWithDosetime.alarm.isActive) {
+                            MainActivity.getInstance().reRegistrationAlarm(alarmTimes, alarmWithDosetime.alarm.id, dateToMillisecondTime(alarmWithDosetime.alarm.updateTime))
+                        }
+                        requireActivity().supportFragmentManager.popBackStack()
+                    })
+                }
             }
         }
         builder.setNegativeButton("취소"){ dialog, which ->

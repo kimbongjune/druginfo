@@ -42,8 +42,8 @@ class AlarmViewHolder(var binding: ItemAlarmRecyclerviewBinding): RecyclerView.V
             if(lowStockAlert) {
                 // 남은 약의 수량을 표시
                 this.text = "잔여의약품 : ${stockQuantity}개"
-                // 재고가 최소 재고량보다 적으면 글자색을 변경
-                if(stockQuantity < minStockQuantity){
+                // 재고가 최소 재고량이하 이면 글자색을 변경
+                if(stockQuantity <= minStockQuantity){
                     this.setTextColor(ContextCompat.getColor(context, R.color.soft_red))
                 }
             }else {

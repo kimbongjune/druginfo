@@ -221,8 +221,10 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
                 }
         }
         return if(id != 0){
+            Log.e(TAG,"id가 0이 아니여서 호출됨")
             updateStock(context,id)
         }else{
+            Log.e(TAG,"id가 0이여서 호출됨")
             Pair(ALARM_TITLE, ALARM_BODY)
         }
     }
@@ -348,6 +350,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver(){
     //코루틴 스코프 내에서 변수 할당이 불가능 한 이유로 인해 Pair(의약품 제목, 의약품 명)를 반환함
     private fun updateStock(context: Context, id:Int):Pair<String,String>{
         GlobalScope.launch {
+            Log.e(TAG,"updateStock 여러번 동작하여 로그를 남김")
             //울린 알람의 id를 이용해 database에서 알람을 조회한다.
             Log.e(TAG,"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${id}")
             AlarmDatabase.getDatabase(context).alarmDao().getAlarm(id).let {

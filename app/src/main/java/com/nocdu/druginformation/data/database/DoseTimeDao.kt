@@ -27,7 +27,7 @@ interface DoseTimeDao {
     suspend fun getDoseTimesByAlarmId(alarmId: Int): List<DoseTime>
 
     //일일 복용시간을 수정한다.
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateDoseTime(doseTime: List<DoseTime>)
     
     //일일 복용시간을 삭제한다.

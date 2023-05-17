@@ -447,10 +447,10 @@ class MainActivity : AppCompatActivity() {
                         alarmIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
                     )
-                    //pendingIntent 객체의 이벤트 수행을 취소한다.
-                    pendingIntent.cancel()
                     //알람을 취소한다.
                     alarmManager.cancel(pendingIntent)
+                    //pendingIntent 객체의 이벤트 수행을 취소한다.
+                    pendingIntent.cancel()
 
                     Log.e(TAG,"지운 알람의 아이디 = ${createAlarmId(alarmId, i, alarmUpdateTime)}")
                 }
@@ -517,10 +517,10 @@ class MainActivity : AppCompatActivity() {
                         alarmIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
                     )
-                    //pendingIntent 객체의 이벤트 수행을 취소한다.
-                    pendingIntent.cancel()
                     //알람을 취소한다.
                     alarmManager.cancel(pendingIntent)
+                    //pendingIntent 객체의 이벤트 수행을 취소한다.
+                    pendingIntent.cancel()
 
                     Log.e(TAG,"지운 알람의 아이디 = ${createAlarmId(alarmId, i, alarmUpdateTime)}")
                 }

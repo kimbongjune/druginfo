@@ -57,8 +57,13 @@ class AlarmViewModel(private val alarmRepository: AlarmRepository): ViewModel() 
     }
 
     //알람 데이터베이스에 저장된 특정 알람에 대한 알람 시간을 삭제하는 함수
-    fun deleteAllDoseTimeByAlarmId(alarmId: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteAllDoseTimeByAlarmId(alarmId: Int) = viewModelScope.async(Dispatchers.IO) {
         alarmRepository.deleteAllDoseTimeByAlarmId(alarmId)
+    }
+
+    //특정 알람의 복용시간 데이터를 수정한다.
+    fun updateDoseTime(doseTime: List<DoseTime>) = viewModelScope.launch(Dispatchers.IO) {
+        alarmRepository.updateDoseTime(doseTime)
     }
 
     //알람 데이터베이스에 FCM 토큰을 추가하는 함수

@@ -43,7 +43,7 @@ interface AlarmDao {
 //            "ASC")
 
     // 모든 알람 가져온다 PagingSource를 이용해 페이징 처리를 한다.
-    @Query("SELECT * FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
+    @Query("SELECT alarm.*, doses_time.time, doses_time.alarm_id, doses_time.id AS doses_time_id FROM alarm INNER JOIN doses_time ON alarm.id = doses_time.alarm_id GROUP BY alarm.id ORDER BY alarm.id")
     fun getAlarms(): PagingSource<Int, AlarmWithDosetime>
 
     @Query("""

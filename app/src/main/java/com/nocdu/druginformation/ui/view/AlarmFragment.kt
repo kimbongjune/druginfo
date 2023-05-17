@@ -200,6 +200,9 @@ class AlarmFragment : Fragment() {
                     && loadState.refresh is LoadState.NotLoading
                     && loadState.append.endOfPaginationReached
 
+            Log.e(TAG,"alarmPagingAdapter.itemCount = ${alarmPagingAdapter.itemCount}")
+            Log.e(TAG,"loadState = ${isListEmpty}")
+
             showHideScreen(isListEmpty, binding.ivAlarmCalendar, binding.tvAlarmInfo, binding.btnCreateAlarm)
             showHideScreen(!isListEmpty, binding.btnCreateAlarmSecond, binding.rvAlarmList)
         }
