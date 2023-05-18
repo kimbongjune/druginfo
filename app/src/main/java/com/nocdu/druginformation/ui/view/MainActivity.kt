@@ -16,6 +16,7 @@ import android.view.View
 import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -134,6 +135,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //안드로이드 기본 액션바를 대신해 커스텀한 액션바를 사용한다. 단, 테마에 NO_ACTION_BAR를 상속받는 테마를 사용해야한다.
         setSupportActionBar(binding.toolbar)
+        //앱의 다크모드를 방지하기위한 코드
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         //액션바의 타이틀을 표시하지 않는다.
         supportActionBar?.setDisplayShowTitleEnabled(false)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
