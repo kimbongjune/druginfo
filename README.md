@@ -38,7 +38,7 @@
 <br><br>
 
 ## 🗺️ 프로젝트 전체 구조
-![test  Copy of Untitled](https://kimbongjune.s3.amazonaws.com/druginfo/document/structure.png)
+![test  Copy of Untitled](https://kimbongjune.s3.amazonaws.com/druginfo/document/structure2.png)
 
 <br><br>
 
