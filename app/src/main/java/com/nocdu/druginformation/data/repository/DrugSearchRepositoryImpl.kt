@@ -24,7 +24,7 @@ class DrugSearchRepositoryImpl(private val db:DrugSearchDatabase):DrugSearchRepo
         query: String,
         page: Int,
     ): Response<SearchResponse> {
-        return api.searchDrugs(query, page)
+        return api.searchDrugs(query, page, PAGING_SIZE)
     }
 
     //즐겨찾기 약 데이터를 추가한다.

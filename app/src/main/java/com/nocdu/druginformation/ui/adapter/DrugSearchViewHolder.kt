@@ -19,8 +19,8 @@ class DrugSearchViewHolder(private val binding:ItemRecyclerviewBinding):Recycler
         val effect = document.efcyQesitm
 
         itemView.apply {
-            //데이터 내에 이미지 데이터가 null이 아니면
-            if(document.itemImage != null){
+            //데이터 내에 이미지 데이터가 null이나 빈 문자열이 아니면
+            if(!document.itemImage.isNullOrBlank()){
                 //이미지뷰에 데이터로 받아온 이미지를 표출
                 //binding.ivArticleImage.load(document.itemImage)
                 Glide.with(context).load(document.itemImage)

@@ -337,6 +337,49 @@ class SearchResultFragment : Fragment() {
             binding.tvGeneralCaution.visibility = View.GONE
             binding.tvGeneralCautionTitle.visibility = View.GONE
         }
+
+        // 약가 정보 표시
+        if(data.priceInfo != null){
+            binding.tvPriceInfoTitle.visibility = View.VISIBLE
+            binding.tvPriceInfo.visibility = View.VISIBLE
+            val priceText = StringBuilder()
+            data.priceInfo.maxPrice?.let { 
+                priceText.append("최고가: ${String.format("%,.0f", it)}원") 
+            }
+            data.priceInfo.unit?.let { 
+                if(priceText.isNotEmpty()) priceText.append("\n")
+                priceText.append("단위: $it") 
+            }
+            data.priceInfo.spec?.let { 
+                if(priceText.isNotEmpty()) priceText.append("\n")
+                priceText.append("규격: $it") 
+            }
+            data.priceInfo.payType?.let { 
+                if(priceText.isNotEmpty()) priceText.append("\n")
+                priceText.append("급여유형: $it") 
+            }
+            binding.tvPriceInfo.text = if(priceText.isNotEmpty()) priceText.toString() else "정보 없음"
+        }else{
+            binding.tvPriceInfoTitle.visibility = View.GONE
+            binding.tvPriceInfo.visibility = View.GONE
+        }
+
+        // 성분/약효 정보 표시
+        if(!data.ingredients.isNullOrEmpty()){
+            binding.tvIngredientInfoTitle.visibility = View.VISIBLE
+            binding.tvIngredientInfo.visibility = View.VISIBLE
+            val ingredientText = data.ingredients.mapNotNull { ingredient ->
+                val parts = mutableListOf<String>()
+                ingredient.componentKorName?.let { parts.add(it) }
+                ingredient.formulaName?.let { parts.add("($it)") }
+                ingredient.admRoute?.let { parts.add("[$it]") }
+                if(parts.isNotEmpty()) parts.joinToString(" ") else null
+            }.joinToString("\n")
+            binding.tvIngredientInfo.text = if(ingredientText.isNotEmpty()) ingredientText else "정보 없음"
+        }else{
+            binding.tvIngredientInfoTitle.visibility = View.GONE
+            binding.tvIngredientInfo.visibility = View.GONE
+        }
     }
 
     //툴바의 뒤로가기 이벤트를처리하는 함수

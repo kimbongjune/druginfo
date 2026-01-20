@@ -12,7 +12,7 @@ import java.util.*
  */
 object Constants {
     //API 호출 시 사용하는 기본 URL
-    const val BASE_URL = "http://44.202.206.211/DrugInfo/"
+    const val BASE_URL = "http://172.30.1.25:8080/DrugInfo/"
     //const val BASE_URL = "http://192.168.0.178:8080/"
 
     //페이징 어댑터 기본 페이징 사이즈
@@ -57,8 +57,6 @@ object Constants {
     //기기가 꺼진 상태에서 알람이 발생했을 때 깨우기 위한 WakeLock 태그
     const val ACQUIRE_WAKE_LOCK = "AlarmReceiver:WakeLock"
 
-    //의약품 검색 API URL
-    const val DRUG_SEARCH_URI = "drugsearch/textsearch"
     //FCM 전송 API URL
     const val FCM_SEND_URL = "fcm/send"
     //개인정보 처리방침 URL

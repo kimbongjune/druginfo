@@ -90,8 +90,8 @@ class DrugSearchPagingAdapter:PagingDataAdapter<Document, DrugSearchViewHolder>(
     }
 
     //Glide를 사용하여 이미지를 프리로딩한다.
-    private fun imagePreLoad(context: Context, url : String, width:Int, height:Int){
-        if(url != null){
+    private fun imagePreLoad(context: Context, url : String?, width:Int, height:Int){
+        if(!url.isNullOrBlank()){
             Glide.with(context).load(url)
                 .preload(width, height)
         }else{
